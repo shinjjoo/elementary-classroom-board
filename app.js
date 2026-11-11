@@ -553,12 +553,12 @@ function renderStaticIcons() {
     const el = document.getElementById(id);
     if (el) el.innerHTML = renderSoftIcon(icon, grad, size, svgSize);
   };
-  setIcon('headerCalendarIcon', 'calendar', 'grad-purple-blue', 'w-11 h-11', 22);
-  setIcon('ctrlBellIcon', 'bell', 'grad-pink-orange', 'w-7 h-7', 15);
-  setIcon('ctrlSoundIcon', 'bell', 'grad-sky-indigo', 'w-7 h-7', 15);
-  setIcon('ctrlSettingsIcon', 'settings', 'grad-purple-blue', 'w-7 h-7', 15);
-  setIcon('sectionTimetableIcon', 'calendar', 'grad-sky-indigo', 'w-10 h-10', 20);
-  setIcon('sectionRoutineIcon', 'check', 'grad-purple-blue', 'w-10 h-10', 20);
+  setIcon('headerCalendarIcon', 'calendar', 'grad-purple-blue', 'w-7 h-7', 15);
+  setIcon('ctrlBellIcon', 'bell', 'grad-pink-orange', 'w-5 h-5', 12);
+  setIcon('ctrlSoundIcon', 'bell', 'grad-sky-indigo', 'w-5 h-5', 12);
+  setIcon('ctrlSettingsIcon', 'settings', 'grad-purple-blue', 'w-5 h-5', 12);
+  setIcon('sectionTimetableIcon', 'calendar', 'grad-sky-indigo', 'w-7 h-7', 15);
+  setIcon('sectionRoutineIcon', 'check', 'grad-purple-blue', 'w-9 h-9', 18);
   setIcon('celebrateStarIcon', 'star', 'grad-pink-orange', 'w-11 h-11', 22);
 }
 
@@ -713,13 +713,13 @@ function updateHeaderClockAndTimer() {
   const soundBtn = document.getElementById('btnSoundToggle');
   const soundLabel = document.getElementById('soundToggleLabel');
   if (soundLabel) {
-    soundLabel.textContent = state.soundEnabled ? '자동종 켜짐' : '자동종 꺼짐';
+    soundLabel.textContent = state.soundEnabled ? '자동종' : '무음';
     soundLabel.classList.add('whitespace-nowrap');
   }
   if (soundBtn) {
     soundBtn.className = state.soundEnabled
-      ? 'px-2 py-2 rounded-xl bg-blue-50 border border-blue-200 flex flex-col items-center justify-center gap-1 cursor-pointer transition whitespace-nowrap'
-      : 'px-2 py-2 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex flex-col items-center justify-center gap-1 cursor-pointer transition whitespace-nowrap';
+      ? 'px-2 py-1.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0'
+      : 'px-2 py-1.5 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0';
   }
 }
 
