@@ -193,26 +193,32 @@ body {
 
 /* ================= COMPACT SIDEBAR TIMETABLE ================= */
 #periodListContainer .bento-tile {
-  padding: 0.45rem 0.65rem !important;
+  padding: 0.5rem 0.75rem !important;
   border-radius: 14px !important;
+  flex: 1 1 0%;
+  min-height: 0;
 }
 
 #periodListContainer .bento-tile > div:first-child > div:first-child {
-  width: 2.4rem !important;
-  height: 2.4rem !important;
+  width: 3.1rem !important;
+  height: 2.2rem !important;
   border-radius: 10px !important;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #periodListContainer .bento-tile .soft-icon-tile {
-  width: 2.1rem !important;
-  height: 2.1rem !important;
+  width: 2.2rem !important;
+  height: 2.2rem !important;
   border-radius: 26% !important;
+  flex-shrink: 0;
 }
 
 #periodListContainer .bento-tile .soft-icon-tile svg {
-  width: 1.1rem !important;
-  height: 1.1rem !important;
+  width: 1.15rem !important;
+  height: 1.15rem !important;
 }
 
 #periodListContainer .bento-tile span,
@@ -237,20 +243,24 @@ body {
   flex-shrink: 0;
 }
 
-/* ================= ROUTINE CARDS GRID ================= */
+/* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING) ================= */
 #routineCardsGrid .bento-tile {
   border-radius: 18px !important;
+  flex: 1 1 0%;
+  min-height: 0;
+  padding: 0.75rem 1.1rem !important;
 }
 
 #routineCardsGrid .bento-tile .soft-icon-tile {
-  width: 3rem !important;
-  height: 3rem !important;
+  width: 2.85rem !important;
+  height: 2.85rem !important;
   border-radius: 26% !important;
+  flex-shrink: 0;
 }
 
 #routineCardsGrid .bento-tile .soft-icon-tile svg {
-  width: 1.5rem !important;
-  height: 1.5rem !important;
+  width: 1.45rem !important;
+  height: 1.45rem !important;
 }
 
 /* Animations */

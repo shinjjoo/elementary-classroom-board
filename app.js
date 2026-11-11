@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'elementary_classroom_board_bento_v2';
+const STORAGE_KEY = 'elementary_classroom_board_bento_v3';
 
 const VECTOR_PATHS = {
   book: `
@@ -147,22 +147,33 @@ function renderSoftIcon(iconKey, gradClass = 'grad-purple-blue', sizeClass = 'w-
 }
 
 const DEFAULT_SUBJECTS = [
-  { id: 'kor',    name: '국어',         icon: 'book',    grad: 'grad-pink-orange' },
-  { id: 'math',   name: '수학',         icon: 'math',    grad: 'grad-purple-blue' },
-  { id: 'bareun', name: '바른생활',     icon: 'heart',   grad: 'grad-mint-blue' },
-  { id: 'seulgi', name: '슬기로운생활', icon: 'compass', grad: 'grad-sky-indigo' },
-  { id: 'jeul',   name: '즐거운생활',   icon: 'art',     grad: 'grad-lavender-pink' },
-  { id: 'spring', name: '봄 (통합)',     icon: 'sprout',  grad: 'grad-mint-blue' },
-  { id: 'summer', name: '여름 (통합)',   icon: 'sun',     grad: 'grad-blue-cyan' },
-  { id: 'autumn', name: '가을 (통합)',   icon: 'leaf',    grad: 'grad-peach-coral' },
-  { id: 'winter', name: '겨울 (통합)',   icon: 'snow',    grad: 'grad-sky-indigo' },
-  { id: 'school', name: '학교 (통합)',   icon: 'school',  grad: 'grad-purple-blue' },
-  { id: 'safe',   name: '안전한 생활',   icon: 'shield',  grad: 'grad-pink-orange' },
-  { id: 'chang',  name: '창체',         icon: 'star',    grad: 'grad-periwinkle-rose' },
-  { id: 'read',   name: '독서',         icon: 'book',    grad: 'grad-sky-indigo' },
-  { id: 'pe',     name: '체육·놀이',    icon: 'pe',      grad: 'grad-blue-cyan' },
-  { id: 'music',  name: '노래·악기',    icon: 'music',   grad: 'grad-lavender-pink' },
-  { id: 'art',    name: '만들기·그리기', icon: 'art',     grad: 'grad-peach-coral' }
+  // 기본 교과
+  { id: 'kor',        name: '국어',       icon: 'book',     grad: 'grad-pink-orange' },
+  { id: 'math',       name: '수학',       icon: 'math',     grad: 'grad-purple-blue' },
+  { id: 'chang',      name: '창체',       icon: 'star',     grad: 'grad-periwinkle-rose' },
+  { id: 'safe',       name: '안전한 생활', icon: 'shield',   grad: 'grad-mint-blue' },
+  { id: 'read',       name: '독서',       icon: 'book',     grad: 'grad-sky-indigo' },
+  { id: 'pe',         name: '체육·놀이',  icon: 'pe',       grad: 'grad-blue-cyan' },
+
+  // 1학년 통합교과 (8과목)
+  { id: 'g1_school',  name: '학교',       icon: 'school',   grad: 'grad-purple-blue', grade: 1 },
+  { id: 'g1_people',  name: '사람들',     icon: 'heart',    grad: 'grad-pink-orange', grade: 1 },
+  { id: 'g1_korea',   name: '우리나라',   icon: 'compass',  grad: 'grad-sky-indigo', grade: 1 },
+  { id: 'g1_explore', name: '탐험',       icon: 'compass',  grad: 'grad-blue-cyan', grade: 1 },
+  { id: 'g1_day',     name: '하루',       icon: 'sun',      grad: 'grad-peach-coral', grade: 1 },
+  { id: 'g1_promise', name: '약속',       icon: 'shield',   grad: 'grad-mint-blue', grade: 1 },
+  { id: 'g1_imagine', name: '상상',       icon: 'star',     grad: 'grad-lavender-pink', grade: 1 },
+  { id: 'g1_story',   name: '이야기',     icon: 'book',     grad: 'grad-periwinkle-rose', grade: 1 },
+
+  // 2학년 통합교과 (8과목)
+  { id: 'g2_me',      name: '나',         icon: 'heart',    grad: 'grad-pink-orange', grade: 2 },
+  { id: 'g2_nature',  name: '자연',       icon: 'sprout',   grad: 'grad-mint-blue', grade: 2 },
+  { id: 'g2_village', name: '마을',       icon: 'school',   grad: 'grad-sky-indigo', grade: 2 },
+  { id: 'g2_world',   name: '세계',       icon: 'compass',  grad: 'grad-purple-blue', grade: 2 },
+  { id: 'g2_season',  name: '계절',       icon: 'leaf',     grad: 'grad-peach-coral', grade: 2 },
+  { id: 'g2_person',  name: '인물',       icon: 'star',     grad: 'grad-lavender-pink', grade: 2 },
+  { id: 'g2_object',  name: '물건',       icon: 'art',      grad: 'grad-blue-cyan', grade: 2 },
+  { id: 'g2_memory',  name: '기억',       icon: 'notebook', grad: 'grad-periwinkle-rose', grade: 2 }
 ];
 
 const FREQUENT_TASK_PRESETS = [
@@ -214,11 +225,11 @@ function getDefaultState() {
     lastResetDate: new Date().toISOString().slice(0, 10),
     subjects: JSON.parse(JSON.stringify(DEFAULT_SUBJECTS)),
     weeklyTimetable: {
-      mon: { count: 4, periods: ['kor', 'math', 'bareun', 'jeul', 'chang', 'read'] },
-      tue: { count: 5, periods: ['kor', 'math', 'seulgi', 'jeul', 'safe', 'read'] },
-      wed: { count: 4, periods: ['kor', 'math', 'bareun', 'chang', 'pe', 'read'] },
-      thu: { count: 5, periods: ['kor', 'math', 'seulgi', 'jeul', 'read', 'art'] },
-      fri: { count: 4, periods: ['kor', 'math', 'jeul', 'safe', 'chang', 'pe'] }
+      mon: { count: 4, periods: ['kor', 'math', 'g1_school', 'g1_day', 'chang', 'read'] },
+      tue: { count: 5, periods: ['kor', 'math', 'g1_people', 'g1_promise', 'safe', 'read'] },
+      wed: { count: 4, periods: ['kor', 'math', 'g1_school', 'chang', 'pe', 'read'] },
+      thu: { count: 5, periods: ['kor', 'math', 'g1_imagine', 'g1_story', 'read', 'safe'] },
+      fri: { count: 4, periods: ['kor', 'math', 'g1_day', 'safe', 'chang', 'pe'] }
     },
     todayOverrides: {},
     bellSchedule: {
@@ -240,25 +251,29 @@ function getDefaultState() {
         { id: 'm1', icon: 'bag',      grad: 'grad-purple-blue', title: '가방 정리하고 사물함에 넣기', repeat: 'daily', done: false },
         { id: 'm2', icon: 'submit',   grad: 'grad-pink-orange', title: '숙제와 알림장 바구니에 내기', repeat: 'daily', done: false },
         { id: 'm3', icon: 'water',    grad: 'grad-blue-cyan',   title: '내 물통 제자리에 두고 물 마시기', repeat: 'daily', done: false },
-        { id: 'm4', icon: 'book',     grad: 'grad-sky-indigo',  title: '자리에 앉아 조용히 아침 독서하기', repeat: 'daily', done: false }
+        { id: 'm4', icon: 'calendar', grad: 'grad-sky-indigo',  title: '오늘 시간표 확인하고 교과서 꺼내기', repeat: 'daily', done: false },
+        { id: 'm5', icon: 'book',     grad: 'grad-purple-blue', title: '자리에 앉아 조용히 아침 독서하기', repeat: 'daily', done: false }
       ],
       classprep: [
-        { id: 'c1', icon: 'book',     grad: 'grad-purple-blue', title: '이번 시간 교과서 꺼내 놓기', repeat: 'daily', done: false },
-        { id: 'c2', icon: 'pencil',   grad: 'grad-pink-orange', title: '연필과 지우개 책상 위에 준비하기', repeat: 'daily', done: false },
-        { id: 'c3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '등을 펴고 바른 자세로 앉기', repeat: 'daily', done: false },
-        { id: 'c4', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 경청하기', repeat: 'daily', done: false }
+        { id: 'c1', icon: 'book',     grad: 'grad-purple-blue', title: '이번 시간 교과서 책상 위에 꺼내기', repeat: 'daily', done: false },
+        { id: 'c2', icon: 'pencil',   grad: 'grad-pink-orange', title: '연필 3자루와 지우개 준비하기', repeat: 'daily', done: false },
+        { id: 'c3', icon: 'bag',      grad: 'grad-blue-cyan',   title: '물통과 장난감은 책상 속에 넣기', repeat: 'daily', done: false },
+        { id: 'c4', icon: 'chair',    grad: 'grad-sky-indigo',  title: '허리를 펴고 바른 자세로 앉기', repeat: 'daily', done: false },
+        { id: 'c5', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 귀 기울이기', repeat: 'daily', done: false }
       ],
       breaktime: [
-        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 먼저 꺼내 놓기', repeat: 'daily', done: false },
-        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 미리 다녀오기', repeat: 'daily', done: false },
-        { id: 'b3', icon: 'milk',     grad: 'grad-pink-orange', title: '우유나 물 마시고 손 깨끗이 씻기', repeat: 'daily', done: false },
-        { id: 'b4', icon: 'shield',   grad: 'grad-mint-blue',   title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false }
+        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 미리 꺼내 놓기', repeat: 'daily', done: false },
+        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 다녀와서 비누로 손 씻기', repeat: 'daily', done: false },
+        { id: 'b3', icon: 'water',    grad: 'grad-mint-blue',   title: '내 자리에서 물이나 우유 마시기', repeat: 'daily', done: false },
+        { id: 'b4', icon: 'shield',   grad: 'grad-sky-indigo',  title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false },
+        { id: 'b5', icon: 'bell',     grad: 'grad-pink-orange', title: '종이 치면 바로 자리에 앉아 기다리기', repeat: 'daily', done: false }
       ],
       afterschool: [
-        { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 넣기', repeat: 'daily', done: false },
-        { id: 'a2', icon: 'clean',    grad: 'grad-mint-blue',   title: '책상 속과 내 자리 주변 정리하기', repeat: 'daily', done: false },
-        { id: 'a3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '의자 책상 안으로 바르게 넣기', repeat: 'daily', done: false },
-        { id: 'a4', icon: 'coat',     grad: 'grad-purple-blue', title: '외투·물통·신발주머니 챙기기', repeat: 'daily', done: false }
+        { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 챙겨 넣기', repeat: 'daily', done: false },
+        { id: 'a2', icon: 'clean',    grad: 'grad-mint-blue',   title: '책상 서랍 속과 내 자리 주변 정리하기', repeat: 'daily', done: false },
+        { id: 'a3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '의자를 책상 안으로 소리 없이 넣기', repeat: 'daily', done: false },
+        { id: 'a4', icon: 'coat',     grad: 'grad-purple-blue', title: '외투·물통·신발주머니 빠짐없이 챙기기', repeat: 'daily', done: false },
+        { id: 'a5', icon: 'heart',    grad: 'grad-lavender-pink', title: '선생님과 친구들에게 인사하고 하교하기', repeat: 'daily', done: false }
       ]
     }
   };
@@ -349,7 +364,7 @@ function evaluateCurrentTimeSlot() {
       routineTab: 'morning',
       icon: 'sun',
       grad: 'grad-pink-orange',
-      headline: '좋은 아침이에요! 등교 준비를 해요',
+      headline: `등교 후 '아침 활동'`,
       subline: '가방을 정리하고 숙제를 제출해요',
       timeRange: `${bs.morningStart} 등교·아침활동`,
       progressPct: 100,
@@ -366,7 +381,7 @@ function evaluateCurrentTimeSlot() {
       routineTab: 'morning',
       icon: 'sun',
       grad: 'grad-pink-orange',
-      headline: '등교 후 아침 활동 시간이에요',
+      headline: `등교 후 '아침 활동'`,
       subline: '가방을 정리하고 숙제를 제출해요',
       timeRange: `${bs.morningStart} ~ ${bs.morningEnd}`,
       progressPct: Math.round((rem / total) * 100),
@@ -386,7 +401,7 @@ function evaluateCurrentTimeSlot() {
       routineTab: 'breaktime',
       icon: 'wash',
       grad: 'grad-blue-cyan',
-      headline: '점심시간이에요! 맛있게 식사해요',
+      headline: `즐거운 '점심시간'`,
       subline: '손을 깨끗이 씻고 질서를 지켜 급식을 먹어요',
       timeRange: `${bs.lunchStart} ~ ${bs.lunchEnd}`,
       progressPct: Math.round((rem / total) * 100),
@@ -411,7 +426,7 @@ function evaluateCurrentTimeSlot() {
         routineTab: 'classprep',
         icon: subj.icon,
         grad: subj.grad,
-        headline: `지금은 ${p.num}교시 ${subj.name} 시간이에요`,
+        headline: `${p.num}교시 '${subj.name}'`,
         subline: '교과서와 연필을 준비하고 선생님 말씀에 귀 기울여요',
         timeRange: `${p.start} ~ ${p.end}`,
         progressPct: Math.round((rem / total) * 100),
@@ -433,7 +448,7 @@ function evaluateCurrentTimeSlot() {
           routineTab: 'breaktime',
           icon: 'water',
           grad: 'grad-blue-cyan',
-          headline: `쉬는 시간 (다음: ${nextP.num}교시 ${nextSubj.name})`,
+          headline: `쉬는 시간 · 다음 ${nextP.num}교시 '${nextSubj.name}'`,
           subline: '화장실에 다녀오고 다음 시간 교과서를 준비해요',
           timeRange: `${p.end} ~ ${nextP.start}`,
           progressPct: Math.round((rem / total) * 100),
@@ -451,7 +466,7 @@ function evaluateCurrentTimeSlot() {
     routineTab: 'afterschool',
     icon: 'bag',
     grad: 'grad-periwinkle-rose',
-    headline: '수업 마침! 자리를 정리하고 하교해요',
+    headline: `일과 마침 '하교 준비'`,
     subline: '알림장과 소지품을 챙기고 안전하게 귀가해요',
     timeRange: `${lastP ? lastP.end : '13:40'} ~ 하교`,
     progressPct: 100,
@@ -648,7 +663,7 @@ function updateHeaderClockAndTimer() {
 
     if (iconSlot) iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-14 h-14', 28);
     if (headlineEl) {
-      headlineEl.textContent = `${pObj.num}교시 ${subj.name} 시간이에요`;
+      headlineEl.textContent = `${pObj.num}교시 '${subj.name}'`;
       headlineEl.classList.add('whitespace-nowrap', 'truncate');
     }
     if (sublineEl) {
@@ -718,8 +733,8 @@ function updateHeaderClockAndTimer() {
   }
   if (soundBtn) {
     soundBtn.className = state.soundEnabled
-      ? 'px-2 py-1.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0'
-      : 'px-2 py-1.5 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0';
+      ? 'w-full py-2 px-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap'
+      : 'w-full py-2 px-2.5 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap';
   }
 }
 
@@ -822,8 +837,10 @@ function renderTimetableSection() {
 
           <button onclick="event.stopPropagation(); openSubjectPickerModal(${i})"
             title="${i + 1}교시 과목 변경"
-            class="px-2 py-1 rounded-lg text-[11px] font-extrabold bg-[#F8FAFC] hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 cursor-pointer transition whitespace-nowrap">
-            변경
+            class="w-7 h-7 rounded-lg bg-[#F8FAFC] hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 hover:border-blue-200 flex items-center justify-center cursor-pointer transition flex-shrink-0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -908,19 +925,19 @@ function renderRoutineSection() {
   gridEl.innerHTML = tasks.map((task, idx) => {
     const isTodaySpecial = task.repeat === 'today';
     return `
-      <div class="bento-tile p-3.5 flex items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl ${
+      <div class="bento-tile flex-1 min-h-[54px] px-4 py-2.5 flex items-center justify-between gap-3.5 bg-white border border-slate-200/90 rounded-2xl ${
         isTodaySpecial ? 'bg-gradient-to-r from-blue-50/40 to-white border-blue-200' : ''
       }">
-        <div class="flex items-center gap-3 min-w-0 flex-1">
-          <span class="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 font-black text-xs flex items-center justify-center flex-shrink-0">
+        <div class="flex items-center gap-3.5 min-w-0 flex-1">
+          <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-black text-sm md:text-base flex items-center justify-center flex-shrink-0 shadow-2xs">
             ${idx + 1}
           </span>
           ${renderSoftIcon(task.icon || 'star', task.grad || 'grad-purple-blue', 'w-11 h-11', 22)}
-          <span class="text-base md:text-lg font-extrabold text-slate-900 whitespace-nowrap truncate flex-1">
+          <span class="text-lg md:text-2xl xl:text-[1.65rem] font-black text-slate-900 whitespace-nowrap truncate flex-1 leading-snug py-0.5">
             ${escapeHtml(task.title)}
           </span>
           ${isTodaySpecial ? `
-            <span class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-blue-600 border border-blue-200 whitespace-nowrap flex-shrink-0">
+            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-600 border border-blue-200 whitespace-nowrap flex-shrink-0">
               오늘
             </span>
           ` : ''}
@@ -928,7 +945,7 @@ function renderRoutineSection() {
 
         <button onclick="event.stopPropagation(); deleteRoutineTask('${activeRoutineTab}', '${task.id}')"
           title="삭제"
-          class="w-7 h-7 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
+          class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
           ✕
         </button>
       </div>

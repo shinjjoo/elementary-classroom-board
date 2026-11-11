@@ -203,26 +203,32 @@ body {
 
 /* ================= COMPACT SIDEBAR TIMETABLE ================= */
 #periodListContainer .bento-tile {
-  padding: 0.45rem 0.65rem !important;
+  padding: 0.5rem 0.75rem !important;
   border-radius: 14px !important;
+  flex: 1 1 0%;
+  min-height: 0;
 }
 
 #periodListContainer .bento-tile > div:first-child > div:first-child {
-  width: 2.4rem !important;
-  height: 2.4rem !important;
+  width: 3.1rem !important;
+  height: 2.2rem !important;
   border-radius: 10px !important;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #periodListContainer .bento-tile .soft-icon-tile {
-  width: 2.1rem !important;
-  height: 2.1rem !important;
+  width: 2.2rem !important;
+  height: 2.2rem !important;
   border-radius: 26% !important;
+  flex-shrink: 0;
 }
 
 #periodListContainer .bento-tile .soft-icon-tile svg {
-  width: 1.1rem !important;
-  height: 1.1rem !important;
+  width: 1.15rem !important;
+  height: 1.15rem !important;
 }
 
 #periodListContainer .bento-tile span,
@@ -247,20 +253,24 @@ body {
   flex-shrink: 0;
 }
 
-/* ================= ROUTINE CARDS GRID ================= */
+/* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING) ================= */
 #routineCardsGrid .bento-tile {
   border-radius: 18px !important;
+  flex: 1 1 0%;
+  min-height: 0;
+  padding: 0.75rem 1.1rem !important;
 }
 
 #routineCardsGrid .bento-tile .soft-icon-tile {
-  width: 3rem !important;
-  height: 3rem !important;
+  width: 2.85rem !important;
+  height: 2.85rem !important;
   border-radius: 26% !important;
+  flex-shrink: 0;
 }
 
 #routineCardsGrid .bento-tile .soft-icon-tile svg {
-  width: 1.5rem !important;
-  height: 1.5rem !important;
+  width: 1.45rem !important;
+  height: 1.45rem !important;
 }
 
 /* Animations */
@@ -292,7 +302,7 @@ body {
 </style>
 </head>
 <body class="antialiased">
-  <div id="app" class="w-full max-w-[1540px] mx-auto p-3 md:p-5 flex flex-col gap-4">
+  <div id="app" class="w-full max-w-none min-h-[780px] lg:h-screen p-3 xl:p-4 flex flex-col justify-between gap-3 overflow-hidden">
 
     <!-- Toast Notification -->
     <div id="toastBanner" class="hidden fixed top-4 right-4 z-50 px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-bold text-sm shadow-xl border border-blue-400 whitespace-nowrap truncate">
@@ -300,13 +310,13 @@ body {
     </div>
 
     <!-- ================= 12-COLUMN BENTO GRID ================= -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 xl:gap-4 flex-1 min-h-0 items-stretch">
 
-      <!-- ================= MAIN CENTER STAGE (lg:col-span-8 xl:col-span-9) ================= -->
-      <main class="lg:col-span-8 xl:col-span-9 flex flex-col gap-4">
+      <!-- ================= MAIN CENTER STAGE (lg:col-span-8) ================= -->
+      <main class="lg:col-span-8 flex flex-col gap-3.5 xl:gap-4 min-h-0 h-full">
 
         <!-- Top Hero Card (현재 시간 핵심 정보 크게 표시) -->
-        <section class="bento-card p-5 md:p-6 bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-4">
+        <section class="bento-card p-4 xl:p-5 bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-3 flex-shrink-0">
           <!-- Top status bar (single-line) -->
           <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate">
             <div class="flex items-center gap-2 min-w-0">
@@ -329,10 +339,10 @@ body {
           </div>
 
           <!-- Main Hero content: Circular SVG Progress + Icon + Headlines -->
-          <div class="flex items-center gap-5 md:gap-6 py-2">
+          <div class="flex items-center gap-4 xl:gap-5 py-1">
             <!-- Circular SVG Progress wrapping #currentStatusIconSlot -->
-            <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 flex items-center justify-center">
-              <svg class="w-20 h-20 md:w-24 md:h-24 -rotate-90" viewBox="0 0 60 60">
+            <div class="relative w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 -rotate-90" viewBox="0 0 60 60">
                 <circle cx="30" cy="30" r="26" fill="none" stroke="#DBEAFE" stroke-width="4.5" />
                 <circle id="timerCirclePath" cx="30" cy="30" r="26" fill="none" stroke="#2563EB" stroke-width="4.5"
                   stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="40" class="transition-all duration-500" />
@@ -340,12 +350,12 @@ body {
               <div id="currentStatusIconSlot" class="absolute inset-0 flex items-center justify-center"></div>
             </div>
 
-            <!-- Extra-large single-line Headline and Subline -->
+            <!-- Extra-large Headline and Subline without clipping -->
             <div class="min-w-0 flex-1">
-              <h1 id="currentStatusHeadline" class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight whitespace-nowrap truncate">
-                지금은 1교시 국어 시간이에요
+              <h1 id="currentStatusHeadline" class="text-3xl md:text-5xl xl:text-[3.25rem] font-black text-slate-900 tracking-tight leading-snug whitespace-nowrap truncate py-0.5">
+                1교시 '국어'
               </h1>
-              <div id="currentStatusSubline" class="text-sm md:text-base font-bold text-blue-600 whitespace-nowrap truncate mt-1">
+              <div id="currentStatusSubline" class="text-sm md:text-base font-bold text-blue-600 whitespace-nowrap truncate mt-0.5">
                 바른 자세로 앉아 선생님과 친구들의 이야기에 귀 기울여요
               </div>
             </div>
@@ -353,9 +363,9 @@ body {
         </section>
 
         <!-- Main Center To-Do List Card (현재 시간 할 일 리스트 크게 표시) -->
-        <section class="bento-card p-5 md:p-6 flex-1 flex flex-col justify-between gap-4">
+        <section class="bento-card p-4 xl:p-5 flex-1 flex flex-col justify-between gap-3 min-h-0">
           <!-- Header row (single-line) -->
-          <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100 whitespace-nowrap truncate">
+          <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <div id="sectionRoutineIcon" class="flex-shrink-0"></div>
               <h2 id="routineBoardTitle" class="text-xl md:text-2xl font-black text-slate-900 tracking-tight whitespace-nowrap truncate">
@@ -374,12 +384,12 @@ body {
             </div>
           </div>
 
-          <!-- Body: Routine Cards Grid -->
-          <div id="routineCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 items-start">
+          <!-- Body: Routine Cards Grid (1 item per row, 5 rows filling vertically) -->
+          <div id="routineCardsGrid" class="flex flex-col gap-2.5 flex-1 justify-between min-h-0">
           </div>
 
           <!-- Footer (single-line) -->
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 whitespace-nowrap truncate">
+          <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 whitespace-nowrap truncate flex-shrink-0">
             <span class="whitespace-nowrap truncate">모든 변경 사항은 이 브라우저에 자동 저장됩니다</span>
             <button onclick="openSettingsModal('backup')" class="text-blue-600 hover:underline font-extrabold cursor-pointer whitespace-nowrap flex-shrink-0 ml-2">
               JSON 백업/복원 →
@@ -389,18 +399,18 @@ body {
 
       </main>
 
-      <!-- ================= COMPACT RIGHT SIDEBAR (lg:col-span-4 xl:col-span-3) ================= -->
-      <aside class="lg:col-span-4 xl:col-span-3 flex flex-col gap-3">
+      <!-- ================= COMPACT RIGHT SIDEBAR (lg:col-span-4) ================= -->
+      <aside class="lg:col-span-4 flex flex-col gap-3 xl:gap-3.5 min-h-0 h-full justify-between">
 
-        <!-- Sidebar Card 1 (Compact Clock, Date & Quick Controls) -->
-        <div class="bento-card p-4 flex flex-col gap-3">
+        <!-- Sidebar Card 1 (Ultra-Large Clock, Date & Quick Controls) -->
+        <div class="bento-card p-3.5 xl:p-4 flex flex-col gap-2.5 xl:gap-3 flex-shrink-0">
           <!-- Compact single-line header with #headerCalendarIcon, #btnEditClassName (#classNameDisplay), #classNameInputWrap (#classNameInput), #dateDisplay, #dayOfWeekBadge -->
-          <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate pb-2.5 border-b border-slate-100">
+          <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate pb-2 border-b border-slate-100">
             <div class="flex items-center gap-2 min-w-0">
               <div id="headerCalendarIcon" class="flex-shrink-0"></div>
               <button id="btnEditClassName" onclick="openClassNameEditor()" title="학급 이름 바꾸기"
-                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-xs font-extrabold cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <span id="classNameDisplay" class="truncate max-w-[70px]">1학년 1반</span>
+                class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-xs font-extrabold cursor-pointer transition whitespace-nowrap flex-shrink-0">
+                <span id="classNameDisplay" class="truncate max-w-[80px]">1학년 1반</span>
                 <span class="opacity-60 text-[10px]">✎</span>
               </button>
               <div id="classNameInputWrap" class="hidden items-center gap-1 flex-shrink-0">
@@ -415,70 +425,65 @@ body {
               <span id="dateDisplay" class="text-sm md:text-base font-black text-slate-900 whitespace-nowrap">
                 11월 10일
               </span>
-              <span id="dayOfWeekBadge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-100 text-slate-700 whitespace-nowrap flex-shrink-0">
+              <span id="dayOfWeekBadge" class="px-2 py-0.5 rounded-full text-xs font-extrabold bg-slate-100 text-slate-700 whitespace-nowrap flex-shrink-0">
                 화요일
               </span>
             </div>
           </div>
 
-          <!-- Compact clock row with #ampmDisplay, #clockDisplay, #secondsDisplay and compact action buttons -->
-          <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate">
-            <!-- Digital Clock Display -->
-            <div class="px-2.5 py-1.5 rounded-xl bg-[#F3F7FC] border border-blue-100 flex items-baseline gap-1 flex-shrink-0">
-              <span id="ampmDisplay" class="text-[11px] font-black text-blue-600 whitespace-nowrap">오전</span>
-              <span id="clockDisplay" class="text-xl md:text-2xl font-black text-slate-900 tabular-nums leading-none whitespace-nowrap">09:00</span>
-              <span id="secondsDisplay" class="text-[11px] font-bold text-slate-400 tabular-nums whitespace-nowrap">:00</span>
-            </div>
+          <!-- Ultra-Large Clock Display (약 4배 초대형 표시) -->
+          <div class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-br from-[#EFF6FF] to-[#F8FAFC] border border-blue-200 flex items-baseline justify-center gap-2.5 shadow-2xs">
+            <span id="ampmDisplay" class="text-base xl:text-lg font-extrabold text-blue-600 whitespace-nowrap">오전</span>
+            <span id="clockDisplay" class="text-6xl xl:text-7xl 2xl:text-[5.25rem] font-black text-slate-900 tracking-tighter tabular-nums leading-none whitespace-nowrap">09:00</span>
+            <span id="secondsDisplay" class="text-xl xl:text-2xl font-bold text-slate-400 tabular-nums whitespace-nowrap">:00</span>
+          </div>
 
-            <!-- Compact Action Buttons: 종소리, 자동종, 설정 -->
-            <div class="flex items-center gap-1 min-w-0">
-              <button onclick="playSchoolChime(true)" title="종소리 울리기"
-                class="px-2 py-1.5 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <div id="ctrlBellIcon" class="flex-shrink-0"></div>
-                <span class="text-[11px] font-black text-slate-700 whitespace-nowrap">종소리</span>
-              </button>
+          <!-- Action Buttons Row: 종소리, 자동종, 설정 (가로 3등분 그리드) -->
+          <div class="grid grid-cols-3 gap-2 w-full">
+            <button onclick="playSchoolChime(true)" title="종소리 울리기"
+              class="w-full py-2 px-2 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="ctrlBellIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-slate-700 whitespace-nowrap">종소리</span>
+            </button>
 
-              <button id="btnSoundToggle" onclick="toggleSoundEnabled()" title="자동 종소리 토글"
-                class="px-2 py-1.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <div id="ctrlSoundIcon" class="flex-shrink-0"></div>
-                <span id="soundToggleLabel" class="text-[11px] font-black text-blue-700 whitespace-nowrap">자동종</span>
-              </button>
+            <button id="btnSoundToggle" onclick="toggleSoundEnabled()" title="자동 종소리 토글"
+              class="w-full py-2 px-2 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="ctrlSoundIcon" class="flex-shrink-0"></div>
+              <span id="soundToggleLabel" class="text-xs font-black text-blue-700 whitespace-nowrap">자동종</span>
+            </button>
 
-              <button onclick="openSettingsModal('timetable')" title="설정"
-                class="px-2 py-1.5 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <div id="ctrlSettingsIcon" class="flex-shrink-0"></div>
-                <span class="text-[11px] font-black text-slate-700 whitespace-nowrap">설정</span>
-              </button>
-            </div>
+            <button onclick="openSettingsModal('timetable')" title="설정"
+              class="w-full py-2 px-2 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="ctrlSettingsIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-slate-700 whitespace-nowrap">설정</span>
+            </button>
           </div>
         </div>
 
-        <!-- Sidebar Card 2 (Compact Today's Timetable - 사이드에 작게 표시) -->
-        <div class="bento-card p-4 flex flex-col justify-between gap-3">
-          <div>
-            <!-- Compact Header with #sectionTimetableIcon, title 오늘의 시간표, #weekdayTabs, and #btnResetTodayOverride -->
-            <div class="flex items-center justify-between gap-1.5 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate">
-              <div class="flex items-center gap-1.5 min-w-0">
-                <div id="sectionTimetableIcon" class="flex-shrink-0"></div>
-                <h3 class="text-base font-black text-slate-900 whitespace-nowrap truncate">오늘의 시간표</h3>
-              </div>
-
-              <div class="flex items-center gap-1 flex-shrink-0">
-                <div id="weekdayTabs" class="flex items-center gap-0.5 bg-[#F3F7FC] p-0.5 rounded-xl border border-slate-200/80"></div>
-                <button onclick="resetTodayPeriodOverrides()" id="btnResetTodayOverride" title="기본 시간표 복원"
-                  class="hidden text-[11px] font-extrabold text-blue-600 hover:underline cursor-pointer whitespace-nowrap flex-shrink-0">
-                  되돌리기
-                </button>
-              </div>
+        <!-- Sidebar Card 2 (Today's Timetable - 높이에 맞춰 균등 배치) -->
+        <div class="bento-card p-3.5 xl:p-4 flex-1 flex flex-col justify-between min-h-0 gap-2">
+          <!-- Compact Header with #sectionTimetableIcon, title 오늘의 시간표, #weekdayTabs, and #btnResetTodayOverride -->
+          <div class="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <div id="sectionTimetableIcon" class="flex-shrink-0"></div>
+              <h3 class="text-base font-black text-slate-900 whitespace-nowrap truncate">오늘의 시간표</h3>
             </div>
 
-            <!-- Period List Container (#periodListContainer) -->
-            <div id="periodListContainer" class="flex flex-col gap-1.5 mt-2.5">
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <div id="weekdayTabs" class="flex items-center gap-0.5 bg-[#F3F7FC] p-0.5 rounded-xl border border-slate-200/80"></div>
+              <button onclick="resetTodayPeriodOverrides()" id="btnResetTodayOverride" title="기본 시간표 복원"
+                class="hidden text-[11px] font-extrabold text-blue-600 hover:underline cursor-pointer whitespace-nowrap flex-shrink-0">
+                되돌리기
+              </button>
             </div>
           </div>
 
+          <!-- Period List Container (#periodListContainer) -->
+          <div id="periodListContainer" class="flex-1 flex flex-col justify-evenly gap-1.5 min-h-0 py-1">
+          </div>
+
           <!-- Compact Footer with #btnCount4, #btnCount5, #btnCount6 and 시정표 설정 button -->
-          <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500 whitespace-nowrap truncate">
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-1.5">
               <span class="text-[11px] text-slate-400 whitespace-nowrap">교시:</span>
               <div class="inline-flex rounded-lg bg-[#F3F7FC] p-0.5 border border-slate-200">
@@ -494,15 +499,15 @@ body {
         </div>
 
         <!-- Sidebar Card 3 (Compact Time-Slot Preview) -->
-        <div class="bento-card p-3 flex items-center justify-between gap-1.5 whitespace-nowrap truncate bg-[#F8FAFC] border-slate-200">
-          <span class="text-[11px] font-black text-slate-400 whitespace-nowrap flex-shrink-0">미리보기</span>
+        <div class="bento-card p-2.5 xl:p-3 flex items-center justify-between gap-1.5 whitespace-nowrap truncate bg-[#F8FAFC] border-slate-200 flex-shrink-0">
+          <span class="text-xs font-black text-slate-400 whitespace-nowrap flex-shrink-0">미리보기</span>
           <div class="flex items-center gap-1 min-w-0 overflow-x-auto">
-            <button onclick="simulateTimeSlot('morning')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">등교</button>
-            <button onclick="simulateTimeSlot('period1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">수업</button>
-            <button onclick="simulateTimeSlot('break1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">쉬는</button>
-            <button onclick="simulateTimeSlot('lunch')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">점심</button>
-            <button onclick="simulateTimeSlot('afterschool')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">하교</button>
-            <button id="btnRestoreRealTime" onclick="restoreRealTimeClock()" class="hidden px-2 py-1 rounded-lg bg-blue-600 text-white text-[11px] font-black cursor-pointer whitespace-nowrap flex-shrink-0 transition">현재시각</button>
+            <button onclick="simulateTimeSlot('morning')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">등교</button>
+            <button onclick="simulateTimeSlot('period1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">수업</button>
+            <button onclick="simulateTimeSlot('break1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">쉬는</button>
+            <button onclick="simulateTimeSlot('lunch')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">점심</button>
+            <button onclick="simulateTimeSlot('afterschool')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">하교</button>
+            <button id="btnRestoreRealTime" onclick="restoreRealTimeClock()" class="hidden px-2 py-1 rounded-lg bg-blue-600 text-white text-xs font-black cursor-pointer whitespace-nowrap flex-shrink-0 transition">현재시각</button>
           </div>
         </div>
 
@@ -739,7 +744,7 @@ body {
   </div>
 
   <script>
-const STORAGE_KEY = 'elementary_classroom_board_bento_v2';
+const STORAGE_KEY = 'elementary_classroom_board_bento_v3';
 
 const VECTOR_PATHS = {
   book: `
@@ -888,22 +893,33 @@ function renderSoftIcon(iconKey, gradClass = 'grad-purple-blue', sizeClass = 'w-
 }
 
 const DEFAULT_SUBJECTS = [
-  { id: 'kor',    name: '국어',         icon: 'book',    grad: 'grad-pink-orange' },
-  { id: 'math',   name: '수학',         icon: 'math',    grad: 'grad-purple-blue' },
-  { id: 'bareun', name: '바른생활',     icon: 'heart',   grad: 'grad-mint-blue' },
-  { id: 'seulgi', name: '슬기로운생활', icon: 'compass', grad: 'grad-sky-indigo' },
-  { id: 'jeul',   name: '즐거운생활',   icon: 'art',     grad: 'grad-lavender-pink' },
-  { id: 'spring', name: '봄 (통합)',     icon: 'sprout',  grad: 'grad-mint-blue' },
-  { id: 'summer', name: '여름 (통합)',   icon: 'sun',     grad: 'grad-blue-cyan' },
-  { id: 'autumn', name: '가을 (통합)',   icon: 'leaf',    grad: 'grad-peach-coral' },
-  { id: 'winter', name: '겨울 (통합)',   icon: 'snow',    grad: 'grad-sky-indigo' },
-  { id: 'school', name: '학교 (통합)',   icon: 'school',  grad: 'grad-purple-blue' },
-  { id: 'safe',   name: '안전한 생활',   icon: 'shield',  grad: 'grad-pink-orange' },
-  { id: 'chang',  name: '창체',         icon: 'star',    grad: 'grad-periwinkle-rose' },
-  { id: 'read',   name: '독서',         icon: 'book',    grad: 'grad-sky-indigo' },
-  { id: 'pe',     name: '체육·놀이',    icon: 'pe',      grad: 'grad-blue-cyan' },
-  { id: 'music',  name: '노래·악기',    icon: 'music',   grad: 'grad-lavender-pink' },
-  { id: 'art',    name: '만들기·그리기', icon: 'art',     grad: 'grad-peach-coral' }
+  // 기본 교과
+  { id: 'kor',        name: '국어',       icon: 'book',     grad: 'grad-pink-orange' },
+  { id: 'math',       name: '수학',       icon: 'math',     grad: 'grad-purple-blue' },
+  { id: 'chang',      name: '창체',       icon: 'star',     grad: 'grad-periwinkle-rose' },
+  { id: 'safe',       name: '안전한 생활', icon: 'shield',   grad: 'grad-mint-blue' },
+  { id: 'read',       name: '독서',       icon: 'book',     grad: 'grad-sky-indigo' },
+  { id: 'pe',         name: '체육·놀이',  icon: 'pe',       grad: 'grad-blue-cyan' },
+
+  // 1학년 통합교과 (8과목)
+  { id: 'g1_school',  name: '학교',       icon: 'school',   grad: 'grad-purple-blue', grade: 1 },
+  { id: 'g1_people',  name: '사람들',     icon: 'heart',    grad: 'grad-pink-orange', grade: 1 },
+  { id: 'g1_korea',   name: '우리나라',   icon: 'compass',  grad: 'grad-sky-indigo', grade: 1 },
+  { id: 'g1_explore', name: '탐험',       icon: 'compass',  grad: 'grad-blue-cyan', grade: 1 },
+  { id: 'g1_day',     name: '하루',       icon: 'sun',      grad: 'grad-peach-coral', grade: 1 },
+  { id: 'g1_promise', name: '약속',       icon: 'shield',   grad: 'grad-mint-blue', grade: 1 },
+  { id: 'g1_imagine', name: '상상',       icon: 'star',     grad: 'grad-lavender-pink', grade: 1 },
+  { id: 'g1_story',   name: '이야기',     icon: 'book',     grad: 'grad-periwinkle-rose', grade: 1 },
+
+  // 2학년 통합교과 (8과목)
+  { id: 'g2_me',      name: '나',         icon: 'heart',    grad: 'grad-pink-orange', grade: 2 },
+  { id: 'g2_nature',  name: '자연',       icon: 'sprout',   grad: 'grad-mint-blue', grade: 2 },
+  { id: 'g2_village', name: '마을',       icon: 'school',   grad: 'grad-sky-indigo', grade: 2 },
+  { id: 'g2_world',   name: '세계',       icon: 'compass',  grad: 'grad-purple-blue', grade: 2 },
+  { id: 'g2_season',  name: '계절',       icon: 'leaf',     grad: 'grad-peach-coral', grade: 2 },
+  { id: 'g2_person',  name: '인물',       icon: 'star',     grad: 'grad-lavender-pink', grade: 2 },
+  { id: 'g2_object',  name: '물건',       icon: 'art',      grad: 'grad-blue-cyan', grade: 2 },
+  { id: 'g2_memory',  name: '기억',       icon: 'notebook', grad: 'grad-periwinkle-rose', grade: 2 }
 ];
 
 const FREQUENT_TASK_PRESETS = [
@@ -955,11 +971,11 @@ function getDefaultState() {
     lastResetDate: new Date().toISOString().slice(0, 10),
     subjects: JSON.parse(JSON.stringify(DEFAULT_SUBJECTS)),
     weeklyTimetable: {
-      mon: { count: 4, periods: ['kor', 'math', 'bareun', 'jeul', 'chang', 'read'] },
-      tue: { count: 5, periods: ['kor', 'math', 'seulgi', 'jeul', 'safe', 'read'] },
-      wed: { count: 4, periods: ['kor', 'math', 'bareun', 'chang', 'pe', 'read'] },
-      thu: { count: 5, periods: ['kor', 'math', 'seulgi', 'jeul', 'read', 'art'] },
-      fri: { count: 4, periods: ['kor', 'math', 'jeul', 'safe', 'chang', 'pe'] }
+      mon: { count: 4, periods: ['kor', 'math', 'g1_school', 'g1_day', 'chang', 'read'] },
+      tue: { count: 5, periods: ['kor', 'math', 'g1_people', 'g1_promise', 'safe', 'read'] },
+      wed: { count: 4, periods: ['kor', 'math', 'g1_school', 'chang', 'pe', 'read'] },
+      thu: { count: 5, periods: ['kor', 'math', 'g1_imagine', 'g1_story', 'read', 'safe'] },
+      fri: { count: 4, periods: ['kor', 'math', 'g1_day', 'safe', 'chang', 'pe'] }
     },
     todayOverrides: {},
     bellSchedule: {
@@ -981,25 +997,29 @@ function getDefaultState() {
         { id: 'm1', icon: 'bag',      grad: 'grad-purple-blue', title: '가방 정리하고 사물함에 넣기', repeat: 'daily', done: false },
         { id: 'm2', icon: 'submit',   grad: 'grad-pink-orange', title: '숙제와 알림장 바구니에 내기', repeat: 'daily', done: false },
         { id: 'm3', icon: 'water',    grad: 'grad-blue-cyan',   title: '내 물통 제자리에 두고 물 마시기', repeat: 'daily', done: false },
-        { id: 'm4', icon: 'book',     grad: 'grad-sky-indigo',  title: '자리에 앉아 조용히 아침 독서하기', repeat: 'daily', done: false }
+        { id: 'm4', icon: 'calendar', grad: 'grad-sky-indigo',  title: '오늘 시간표 확인하고 교과서 꺼내기', repeat: 'daily', done: false },
+        { id: 'm5', icon: 'book',     grad: 'grad-purple-blue', title: '자리에 앉아 조용히 아침 독서하기', repeat: 'daily', done: false }
       ],
       classprep: [
-        { id: 'c1', icon: 'book',     grad: 'grad-purple-blue', title: '이번 시간 교과서 꺼내 놓기', repeat: 'daily', done: false },
-        { id: 'c2', icon: 'pencil',   grad: 'grad-pink-orange', title: '연필과 지우개 책상 위에 준비하기', repeat: 'daily', done: false },
-        { id: 'c3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '등을 펴고 바른 자세로 앉기', repeat: 'daily', done: false },
-        { id: 'c4', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 경청하기', repeat: 'daily', done: false }
+        { id: 'c1', icon: 'book',     grad: 'grad-purple-blue', title: '이번 시간 교과서 책상 위에 꺼내기', repeat: 'daily', done: false },
+        { id: 'c2', icon: 'pencil',   grad: 'grad-pink-orange', title: '연필 3자루와 지우개 준비하기', repeat: 'daily', done: false },
+        { id: 'c3', icon: 'bag',      grad: 'grad-blue-cyan',   title: '물통과 장난감은 책상 속에 넣기', repeat: 'daily', done: false },
+        { id: 'c4', icon: 'chair',    grad: 'grad-sky-indigo',  title: '허리를 펴고 바른 자세로 앉기', repeat: 'daily', done: false },
+        { id: 'c5', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 귀 기울이기', repeat: 'daily', done: false }
       ],
       breaktime: [
-        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 먼저 꺼내 놓기', repeat: 'daily', done: false },
-        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 미리 다녀오기', repeat: 'daily', done: false },
-        { id: 'b3', icon: 'milk',     grad: 'grad-pink-orange', title: '우유나 물 마시고 손 깨끗이 씻기', repeat: 'daily', done: false },
-        { id: 'b4', icon: 'shield',   grad: 'grad-mint-blue',   title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false }
+        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 미리 꺼내 놓기', repeat: 'daily', done: false },
+        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 다녀와서 비누로 손 씻기', repeat: 'daily', done: false },
+        { id: 'b3', icon: 'water',    grad: 'grad-mint-blue',   title: '내 자리에서 물이나 우유 마시기', repeat: 'daily', done: false },
+        { id: 'b4', icon: 'shield',   grad: 'grad-sky-indigo',  title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false },
+        { id: 'b5', icon: 'bell',     grad: 'grad-pink-orange', title: '종이 치면 바로 자리에 앉아 기다리기', repeat: 'daily', done: false }
       ],
       afterschool: [
-        { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 넣기', repeat: 'daily', done: false },
-        { id: 'a2', icon: 'clean',    grad: 'grad-mint-blue',   title: '책상 속과 내 자리 주변 정리하기', repeat: 'daily', done: false },
-        { id: 'a3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '의자 책상 안으로 바르게 넣기', repeat: 'daily', done: false },
-        { id: 'a4', icon: 'coat',     grad: 'grad-purple-blue', title: '외투·물통·신발주머니 챙기기', repeat: 'daily', done: false }
+        { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 챙겨 넣기', repeat: 'daily', done: false },
+        { id: 'a2', icon: 'clean',    grad: 'grad-mint-blue',   title: '책상 서랍 속과 내 자리 주변 정리하기', repeat: 'daily', done: false },
+        { id: 'a3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '의자를 책상 안으로 소리 없이 넣기', repeat: 'daily', done: false },
+        { id: 'a4', icon: 'coat',     grad: 'grad-purple-blue', title: '외투·물통·신발주머니 빠짐없이 챙기기', repeat: 'daily', done: false },
+        { id: 'a5', icon: 'heart',    grad: 'grad-lavender-pink', title: '선생님과 친구들에게 인사하고 하교하기', repeat: 'daily', done: false }
       ]
     }
   };
@@ -1090,7 +1110,7 @@ function evaluateCurrentTimeSlot() {
       routineTab: 'morning',
       icon: 'sun',
       grad: 'grad-pink-orange',
-      headline: '좋은 아침이에요! 등교 준비를 해요',
+      headline: `등교 후 '아침 활동'`,
       subline: '가방을 정리하고 숙제를 제출해요',
       timeRange: `${bs.morningStart} 등교·아침활동`,
       progressPct: 100,
@@ -1107,7 +1127,7 @@ function evaluateCurrentTimeSlot() {
       routineTab: 'morning',
       icon: 'sun',
       grad: 'grad-pink-orange',
-      headline: '등교 후 아침 활동 시간이에요',
+      headline: `등교 후 '아침 활동'`,
       subline: '가방을 정리하고 숙제를 제출해요',
       timeRange: `${bs.morningStart} ~ ${bs.morningEnd}`,
       progressPct: Math.round((rem / total) * 100),
@@ -1127,7 +1147,7 @@ function evaluateCurrentTimeSlot() {
       routineTab: 'breaktime',
       icon: 'wash',
       grad: 'grad-blue-cyan',
-      headline: '점심시간이에요! 맛있게 식사해요',
+      headline: `즐거운 '점심시간'`,
       subline: '손을 깨끗이 씻고 질서를 지켜 급식을 먹어요',
       timeRange: `${bs.lunchStart} ~ ${bs.lunchEnd}`,
       progressPct: Math.round((rem / total) * 100),
@@ -1152,7 +1172,7 @@ function evaluateCurrentTimeSlot() {
         routineTab: 'classprep',
         icon: subj.icon,
         grad: subj.grad,
-        headline: `지금은 ${p.num}교시 ${subj.name} 시간이에요`,
+        headline: `${p.num}교시 '${subj.name}'`,
         subline: '교과서와 연필을 준비하고 선생님 말씀에 귀 기울여요',
         timeRange: `${p.start} ~ ${p.end}`,
         progressPct: Math.round((rem / total) * 100),
@@ -1174,7 +1194,7 @@ function evaluateCurrentTimeSlot() {
           routineTab: 'breaktime',
           icon: 'water',
           grad: 'grad-blue-cyan',
-          headline: `쉬는 시간 (다음: ${nextP.num}교시 ${nextSubj.name})`,
+          headline: `쉬는 시간 · 다음 ${nextP.num}교시 '${nextSubj.name}'`,
           subline: '화장실에 다녀오고 다음 시간 교과서를 준비해요',
           timeRange: `${p.end} ~ ${nextP.start}`,
           progressPct: Math.round((rem / total) * 100),
@@ -1192,7 +1212,7 @@ function evaluateCurrentTimeSlot() {
     routineTab: 'afterschool',
     icon: 'bag',
     grad: 'grad-periwinkle-rose',
-    headline: '수업 마침! 자리를 정리하고 하교해요',
+    headline: `일과 마침 '하교 준비'`,
     subline: '알림장과 소지품을 챙기고 안전하게 귀가해요',
     timeRange: `${lastP ? lastP.end : '13:40'} ~ 하교`,
     progressPct: 100,
@@ -1389,7 +1409,7 @@ function updateHeaderClockAndTimer() {
 
     if (iconSlot) iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-14 h-14', 28);
     if (headlineEl) {
-      headlineEl.textContent = `${pObj.num}교시 ${subj.name} 시간이에요`;
+      headlineEl.textContent = `${pObj.num}교시 '${subj.name}'`;
       headlineEl.classList.add('whitespace-nowrap', 'truncate');
     }
     if (sublineEl) {
@@ -1459,8 +1479,8 @@ function updateHeaderClockAndTimer() {
   }
   if (soundBtn) {
     soundBtn.className = state.soundEnabled
-      ? 'px-2 py-1.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0'
-      : 'px-2 py-1.5 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0';
+      ? 'w-full py-2 px-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap'
+      : 'w-full py-2 px-2.5 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap';
   }
 }
 
@@ -1563,8 +1583,10 @@ function renderTimetableSection() {
 
           <button onclick="event.stopPropagation(); openSubjectPickerModal(${i})"
             title="${i + 1}교시 과목 변경"
-            class="px-2 py-1 rounded-lg text-[11px] font-extrabold bg-[#F8FAFC] hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-200 cursor-pointer transition whitespace-nowrap">
-            변경
+            class="w-7 h-7 rounded-lg bg-[#F8FAFC] hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 hover:border-blue-200 flex items-center justify-center cursor-pointer transition flex-shrink-0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -1649,19 +1671,19 @@ function renderRoutineSection() {
   gridEl.innerHTML = tasks.map((task, idx) => {
     const isTodaySpecial = task.repeat === 'today';
     return `
-      <div class="bento-tile p-3.5 flex items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl ${
+      <div class="bento-tile flex-1 min-h-[54px] px-4 py-2.5 flex items-center justify-between gap-3.5 bg-white border border-slate-200/90 rounded-2xl ${
         isTodaySpecial ? 'bg-gradient-to-r from-blue-50/40 to-white border-blue-200' : ''
       }">
-        <div class="flex items-center gap-3 min-w-0 flex-1">
-          <span class="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 font-black text-xs flex items-center justify-center flex-shrink-0">
+        <div class="flex items-center gap-3.5 min-w-0 flex-1">
+          <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-black text-sm md:text-base flex items-center justify-center flex-shrink-0 shadow-2xs">
             ${idx + 1}
           </span>
           ${renderSoftIcon(task.icon || 'star', task.grad || 'grad-purple-blue', 'w-11 h-11', 22)}
-          <span class="text-base md:text-lg font-extrabold text-slate-900 whitespace-nowrap truncate flex-1">
+          <span class="text-lg md:text-2xl xl:text-[1.65rem] font-black text-slate-900 whitespace-nowrap truncate flex-1 leading-snug py-0.5">
             ${escapeHtml(task.title)}
           </span>
           ${isTodaySpecial ? `
-            <span class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-blue-600 border border-blue-200 whitespace-nowrap flex-shrink-0">
+            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-600 border border-blue-200 whitespace-nowrap flex-shrink-0">
               오늘
             </span>
           ` : ''}
@@ -1669,7 +1691,7 @@ function renderRoutineSection() {
 
         <button onclick="event.stopPropagation(); deleteRoutineTask('${activeRoutineTab}', '${task.id}')"
           title="삭제"
-          class="w-7 h-7 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
+          class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
           ✕
         </button>
       </div>

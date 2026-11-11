@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="antialiased">
-  <div id="app" class="w-full max-w-[1540px] mx-auto p-3 md:p-5 flex flex-col gap-4">
+  <div id="app" class="w-full max-w-none min-h-[780px] lg:h-screen p-3 xl:p-4 flex flex-col justify-between gap-3 overflow-hidden">
 
     <!-- Toast Notification -->
     <div id="toastBanner" class="hidden fixed top-4 right-4 z-50 px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-bold text-sm shadow-xl border border-blue-400 whitespace-nowrap truncate">
@@ -18,13 +18,13 @@
     </div>
 
     <!-- ================= 12-COLUMN BENTO GRID ================= -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 xl:gap-4 flex-1 min-h-0 items-stretch">
 
-      <!-- ================= MAIN CENTER STAGE (lg:col-span-8 xl:col-span-9) ================= -->
-      <main class="lg:col-span-8 xl:col-span-9 flex flex-col gap-4">
+      <!-- ================= MAIN CENTER STAGE (lg:col-span-8) ================= -->
+      <main class="lg:col-span-8 flex flex-col gap-3.5 xl:gap-4 min-h-0 h-full">
 
         <!-- Top Hero Card (현재 시간 핵심 정보 크게 표시) -->
-        <section class="bento-card p-5 md:p-6 bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-4">
+        <section class="bento-card p-4 xl:p-5 bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-3 flex-shrink-0">
           <!-- Top status bar (single-line) -->
           <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate">
             <div class="flex items-center gap-2 min-w-0">
@@ -47,10 +47,10 @@
           </div>
 
           <!-- Main Hero content: Circular SVG Progress + Icon + Headlines -->
-          <div class="flex items-center gap-5 md:gap-6 py-2">
+          <div class="flex items-center gap-4 xl:gap-5 py-1">
             <!-- Circular SVG Progress wrapping #currentStatusIconSlot -->
-            <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 flex items-center justify-center">
-              <svg class="w-20 h-20 md:w-24 md:h-24 -rotate-90" viewBox="0 0 60 60">
+            <div class="relative w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 -rotate-90" viewBox="0 0 60 60">
                 <circle cx="30" cy="30" r="26" fill="none" stroke="#DBEAFE" stroke-width="4.5" />
                 <circle id="timerCirclePath" cx="30" cy="30" r="26" fill="none" stroke="#2563EB" stroke-width="4.5"
                   stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="40" class="transition-all duration-500" />
@@ -58,12 +58,12 @@
               <div id="currentStatusIconSlot" class="absolute inset-0 flex items-center justify-center"></div>
             </div>
 
-            <!-- Extra-large single-line Headline and Subline -->
+            <!-- Extra-large Headline and Subline without clipping -->
             <div class="min-w-0 flex-1">
-              <h1 id="currentStatusHeadline" class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight whitespace-nowrap truncate">
-                지금은 1교시 국어 시간이에요
+              <h1 id="currentStatusHeadline" class="text-3xl md:text-5xl xl:text-[3.25rem] font-black text-slate-900 tracking-tight leading-snug whitespace-nowrap truncate py-0.5">
+                1교시 '국어'
               </h1>
-              <div id="currentStatusSubline" class="text-sm md:text-base font-bold text-blue-600 whitespace-nowrap truncate mt-1">
+              <div id="currentStatusSubline" class="text-sm md:text-base font-bold text-blue-600 whitespace-nowrap truncate mt-0.5">
                 바른 자세로 앉아 선생님과 친구들의 이야기에 귀 기울여요
               </div>
             </div>
@@ -71,9 +71,9 @@
         </section>
 
         <!-- Main Center To-Do List Card (현재 시간 할 일 리스트 크게 표시) -->
-        <section class="bento-card p-5 md:p-6 flex-1 flex flex-col justify-between gap-4">
+        <section class="bento-card p-4 xl:p-5 flex-1 flex flex-col justify-between gap-3 min-h-0">
           <!-- Header row (single-line) -->
-          <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100 whitespace-nowrap truncate">
+          <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <div id="sectionRoutineIcon" class="flex-shrink-0"></div>
               <h2 id="routineBoardTitle" class="text-xl md:text-2xl font-black text-slate-900 tracking-tight whitespace-nowrap truncate">
@@ -92,12 +92,12 @@
             </div>
           </div>
 
-          <!-- Body: Routine Cards Grid -->
-          <div id="routineCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 items-start">
+          <!-- Body: Routine Cards Grid (1 item per row, 5 rows filling vertically) -->
+          <div id="routineCardsGrid" class="flex flex-col gap-2.5 flex-1 justify-between min-h-0">
           </div>
 
           <!-- Footer (single-line) -->
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 whitespace-nowrap truncate">
+          <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 whitespace-nowrap truncate flex-shrink-0">
             <span class="whitespace-nowrap truncate">모든 변경 사항은 이 브라우저에 자동 저장됩니다</span>
             <button onclick="openSettingsModal('backup')" class="text-blue-600 hover:underline font-extrabold cursor-pointer whitespace-nowrap flex-shrink-0 ml-2">
               JSON 백업/복원 →
@@ -107,18 +107,18 @@
 
       </main>
 
-      <!-- ================= COMPACT RIGHT SIDEBAR (lg:col-span-4 xl:col-span-3) ================= -->
-      <aside class="lg:col-span-4 xl:col-span-3 flex flex-col gap-3">
+      <!-- ================= COMPACT RIGHT SIDEBAR (lg:col-span-4) ================= -->
+      <aside class="lg:col-span-4 flex flex-col gap-3 xl:gap-3.5 min-h-0 h-full justify-between">
 
-        <!-- Sidebar Card 1 (Compact Clock, Date & Quick Controls) -->
-        <div class="bento-card p-4 flex flex-col gap-3">
+        <!-- Sidebar Card 1 (Ultra-Large Clock, Date & Quick Controls) -->
+        <div class="bento-card p-3.5 xl:p-4 flex flex-col gap-2.5 xl:gap-3 flex-shrink-0">
           <!-- Compact single-line header with #headerCalendarIcon, #btnEditClassName (#classNameDisplay), #classNameInputWrap (#classNameInput), #dateDisplay, #dayOfWeekBadge -->
-          <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate pb-2.5 border-b border-slate-100">
+          <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate pb-2 border-b border-slate-100">
             <div class="flex items-center gap-2 min-w-0">
               <div id="headerCalendarIcon" class="flex-shrink-0"></div>
               <button id="btnEditClassName" onclick="openClassNameEditor()" title="학급 이름 바꾸기"
-                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-xs font-extrabold cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <span id="classNameDisplay" class="truncate max-w-[70px]">1학년 1반</span>
+                class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-xs font-extrabold cursor-pointer transition whitespace-nowrap flex-shrink-0">
+                <span id="classNameDisplay" class="truncate max-w-[80px]">1학년 1반</span>
                 <span class="opacity-60 text-[10px]">✎</span>
               </button>
               <div id="classNameInputWrap" class="hidden items-center gap-1 flex-shrink-0">
@@ -133,70 +133,65 @@
               <span id="dateDisplay" class="text-sm md:text-base font-black text-slate-900 whitespace-nowrap">
                 11월 10일
               </span>
-              <span id="dayOfWeekBadge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-100 text-slate-700 whitespace-nowrap flex-shrink-0">
+              <span id="dayOfWeekBadge" class="px-2 py-0.5 rounded-full text-xs font-extrabold bg-slate-100 text-slate-700 whitespace-nowrap flex-shrink-0">
                 화요일
               </span>
             </div>
           </div>
 
-          <!-- Compact clock row with #ampmDisplay, #clockDisplay, #secondsDisplay and compact action buttons -->
-          <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate">
-            <!-- Digital Clock Display -->
-            <div class="px-2.5 py-1.5 rounded-xl bg-[#F3F7FC] border border-blue-100 flex items-baseline gap-1 flex-shrink-0">
-              <span id="ampmDisplay" class="text-[11px] font-black text-blue-600 whitespace-nowrap">오전</span>
-              <span id="clockDisplay" class="text-xl md:text-2xl font-black text-slate-900 tabular-nums leading-none whitespace-nowrap">09:00</span>
-              <span id="secondsDisplay" class="text-[11px] font-bold text-slate-400 tabular-nums whitespace-nowrap">:00</span>
-            </div>
+          <!-- Ultra-Large Clock Display (약 4배 초대형 표시) -->
+          <div class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-br from-[#EFF6FF] to-[#F8FAFC] border border-blue-200 flex items-baseline justify-center gap-2.5 shadow-2xs">
+            <span id="ampmDisplay" class="text-base xl:text-lg font-extrabold text-blue-600 whitespace-nowrap">오전</span>
+            <span id="clockDisplay" class="text-6xl xl:text-7xl 2xl:text-[5.25rem] font-black text-slate-900 tracking-tighter tabular-nums leading-none whitespace-nowrap">09:00</span>
+            <span id="secondsDisplay" class="text-xl xl:text-2xl font-bold text-slate-400 tabular-nums whitespace-nowrap">:00</span>
+          </div>
 
-            <!-- Compact Action Buttons: 종소리, 자동종, 설정 -->
-            <div class="flex items-center gap-1 min-w-0">
-              <button onclick="playSchoolChime(true)" title="종소리 울리기"
-                class="px-2 py-1.5 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <div id="ctrlBellIcon" class="flex-shrink-0"></div>
-                <span class="text-[11px] font-black text-slate-700 whitespace-nowrap">종소리</span>
-              </button>
+          <!-- Action Buttons Row: 종소리, 자동종, 설정 (가로 3등분 그리드) -->
+          <div class="grid grid-cols-3 gap-2 w-full">
+            <button onclick="playSchoolChime(true)" title="종소리 울리기"
+              class="w-full py-2 px-2 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="ctrlBellIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-slate-700 whitespace-nowrap">종소리</span>
+            </button>
 
-              <button id="btnSoundToggle" onclick="toggleSoundEnabled()" title="자동 종소리 토글"
-                class="px-2 py-1.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <div id="ctrlSoundIcon" class="flex-shrink-0"></div>
-                <span id="soundToggleLabel" class="text-[11px] font-black text-blue-700 whitespace-nowrap">자동종</span>
-              </button>
+            <button id="btnSoundToggle" onclick="toggleSoundEnabled()" title="자동 종소리 토글"
+              class="w-full py-2 px-2 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="ctrlSoundIcon" class="flex-shrink-0"></div>
+              <span id="soundToggleLabel" class="text-xs font-black text-blue-700 whitespace-nowrap">자동종</span>
+            </button>
 
-              <button onclick="openSettingsModal('timetable')" title="설정"
-                class="px-2 py-1.5 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center gap-1 cursor-pointer transition whitespace-nowrap flex-shrink-0">
-                <div id="ctrlSettingsIcon" class="flex-shrink-0"></div>
-                <span class="text-[11px] font-black text-slate-700 whitespace-nowrap">설정</span>
-              </button>
-            </div>
+            <button onclick="openSettingsModal('timetable')" title="설정"
+              class="w-full py-2 px-2 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="ctrlSettingsIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-slate-700 whitespace-nowrap">설정</span>
+            </button>
           </div>
         </div>
 
-        <!-- Sidebar Card 2 (Compact Today's Timetable - 사이드에 작게 표시) -->
-        <div class="bento-card p-4 flex flex-col justify-between gap-3">
-          <div>
-            <!-- Compact Header with #sectionTimetableIcon, title 오늘의 시간표, #weekdayTabs, and #btnResetTodayOverride -->
-            <div class="flex items-center justify-between gap-1.5 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate">
-              <div class="flex items-center gap-1.5 min-w-0">
-                <div id="sectionTimetableIcon" class="flex-shrink-0"></div>
-                <h3 class="text-base font-black text-slate-900 whitespace-nowrap truncate">오늘의 시간표</h3>
-              </div>
-
-              <div class="flex items-center gap-1 flex-shrink-0">
-                <div id="weekdayTabs" class="flex items-center gap-0.5 bg-[#F3F7FC] p-0.5 rounded-xl border border-slate-200/80"></div>
-                <button onclick="resetTodayPeriodOverrides()" id="btnResetTodayOverride" title="기본 시간표 복원"
-                  class="hidden text-[11px] font-extrabold text-blue-600 hover:underline cursor-pointer whitespace-nowrap flex-shrink-0">
-                  되돌리기
-                </button>
-              </div>
+        <!-- Sidebar Card 2 (Today's Timetable - 높이에 맞춰 균등 배치) -->
+        <div class="bento-card p-3.5 xl:p-4 flex-1 flex flex-col justify-between min-h-0 gap-2">
+          <!-- Compact Header with #sectionTimetableIcon, title 오늘의 시간표, #weekdayTabs, and #btnResetTodayOverride -->
+          <div class="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <div id="sectionTimetableIcon" class="flex-shrink-0"></div>
+              <h3 class="text-base font-black text-slate-900 whitespace-nowrap truncate">오늘의 시간표</h3>
             </div>
 
-            <!-- Period List Container (#periodListContainer) -->
-            <div id="periodListContainer" class="flex flex-col gap-1.5 mt-2.5">
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <div id="weekdayTabs" class="flex items-center gap-0.5 bg-[#F3F7FC] p-0.5 rounded-xl border border-slate-200/80"></div>
+              <button onclick="resetTodayPeriodOverrides()" id="btnResetTodayOverride" title="기본 시간표 복원"
+                class="hidden text-[11px] font-extrabold text-blue-600 hover:underline cursor-pointer whitespace-nowrap flex-shrink-0">
+                되돌리기
+              </button>
             </div>
           </div>
 
+          <!-- Period List Container (#periodListContainer) -->
+          <div id="periodListContainer" class="flex-1 flex flex-col justify-evenly gap-1.5 min-h-0 py-1">
+          </div>
+
           <!-- Compact Footer with #btnCount4, #btnCount5, #btnCount6 and 시정표 설정 button -->
-          <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500 whitespace-nowrap truncate">
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-1.5">
               <span class="text-[11px] text-slate-400 whitespace-nowrap">교시:</span>
               <div class="inline-flex rounded-lg bg-[#F3F7FC] p-0.5 border border-slate-200">
@@ -212,15 +207,15 @@
         </div>
 
         <!-- Sidebar Card 3 (Compact Time-Slot Preview) -->
-        <div class="bento-card p-3 flex items-center justify-between gap-1.5 whitespace-nowrap truncate bg-[#F8FAFC] border-slate-200">
-          <span class="text-[11px] font-black text-slate-400 whitespace-nowrap flex-shrink-0">미리보기</span>
+        <div class="bento-card p-2.5 xl:p-3 flex items-center justify-between gap-1.5 whitespace-nowrap truncate bg-[#F8FAFC] border-slate-200 flex-shrink-0">
+          <span class="text-xs font-black text-slate-400 whitespace-nowrap flex-shrink-0">미리보기</span>
           <div class="flex items-center gap-1 min-w-0 overflow-x-auto">
-            <button onclick="simulateTimeSlot('morning')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">등교</button>
-            <button onclick="simulateTimeSlot('period1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">수업</button>
-            <button onclick="simulateTimeSlot('break1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">쉬는</button>
-            <button onclick="simulateTimeSlot('lunch')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">점심</button>
-            <button onclick="simulateTimeSlot('afterschool')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-[11px] font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">하교</button>
-            <button id="btnRestoreRealTime" onclick="restoreRealTimeClock()" class="hidden px-2 py-1 rounded-lg bg-blue-600 text-white text-[11px] font-black cursor-pointer whitespace-nowrap flex-shrink-0 transition">현재시각</button>
+            <button onclick="simulateTimeSlot('morning')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">등교</button>
+            <button onclick="simulateTimeSlot('period1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">수업</button>
+            <button onclick="simulateTimeSlot('break1')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">쉬는</button>
+            <button onclick="simulateTimeSlot('lunch')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">점심</button>
+            <button onclick="simulateTimeSlot('afterschool')" class="px-2 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-xs font-extrabold text-slate-700 cursor-pointer whitespace-nowrap transition">하교</button>
+            <button id="btnRestoreRealTime" onclick="restoreRealTimeClock()" class="hidden px-2 py-1 rounded-lg bg-blue-600 text-white text-xs font-black cursor-pointer whitespace-nowrap flex-shrink-0 transition">현재시각</button>
           </div>
         </div>
 
