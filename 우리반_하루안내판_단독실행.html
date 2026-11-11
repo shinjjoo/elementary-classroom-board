@@ -462,7 +462,7 @@ body {
 
 
 
-  </style>
+</style>
 </head>
 <body class="antialiased">
   <div id="app" class="w-full flex flex-col justify-between overflow-hidden">
@@ -1914,15 +1914,53 @@ function getEffectivePeriodSubjectId(dayKey, periodIdx) {
 }
 
 let audioCtx = null;
+let masterCompressor = null;
+let masterGain = null;
+
+function initAudioUnlock() {
+  const unlockEvents = ['click', 'touchstart', 'keydown'];
+  const unlockHandler = () => {
+    const ctx = getAudioCtx();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    unlockEvents.forEach(evt => document.removeEventListener(evt, unlockHandler, true));
+  };
+  unlockEvents.forEach(evt => document.addEventListener(evt, unlockHandler, { once: true, capture: true }));
+}
+
 function getAudioCtx() {
   if (!audioCtx) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) audioCtx = new AudioContextClass();
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+      try {
+        masterCompressor = audioCtx.createDynamicsCompressor();
+        masterCompressor.threshold.setValueAtTime(-24, audioCtx.currentTime);
+        masterCompressor.knee.setValueAtTime(30, audioCtx.currentTime);
+        masterCompressor.ratio.setValueAtTime(12, audioCtx.currentTime);
+        masterCompressor.attack.setValueAtTime(0.003, audioCtx.currentTime);
+        masterCompressor.release.setValueAtTime(0.25, audioCtx.currentTime);
+
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(1.0, audioCtx.currentTime);
+
+        masterCompressor.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
+      } catch (e) {
+        masterCompressor = null;
+        masterGain = null;
+      }
+    }
   }
   if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
+    audioCtx.resume().catch(() => {});
   }
   return audioCtx;
+}
+
+function getAudioDestination(ctx) {
+  return masterCompressor || ctx.destination;
 }
 
 function playSchoolChime(force = false) {
@@ -1931,10 +1969,10 @@ function playSchoolChime(force = false) {
   if (!ctx) return;
 
   const notes = [
-    { freq: 659.25, delay: 0.0,  dur: 0.45 },
-    { freq: 783.99, delay: 0.35, dur: 0.45 },
-    { freq: 659.25, delay: 0.70, dur: 0.45 },
-    { freq: 523.25, delay: 1.05, dur: 0.80 }
+    { freq: 659.25, delay: 0.0,  dur: 0.50 }, // E5
+    { freq: 783.99, delay: 0.40, dur: 0.50 }, // G5
+    { freq: 659.25, delay: 0.80, dur: 0.50 }, // E5
+    { freq: 523.25, delay: 1.20, dur: 0.95 }  // C5
   ];
   notes.forEach(n => {
     const osc = ctx.createOscillator();
@@ -1942,14 +1980,14 @@ function playSchoolChime(force = false) {
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(n.freq, ctx.currentTime + n.delay);
     gain.gain.setValueAtTime(0.001, ctx.currentTime + n.delay);
-    gain.gain.exponentialRampToValueAtTime(0.28, ctx.currentTime + n.delay + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.50, ctx.currentTime + n.delay + 0.04);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.delay + n.dur);
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(getAudioDestination(ctx));
     osc.start(ctx.currentTime + n.delay);
     osc.stop(ctx.currentTime + n.delay + n.dur + 0.05);
   });
-  if (force) showToast('학교 차임벨이 울립니다');
+  if (force) showToast('🔔 학교 차임벨이 울립니다');
 }
 
 function playStampSound(checked) {
@@ -1962,10 +2000,10 @@ function playStampSound(checked) {
     osc.type = 'sine';
     const start = ctx.currentTime + idx * 0.07;
     osc.frequency.setValueAtTime(f, start);
-    gain.gain.setValueAtTime(0.2, start);
+    gain.gain.setValueAtTime(0.40, start);
     gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(getAudioDestination(ctx));
     osc.start(start);
     osc.stop(start + 0.24);
   });
@@ -1978,17 +2016,17 @@ function playCelebrationFanfare() {
     { f: 523.25, d: 0.00, l: 0.18 },
     { f: 659.25, d: 0.16, l: 0.18 },
     { f: 783.99, d: 0.32, l: 0.18 },
-    { f: 1046.5, d: 0.50, l: 0.55 }
+    { f: 1046.5, d: 0.50, l: 0.65 }
   ];
   melody.forEach(n => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(n.f, ctx.currentTime + n.d);
-    gain.gain.setValueAtTime(0.25, ctx.currentTime + n.d);
+    gain.gain.setValueAtTime(0.48, ctx.currentTime + n.d);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.d + n.l);
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(getAudioDestination(ctx));
     osc.start(ctx.currentTime + n.d);
     osc.stop(ctx.currentTime + n.d + n.l + 0.04);
   });
@@ -2191,6 +2229,12 @@ function updateHeaderClockAndTimer() {
         showPreClassAlertModal(slot.remainingSec, slot.periodIndex);
       }
     } else if (slot.type === 'period') {
+      const modal = document.getElementById('preClassAlertModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+        playSchoolChime(true);
+        showToast('🔔 수업이 시작되었습니다! 자리에 바르게 앉아요');
+      }
       dismissedPreAlertSlotKey = null;
     }
   }
@@ -3061,9 +3105,15 @@ function showPreClassAlertModal(remainingSec, nextPeriodIdx) {
     barEl.style.width = `${pct}%`;
   }
 
+  // When opening for the first time, immediately play school chime with force=true
   if (modal.classList.contains('hidden')) {
     modal.classList.remove('hidden');
-    playSchoolChime(false);
+    playSchoolChime(true);
+  } else {
+    // While modal is open, play countdown tick beeps at 5, 4, 3, 2, 1 seconds
+    if (remainingSec >= 1 && remainingSec <= 5) {
+      playTimerTickBeep(remainingSec);
+    }
   }
 }
 
@@ -3108,7 +3158,7 @@ function triggerPreClassAlertPreview() {
       const modal = document.getElementById('preClassAlertModal');
       if (modal) modal.classList.add('hidden');
       playSchoolChime(true);
-      showToast('30초 준비 카운트다운이 완료되었습니다');
+      showToast('🔔 30초 준비 완료! 수업이 시작되었습니다');
     } else {
       showPreClassAlertModal(sec, nextIdx);
     }
@@ -3974,21 +4024,28 @@ function startActivityTimer() {
   activityTimerRunning = true;
   updateTimerPlayButtons();
 
+  // Play short starting confirmation beep so teacher knows audio is working
+  playTimerStartBeep();
+
   if (activityTimerInterval) clearInterval(activityTimerInterval);
   activityTimerInterval = setInterval(() => {
     if (activityTimerMode === 'countdown') {
       activityTimerRemainingSec--;
 
-      // 5, 4, 3, 2, 1s beeps
-      if (activityTimerRemainingSec > 0 && activityTimerRemainingSec <= 5) {
+      // 10s ~ 6s: light prep ticks (440Hz)
+      if (activityTimerRemainingSec >= 6 && activityTimerRemainingSec <= 10) {
+        playTimerPrepTick(activityTimerRemainingSec);
+      }
+      // 5s ~ 1s: prominent countdown beeps (587.33Hz -> 1s 880Hz, gain 0.45)
+      else if (activityTimerRemainingSec >= 1 && activityTimerRemainingSec <= 5) {
         playTimerTickBeep(activityTimerRemainingSec);
       }
 
       if (activityTimerRemainingSec <= 0) {
         activityTimerRemainingSec = 0;
         pauseActivityTimer();
-        playCelebrationFanfare();
-        showToast('🔔 활동 시간이 종료되었습니다!');
+        playTimerFinishAlarm();
+        showToast('🔔 활동 시간이 종료되었습니다! 모두 자리에 앉아요');
       }
     } else {
       activityStopwatchElapsedSec++;
@@ -4120,19 +4177,105 @@ function updateMiniTimerDisplay() {
   }
 }
 
-function playTimerTickBeep(sec) {
+function playTimerStartBeep() {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(880, ctx.currentTime);
+  gain.gain.setValueAtTime(0.001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.45, ctx.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+  osc.connect(gain);
+  gain.connect(getAudioDestination(ctx));
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.14);
+}
+
+function playTimerPrepTick(sec) {
   const ctx = getAudioCtx();
   if (!ctx) return;
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = 'sine';
-  osc.frequency.setValueAtTime(sec === 1 ? 880 : 587.33, ctx.currentTime);
-  gain.gain.setValueAtTime(0.15, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+  osc.frequency.setValueAtTime(440, ctx.currentTime);
+  gain.gain.setValueAtTime(0.001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.28, ctx.currentTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
   osc.connect(gain);
-  gain.connect(ctx.destination);
+  gain.connect(getAudioDestination(ctx));
   osc.start(ctx.currentTime);
-  osc.stop(ctx.currentTime + 0.14);
+  osc.stop(ctx.currentTime + 0.09);
+}
+
+function playTimerTickBeep(sec) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  const freq = sec === 1 ? 880 : 587.33; // 1 second left is high-pitched 880Hz
+  osc.frequency.setValueAtTime(freq, ctx.currentTime);
+  gain.gain.setValueAtTime(0.001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.45, ctx.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+  osc.connect(gain);
+  gain.connect(getAudioDestination(ctx));
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.18);
+}
+
+function playTimerFinishAlarm() {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+
+  // 1. Double Bell ring (C6 - G5 - C6 twice)
+  const bellChords = [
+    { freqs: [1046.5, 1318.5], start: 0.00, dur: 0.22 },
+    { freqs: [1046.5, 1318.5], start: 0.25, dur: 0.28 }
+  ];
+
+  bellChords.forEach(chord => {
+    chord.freqs.forEach(f => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, ctx.currentTime + chord.start);
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + chord.start);
+      gain.gain.exponentialRampToValueAtTime(0.50, ctx.currentTime + chord.start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + chord.start + chord.dur);
+      osc.connect(gain);
+      gain.connect(getAudioDestination(ctx));
+      osc.start(ctx.currentTime + chord.start);
+      osc.stop(ctx.currentTime + chord.start + chord.dur + 0.04);
+    });
+  });
+
+  // 2. Triumphant Fanfare Melody (~2.5s duration)
+  // G4 -> C5 -> E5 -> G5 -> E5 -> G5(high)
+  const fanfareNotes = [
+    { freq: 523.25, start: 0.60, dur: 0.18 }, // C5
+    { freq: 659.25, start: 0.78, dur: 0.18 }, // E5
+    { freq: 783.99, start: 0.96, dur: 0.22 }, // G5
+    { freq: 659.25, start: 1.20, dur: 0.16 }, // E5
+    { freq: 783.99, start: 1.38, dur: 0.22 }, // G5
+    { freq: 1046.50, start: 1.62, dur: 0.85 } // C6 (long finish)
+  ];
+
+  fanfareNotes.forEach(n => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(n.freq, ctx.currentTime + n.start);
+    gain.gain.setValueAtTime(0.001, ctx.currentTime + n.start);
+    gain.gain.exponentialRampToValueAtTime(0.50, ctx.currentTime + n.start + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.start + n.dur);
+    osc.connect(gain);
+    gain.connect(getAudioDestination(ctx));
+    osc.start(ctx.currentTime + n.start);
+    osc.stop(ctx.currentTime + n.start + n.dur + 0.05);
+  });
 }
 
 function playAttentionSound(type) {
@@ -4160,7 +4303,7 @@ function playAttentionSound(type) {
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
 
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(getAudioDestination(ctx));
 
     osc.start(ctx.currentTime);
     lfo.start(ctx.currentTime);
@@ -4176,10 +4319,10 @@ function playAttentionSound(type) {
       osc.type = 'sine';
       const start = ctx.currentTime + idx * 0.14;
       osc.frequency.setValueAtTime(f, start);
-      gain.gain.setValueAtTime(0.3, start);
+      gain.gain.setValueAtTime(0.48, start);
       gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(getAudioDestination(ctx));
       osc.start(start);
       osc.stop(start + 0.55);
     });
@@ -4191,10 +4334,10 @@ function playAttentionSound(type) {
       const gain = ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(400, ctx.currentTime + timeOffset);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime + timeOffset);
+      gain.gain.setValueAtTime(0.48, ctx.currentTime + timeOffset);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + timeOffset + 0.1);
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(getAudioDestination(ctx));
       osc.start(ctx.currentTime + timeOffset);
       osc.stop(ctx.currentTime + timeOffset + 0.12);
     });
@@ -4419,6 +4562,7 @@ function initTimerWindowDragAndResize() {
 }
 
 function initBoard() {
+  initAudioUnlock();
   renderStaticIcons();
   const initialSlot = evaluateCurrentTimeSlot();
   activeRoutineTab = initialSlot.routineTab;
@@ -4435,6 +4579,6 @@ function initBoard() {
 initBoard();
 
 
-  </script>
+</script>
 </body>
 </html>
