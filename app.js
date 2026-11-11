@@ -811,7 +811,7 @@ function renderTimetableSection() {
           ${renderSoftIcon(subj.icon, subj.grad, 'w-8 h-8', 16)}
 
           <div class="min-w-0 flex-1 flex items-center gap-1.5">
-            <span class="text-sm md:text-base font-black text-slate-900 whitespace-nowrap truncate">
+            <span class="subject-name text-sm md:text-base font-black text-slate-900 whitespace-nowrap truncate">
               ${escapeHtml(subj.name)}
             </span>
             <span class="text-[11px] font-bold text-slate-400 tabular-nums whitespace-nowrap">

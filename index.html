@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="antialiased">
-  <div id="app" class="w-full max-w-none min-h-[780px] lg:h-screen p-3 xl:p-4 flex flex-col justify-between gap-3 overflow-hidden">
+  <div id="app" class="w-full flex flex-col justify-between overflow-hidden">
 
     <!-- Toast Notification -->
     <div id="toastBanner" class="hidden fixed top-4 right-4 z-50 px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-bold text-sm shadow-xl border border-blue-400 whitespace-nowrap truncate">
@@ -18,13 +18,13 @@
     </div>
 
     <!-- ================= 12-COLUMN BENTO GRID ================= -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 xl:gap-4 flex-1 min-h-0 items-stretch">
+    <div class="main-stage-grid grid grid-cols-1 lg:grid-cols-12 flex-1 min-h-0 items-stretch">
 
       <!-- ================= MAIN CENTER STAGE (lg:col-span-8) ================= -->
-      <main class="lg:col-span-8 flex flex-col gap-3.5 xl:gap-4 min-h-0 h-full">
+      <main class="lg:col-span-8 flex flex-col min-h-0 h-full" style="gap: clamp(0.9rem, 1.6vw, 1.5rem);">
 
         <!-- Top Hero Card (현재 시간 핵심 정보 크게 표시) -->
-        <section class="bento-card p-4 xl:p-5 bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-3 flex-shrink-0">
+        <section class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-3 flex-shrink-0">
           <!-- Top status bar (single-line) -->
           <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate">
             <div class="flex items-center gap-2 min-w-0">
@@ -71,7 +71,7 @@
         </section>
 
         <!-- Main Center To-Do List Card (현재 시간 할 일 리스트 크게 표시) -->
-        <section class="bento-card p-4 xl:p-5 flex-1 flex flex-col justify-between gap-3 min-h-0">
+        <section class="bento-card hero-card-pad flex-1 flex flex-col justify-between gap-3 min-h-0">
           <!-- Header row (single-line) -->
           <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
@@ -108,10 +108,10 @@
       </main>
 
       <!-- ================= COMPACT RIGHT SIDEBAR (lg:col-span-4) ================= -->
-      <aside class="lg:col-span-4 flex flex-col gap-3 xl:gap-3.5 min-h-0 h-full justify-between">
+      <aside class="lg:col-span-4 flex flex-col min-h-0 h-full justify-between" style="gap: clamp(0.75rem, 1.4vw, 1.25rem);">
 
         <!-- Sidebar Card 1 (Ultra-Large Clock, Date & Quick Controls) -->
-        <div class="bento-card p-3.5 xl:p-4 flex flex-col gap-2.5 xl:gap-3 flex-shrink-0">
+        <div class="bento-card sidebar-card-pad flex flex-col gap-2.5 xl:gap-3 flex-shrink-0">
           <!-- Compact single-line header with #headerCalendarIcon, #btnEditClassName (#classNameDisplay), #classNameInputWrap (#classNameInput), #dateDisplay, #dayOfWeekBadge -->
           <div class="flex items-center justify-between gap-2 whitespace-nowrap truncate pb-2 border-b border-slate-100">
             <div class="flex items-center gap-2 min-w-0">
@@ -169,7 +169,7 @@
         </div>
 
         <!-- Sidebar Card 2 (Today's Timetable - 높이에 맞춰 균등 배치) -->
-        <div class="bento-card p-3.5 xl:p-4 flex-1 flex flex-col justify-between min-h-0 gap-2">
+        <div class="bento-card sidebar-card-pad flex-1 flex flex-col justify-between min-h-0 gap-2">
           <!-- Compact Header with #sectionTimetableIcon, title 오늘의 시간표, #weekdayTabs, and #btnResetTodayOverride -->
           <div class="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-1.5 min-w-0">
