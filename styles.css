@@ -1,0 +1,280 @@
+:root {
+  --bg-canvas: #F3F7FC;
+  --bg-bento: #FFFFFF;
+  --bg-bento-subtle: #F8FAFC;
+  --bg-blue-tint: #EFF6FF;
+  --border-crisp: #E2E8F0;
+  --border-blue: #BFDBFE;
+  --primary-blue: #2563EB;
+  --primary-blue-dark: #1D4ED8;
+  --text-main: #0F172A;
+  --text-sub: #64748B;
+}
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Pretendard Variable", "Apple SD Gothic Neo", "Malgun Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.025em;
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ================= SINGLE-LINE TEXT DISCIPLINE ================= */
+.single-line,
+.truncate-1 {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.no-wrap {
+  white-space: nowrap !important;
+}
+
+/* ================= BENTO CARD & TILE BASE ================= */
+.bento-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04),
+              0 2px 6px -1px rgba(37, 99, 235, 0.03);
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bento-tile {
+  background: #FFFFFF;
+  border: 1.5px solid #E6EEF8;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px -3px rgba(30, 58, 138, 0.05);
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.18s ease,
+              border-color 0.18s ease,
+              background-color 0.18s ease;
+}
+
+.bento-tile:hover {
+  transform: translateY(-2px);
+  border-color: #BFDBFE;
+  box-shadow: 0 8px 20px -5px rgba(37, 99, 235, 0.10);
+}
+
+.bento-tile:active {
+  transform: translateY(1px);
+}
+
+.bento-period-active {
+  background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%) !important;
+  border: 2px solid #3B82F6 !important;
+  box-shadow: 0 8px 22px -5px rgba(37, 99, 235, 0.18),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.bento-period-done {
+  opacity: 0.52;
+  background: #F8FAFC;
+}
+
+/* ================= APP-STORE SOFT PASTEL SQUIRCLE ICONS ================= */
+.soft-icon-tile {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 28%;
+  box-shadow:
+    0 8px 18px -5px var(--icon-shadow, rgba(99, 102, 241, 0.32)),
+    0 2px 5px -1px rgba(15, 23, 42, 0.06),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.75),
+    inset 0 -2px 4px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.soft-icon-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 26% 22%, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0) 62%);
+  pointer-events: none;
+}
+
+.bento-tile:hover .soft-icon-tile {
+  transform: scale(1.05);
+}
+
+/* Gradient Presets */
+.grad-pink-orange {
+  background: linear-gradient(135deg, #FF85B3 0%, #FF9E7D 52%, #FFB86C 100%);
+  --icon-shadow: rgba(255, 133, 179, 0.38);
+}
+.grad-purple-blue {
+  background: linear-gradient(135deg, #A78BFA 0%, #818CF8 50%, #60A5FA 100%);
+  --icon-shadow: rgba(129, 140, 248, 0.38);
+}
+.grad-sky-indigo {
+  background: linear-gradient(135deg, #7DD3FC 0%, #60A5FA 50%, #6366F1 100%);
+  --icon-shadow: rgba(96, 165, 250, 0.38);
+}
+.grad-lavender-pink {
+  background: linear-gradient(135deg, #C084FC 0%, #E879F9 50%, #FB7185 100%);
+  --icon-shadow: rgba(192, 132, 252, 0.36);
+}
+.grad-mint-blue {
+  background: linear-gradient(135deg, #6EE7B7 0%, #38BDF8 55%, #60A5FA 100%);
+  --icon-shadow: rgba(56, 189, 248, 0.35);
+}
+.grad-peach-coral {
+  background: linear-gradient(135deg, #FDA4AF 0%, #FB923C 55%, #FBBF24 100%);
+  --icon-shadow: rgba(251, 146, 60, 0.36);
+}
+.grad-blue-cyan {
+  background: linear-gradient(135deg, #60A5FA 0%, #38BDF8 55%, #2DD4BF 100%);
+  --icon-shadow: rgba(56, 189, 248, 0.36);
+}
+.grad-periwinkle-rose {
+  background: linear-gradient(135deg, #818CF8 0%, #C084FC 52%, #F472B6 100%);
+  --icon-shadow: rgba(168, 85, 247, 0.35);
+}
+
+/* ================= HERO CENTER CARD ================= */
+#currentStatusIconSlot .soft-icon-tile {
+  width: 3.4rem !important;
+  height: 3.4rem !important;
+  border-radius: 1rem !important;
+}
+
+#currentStatusIconSlot svg {
+  width: 1.85rem !important;
+  height: 1.85rem !important;
+}
+
+/* ================= ROUTINE TABS PILL BAR ================= */
+#routineTabsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#routineTabsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+#routineTabsContainer .bento-tile {
+  padding: 0.35rem 0.65rem !important;
+  border-radius: 9999px !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap !important;
+}
+
+#routineTabsContainer .bento-tile .soft-icon-tile {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  border-radius: 26% !important;
+}
+
+#routineTabsContainer .bento-tile .soft-icon-tile svg {
+  width: 0.85rem !important;
+  height: 0.85rem !important;
+}
+
+/* ================= COMPACT SIDEBAR TIMETABLE ================= */
+#periodListContainer .bento-tile {
+  padding: 0.45rem 0.65rem !important;
+  border-radius: 14px !important;
+}
+
+#periodListContainer .bento-tile > div:first-child > div:first-child {
+  width: 2.4rem !important;
+  height: 2.4rem !important;
+  border-radius: 10px !important;
+  flex-shrink: 0;
+}
+
+#periodListContainer .bento-tile .soft-icon-tile {
+  width: 2.1rem !important;
+  height: 2.1rem !important;
+  border-radius: 26% !important;
+}
+
+#periodListContainer .bento-tile .soft-icon-tile svg {
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+}
+
+#periodListContainer .bento-tile span,
+#periodListContainer .bento-tile div,
+#periodListContainer .bento-tile button {
+  white-space: nowrap !important;
+}
+
+#weekdayTabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#weekdayTabs::-webkit-scrollbar {
+  display: none;
+}
+#weekdayTabs button {
+  white-space: nowrap !important;
+  flex-shrink: 0;
+}
+
+/* ================= ROUTINE CARDS GRID ================= */
+#routineCardsGrid .bento-tile {
+  border-radius: 18px !important;
+}
+
+#routineCardsGrid .bento-tile .soft-icon-tile {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 26% !important;
+}
+
+#routineCardsGrid .bento-tile .soft-icon-tile svg {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+/* Animations */
+@keyframes stampBounce {
+  0% { transform: scale(1.6) rotate(-8deg); opacity: 0; }
+  65% { transform: scale(0.94) rotate(0deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.stamp-complete {
+  animation: stampBounce 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
