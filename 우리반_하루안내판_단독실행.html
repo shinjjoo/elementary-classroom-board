@@ -73,6 +73,10 @@ body {
   padding: clamp(1.1rem, 2.2vh, 1.75rem) clamp(1.25rem, 2.2vw, 2rem) !important;
 }
 
+#heroScheduleCard {
+  padding: clamp(0.85rem, 1.5vh, 1.2rem) clamp(1.1rem, 1.8vw, 1.6rem) !important;
+}
+
 .sidebar-card-pad {
   padding: clamp(0.95rem, 1.8vh, 1.4rem) clamp(1rem, 1.6vw, 1.5rem) !important;
 }
@@ -313,29 +317,39 @@ body {
   flex-shrink: 0;
 }
 
-/* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING) ================= */
+/* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING - 120% EXPANDED) ================= */
 #routineCardsGrid {
-  gap: clamp(0.28rem, 0.55vh, 0.5rem) !important;
+  gap: clamp(0.35rem, 0.7vh, 0.6rem) !important;
 }
 #routineCardsGrid .bento-tile {
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   flex: 1 1 0%;
   min-height: 0;
-  padding: clamp(0.25rem, 0.55vh, 0.5rem) clamp(0.75rem, 1.1vw, 1.1rem) !important;
+  padding: clamp(0.35rem, 0.75vh, 0.65rem) clamp(0.85rem, 1.2vw, 1.2rem) !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile {
-  width: clamp(1.65rem, 2vw, 2.15rem) !important;
-  height: clamp(1.65rem, 2vw, 2.15rem) !important;
-  border-radius: 26% !important;
-  flex-shrink: 0;
+  width: clamp(1.9rem, 2.3vw, 2.45rem) !important;
+  height: clamp(1.9rem, 2.3vw, 2.45rem) !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile svg {
-  width: clamp(0.9rem, 1.1vw, 1.2rem) !important;
-  height: clamp(0.9rem, 1.1vw, 1.2rem) !important;
+  width: clamp(1rem, 1.25vw, 1.35rem) !important;
+  height: clamp(1rem, 1.25vw, 1.35rem) !important;
 }
 #routineCardsGrid .bento-tile span.flex-1 {
-  font-size: clamp(0.88rem, 1.15vw + 0.15rem, 1.3rem) !important;
-  line-height: 1.2 !important;
+  font-size: clamp(0.95rem, 1.28vw + 0.2rem, 1.42rem) !important;
+  line-height: 1.25 !important;
+}
+
+/* ================= HERO INCOMPLETE STUDENTS LIST (10 COLS x 2 ROWS) ================= */
+#heroIncompleteStudentsList {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0.35rem !important;
+}
+@media (min-width: 640px) {
+  #heroIncompleteStudentsList {
+    grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+  }
 }
 
 /* Animations */
@@ -451,7 +465,6 @@ body {
   </style>
 </head>
 <body class="antialiased">
-
   <div id="app" class="w-full flex flex-col justify-between overflow-hidden">
 
     <!-- Toast Notification -->
@@ -466,7 +479,7 @@ body {
       <main class="lg:col-span-8 flex flex-col min-h-0 h-full" style="gap: clamp(0.9rem, 1.6vw, 1.5rem);">
 
         <!-- Top Hero Card (현재 시간 핵심 정보 크게 표시) -->
-        <section id="heroScheduleCard" class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex-[5.6] min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
+        <section id="heroScheduleCard" class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex-[4.5] min-h-0 flex flex-col justify-between gap-1.5 overflow-hidden">
           <!-- Top status bar (single-line) -->
           <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2 min-w-0">
@@ -498,10 +511,10 @@ body {
           </div>
 
           <!-- Main Hero content: Circular SVG Progress + Icon + Headlines -->
-          <div class="flex items-center gap-4 xl:gap-5 py-1 flex-shrink-0">
+          <div class="flex items-center gap-4 xl:gap-5 py-0.5 flex-shrink-0">
             <!-- Circular SVG Progress wrapping #currentStatusIconSlot -->
-            <div class="relative w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 flex-shrink-0 flex items-center justify-center">
-              <svg class="w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 -rotate-90" viewBox="0 0 60 60">
+            <div class="relative w-18 h-18 md:w-20 md:h-20 xl:w-22 xl:h-22 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-18 h-18 md:w-20 md:h-20 xl:w-22 xl:h-22 -rotate-90" viewBox="0 0 60 60">
                 <circle cx="30" cy="30" r="26" fill="none" stroke="#DBEAFE" stroke-width="4.5" />
                 <circle id="timerCirclePath" cx="30" cy="30" r="26" fill="none" stroke="#2563EB" stroke-width="4.5"
                   stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="40" class="transition-all duration-500" />
@@ -511,17 +524,17 @@ body {
 
             <!-- Extra-large Headline and Subline without clipping -->
             <div class="min-w-0 flex-1">
-              <h1 id="currentStatusHeadline" class="text-3xl md:text-5xl xl:text-[3.25rem] font-black text-slate-900 tracking-tight leading-snug whitespace-nowrap truncate py-0.5">
+              <h1 id="currentStatusHeadline" class="text-2xl md:text-4xl xl:text-[2.75rem] font-black text-slate-900 tracking-tight leading-tight whitespace-nowrap truncate py-0.5">
                 1교시 '국어'
               </h1>
-              <div id="currentStatusSubline" class="text-sm md:text-base font-bold text-blue-600 whitespace-nowrap truncate mt-0.5">
+              <div id="currentStatusSubline" class="text-xs md:text-sm font-bold text-blue-600 whitespace-nowrap truncate mt-0.5">
                 바른 자세로 앉아 선생님과 친구들의 이야기에 귀 기울여요
               </div>
             </div>
           </div>
 
           <!-- 현재 일정 알림창 내 실시간 활동확인 (미완료 학생 표시란) -->
-          <div id="heroActivityCheckPanel" class="mt-1 p-3 rounded-2xl bg-white/90 border border-blue-200/90 shadow-2xs flex flex-col justify-between gap-2 flex-1 min-h-0 overflow-hidden">
+          <div id="heroActivityCheckPanel" class="px-3 py-2 rounded-2xl bg-white/95 border border-blue-200/90 shadow-2xs flex flex-col gap-1.5 flex-shrink-0 overflow-hidden">
             <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
               <div class="flex items-center gap-2 min-w-0 flex-1">
                 <span class="px-2.5 py-0.5 rounded-lg bg-indigo-600 text-white text-xs font-black whitespace-nowrap flex-shrink-0">활동 확인</span>
@@ -539,14 +552,14 @@ body {
                 </button>
               </div>
             </div>
-            <!-- 미완료 학생 이름 배지 목록 (클릭 시 즉시 완료 처리 가능) -->
-            <div id="heroIncompleteStudentsList" class="flex flex-wrap items-center content-start gap-1.5 overflow-y-auto flex-1 min-h-0 py-0.5">
+            <!-- 미완료 학생 이름 배지 목록: 10열 2줄 (클릭 시 즉시 완료 처리 가능) -->
+            <div id="heroIncompleteStudentsList" class="grid grid-cols-5 sm:grid-cols-10 gap-1.5 w-full min-h-0">
             </div>
           </div>
         </section>
 
         <!-- Main Center To-Do List Card (현재 시간 할 일 리스트 크게 표시) -->
-        <section id="routineTodoCard" class="bento-card hero-card-pad flex-[4.4] min-h-0 flex flex-col justify-between gap-2 overflow-hidden">
+        <section id="routineTodoCard" class="bento-card hero-card-pad flex-[5.5] min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
           <!-- Header row (single-line) -->
           <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
@@ -1337,7 +1350,6 @@ body {
     </div>
   </div>
 
-  
   <script>
 const STORAGE_KEY = 'elementary_classroom_board_bento_v5';
 
@@ -3793,27 +3805,29 @@ function renderHeroActivityCheckPanel() {
     }
   }
 
-  // 4. Update incomplete student badge list
+  // 4. Update incomplete student badge list (max 20 students in 10-col grid)
   const listEl = document.getElementById('heroIncompleteStudentsList');
   if (listEl) {
     if (incompleteList.length === 0 && total > 0) {
       listEl.innerHTML = `
-        <div class="w-full py-2 px-3 rounded-xl bg-blue-50/80 border border-blue-200 text-center text-xs md:text-sm font-extrabold text-blue-700">
+        <div class="col-span-full py-1.5 px-3 rounded-xl bg-blue-50/90 border border-blue-200 text-center text-xs md:text-sm font-extrabold text-blue-700 whitespace-nowrap">
           🎉 모든 친구들이 활동을 완료했어요! 참 잘했어요!
         </div>
       `;
     } else if (total === 0) {
       listEl.innerHTML = `
-        <div class="w-full py-1 text-center text-xs font-bold text-slate-400">
+        <div class="col-span-full py-1 text-center text-xs font-bold text-slate-400 whitespace-nowrap">
           등록된 학생이 없습니다
         </div>
       `;
     } else {
-      listEl.innerHTML = incompleteList.map(s => `
-        <button onclick="quickCompleteStudentFromHero('${s.id}')" title="클릭하여 완료 처리"
-          class="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-xs md:text-sm font-black text-slate-800 hover:text-blue-700 cursor-pointer transition flex items-center gap-1 whitespace-nowrap shadow-2xs">
-          <span class="text-[11px] font-extrabold text-blue-600">${s.num}번</span>
-          <span>${escapeHtml(s.name)}</span>
+      const displayList = incompleteList.slice(0, 20);
+      listEl.innerHTML = displayList.map(s => `
+        <button onclick="quickCompleteStudentFromHero('${s.id}')"
+          title="${s.num}번 ${escapeHtml(s.name)} — 클릭 시 완료 처리"
+          class="w-full py-1 px-1 rounded-lg bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-xs font-black text-slate-800 hover:text-blue-700 cursor-pointer transition flex items-center justify-center gap-0.5 whitespace-nowrap truncate shadow-2xs">
+          <span class="text-[10px] font-extrabold text-blue-600 flex-shrink-0">${s.num}.</span>
+          <span class="truncate">${escapeHtml(s.name)}</span>
         </button>
       `).join('');
     }

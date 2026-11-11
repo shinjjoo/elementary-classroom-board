@@ -63,6 +63,10 @@ body {
   padding: clamp(1.1rem, 2.2vh, 1.75rem) clamp(1.25rem, 2.2vw, 2rem) !important;
 }
 
+#heroScheduleCard {
+  padding: clamp(0.85rem, 1.5vh, 1.2rem) clamp(1.1rem, 1.8vw, 1.6rem) !important;
+}
+
 .sidebar-card-pad {
   padding: clamp(0.95rem, 1.8vh, 1.4rem) clamp(1rem, 1.6vw, 1.5rem) !important;
 }
@@ -303,29 +307,39 @@ body {
   flex-shrink: 0;
 }
 
-/* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING) ================= */
+/* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING - 120% EXPANDED) ================= */
 #routineCardsGrid {
-  gap: clamp(0.28rem, 0.55vh, 0.5rem) !important;
+  gap: clamp(0.35rem, 0.7vh, 0.6rem) !important;
 }
 #routineCardsGrid .bento-tile {
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   flex: 1 1 0%;
   min-height: 0;
-  padding: clamp(0.25rem, 0.55vh, 0.5rem) clamp(0.75rem, 1.1vw, 1.1rem) !important;
+  padding: clamp(0.35rem, 0.75vh, 0.65rem) clamp(0.85rem, 1.2vw, 1.2rem) !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile {
-  width: clamp(1.65rem, 2vw, 2.15rem) !important;
-  height: clamp(1.65rem, 2vw, 2.15rem) !important;
-  border-radius: 26% !important;
-  flex-shrink: 0;
+  width: clamp(1.9rem, 2.3vw, 2.45rem) !important;
+  height: clamp(1.9rem, 2.3vw, 2.45rem) !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile svg {
-  width: clamp(0.9rem, 1.1vw, 1.2rem) !important;
-  height: clamp(0.9rem, 1.1vw, 1.2rem) !important;
+  width: clamp(1rem, 1.25vw, 1.35rem) !important;
+  height: clamp(1rem, 1.25vw, 1.35rem) !important;
 }
 #routineCardsGrid .bento-tile span.flex-1 {
-  font-size: clamp(0.88rem, 1.15vw + 0.15rem, 1.3rem) !important;
-  line-height: 1.2 !important;
+  font-size: clamp(0.95rem, 1.28vw + 0.2rem, 1.42rem) !important;
+  line-height: 1.25 !important;
+}
+
+/* ================= HERO INCOMPLETE STUDENTS LIST (10 COLS x 2 ROWS) ================= */
+#heroIncompleteStudentsList {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0.35rem !important;
+}
+@media (min-width: 640px) {
+  #heroIncompleteStudentsList {
+    grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+  }
 }
 
 /* Animations */

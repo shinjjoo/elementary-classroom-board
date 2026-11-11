@@ -2452,27 +2452,29 @@ function renderHeroActivityCheckPanel() {
     }
   }
 
-  // 4. Update incomplete student badge list
+  // 4. Update incomplete student badge list (max 20 students in 10-col grid)
   const listEl = document.getElementById('heroIncompleteStudentsList');
   if (listEl) {
     if (incompleteList.length === 0 && total > 0) {
       listEl.innerHTML = `
-        <div class="w-full py-2 px-3 rounded-xl bg-blue-50/80 border border-blue-200 text-center text-xs md:text-sm font-extrabold text-blue-700">
+        <div class="col-span-full py-1.5 px-3 rounded-xl bg-blue-50/90 border border-blue-200 text-center text-xs md:text-sm font-extrabold text-blue-700 whitespace-nowrap">
           🎉 모든 친구들이 활동을 완료했어요! 참 잘했어요!
         </div>
       `;
     } else if (total === 0) {
       listEl.innerHTML = `
-        <div class="w-full py-1 text-center text-xs font-bold text-slate-400">
+        <div class="col-span-full py-1 text-center text-xs font-bold text-slate-400 whitespace-nowrap">
           등록된 학생이 없습니다
         </div>
       `;
     } else {
-      listEl.innerHTML = incompleteList.map(s => `
-        <button onclick="quickCompleteStudentFromHero('${s.id}')" title="클릭하여 완료 처리"
-          class="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-xs md:text-sm font-black text-slate-800 hover:text-blue-700 cursor-pointer transition flex items-center gap-1 whitespace-nowrap shadow-2xs">
-          <span class="text-[11px] font-extrabold text-blue-600">${s.num}번</span>
-          <span>${escapeHtml(s.name)}</span>
+      const displayList = incompleteList.slice(0, 20);
+      listEl.innerHTML = displayList.map(s => `
+        <button onclick="quickCompleteStudentFromHero('${s.id}')"
+          title="${s.num}번 ${escapeHtml(s.name)} — 클릭 시 완료 처리"
+          class="w-full py-1 px-1 rounded-lg bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-xs font-black text-slate-800 hover:text-blue-700 cursor-pointer transition flex items-center justify-center gap-0.5 whitespace-nowrap truncate shadow-2xs">
+          <span class="text-[10px] font-extrabold text-blue-600 flex-shrink-0">${s.num}.</span>
+          <span class="truncate">${escapeHtml(s.name)}</span>
         </button>
       `).join('');
     }

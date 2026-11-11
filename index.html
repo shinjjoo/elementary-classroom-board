@@ -24,7 +24,7 @@
       <main class="lg:col-span-8 flex flex-col min-h-0 h-full" style="gap: clamp(0.9rem, 1.6vw, 1.5rem);">
 
         <!-- Top Hero Card (현재 시간 핵심 정보 크게 표시) -->
-        <section id="heroScheduleCard" class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex-[5.6] min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
+        <section id="heroScheduleCard" class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex-[4.5] min-h-0 flex flex-col justify-between gap-1.5 overflow-hidden">
           <!-- Top status bar (single-line) -->
           <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2 min-w-0">
@@ -56,10 +56,10 @@
           </div>
 
           <!-- Main Hero content: Circular SVG Progress + Icon + Headlines -->
-          <div class="flex items-center gap-4 xl:gap-5 py-1 flex-shrink-0">
+          <div class="flex items-center gap-4 xl:gap-5 py-0.5 flex-shrink-0">
             <!-- Circular SVG Progress wrapping #currentStatusIconSlot -->
-            <div class="relative w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 flex-shrink-0 flex items-center justify-center">
-              <svg class="w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 -rotate-90" viewBox="0 0 60 60">
+            <div class="relative w-18 h-18 md:w-20 md:h-20 xl:w-22 xl:h-22 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-18 h-18 md:w-20 md:h-20 xl:w-22 xl:h-22 -rotate-90" viewBox="0 0 60 60">
                 <circle cx="30" cy="30" r="26" fill="none" stroke="#DBEAFE" stroke-width="4.5" />
                 <circle id="timerCirclePath" cx="30" cy="30" r="26" fill="none" stroke="#2563EB" stroke-width="4.5"
                   stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="40" class="transition-all duration-500" />
@@ -69,17 +69,17 @@
 
             <!-- Extra-large Headline and Subline without clipping -->
             <div class="min-w-0 flex-1">
-              <h1 id="currentStatusHeadline" class="text-3xl md:text-5xl xl:text-[3.25rem] font-black text-slate-900 tracking-tight leading-snug whitespace-nowrap truncate py-0.5">
+              <h1 id="currentStatusHeadline" class="text-2xl md:text-4xl xl:text-[2.75rem] font-black text-slate-900 tracking-tight leading-tight whitespace-nowrap truncate py-0.5">
                 1교시 '국어'
               </h1>
-              <div id="currentStatusSubline" class="text-sm md:text-base font-bold text-blue-600 whitespace-nowrap truncate mt-0.5">
+              <div id="currentStatusSubline" class="text-xs md:text-sm font-bold text-blue-600 whitespace-nowrap truncate mt-0.5">
                 바른 자세로 앉아 선생님과 친구들의 이야기에 귀 기울여요
               </div>
             </div>
           </div>
 
           <!-- 현재 일정 알림창 내 실시간 활동확인 (미완료 학생 표시란) -->
-          <div id="heroActivityCheckPanel" class="mt-1 p-3 rounded-2xl bg-white/90 border border-blue-200/90 shadow-2xs flex flex-col justify-between gap-2 flex-1 min-h-0 overflow-hidden">
+          <div id="heroActivityCheckPanel" class="px-3 py-2 rounded-2xl bg-white/95 border border-blue-200/90 shadow-2xs flex flex-col gap-1.5 flex-shrink-0 overflow-hidden">
             <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
               <div class="flex items-center gap-2 min-w-0 flex-1">
                 <span class="px-2.5 py-0.5 rounded-lg bg-indigo-600 text-white text-xs font-black whitespace-nowrap flex-shrink-0">활동 확인</span>
@@ -97,14 +97,14 @@
                 </button>
               </div>
             </div>
-            <!-- 미완료 학생 이름 배지 목록 (클릭 시 즉시 완료 처리 가능) -->
-            <div id="heroIncompleteStudentsList" class="flex flex-wrap items-center content-start gap-1.5 overflow-y-auto flex-1 min-h-0 py-0.5">
+            <!-- 미완료 학생 이름 배지 목록: 10열 2줄 (클릭 시 즉시 완료 처리 가능) -->
+            <div id="heroIncompleteStudentsList" class="grid grid-cols-5 sm:grid-cols-10 gap-1.5 w-full min-h-0">
             </div>
           </div>
         </section>
 
         <!-- Main Center To-Do List Card (현재 시간 할 일 리스트 크게 표시) -->
-        <section id="routineTodoCard" class="bento-card hero-card-pad flex-[4.4] min-h-0 flex flex-col justify-between gap-2 overflow-hidden">
+        <section id="routineTodoCard" class="bento-card hero-card-pad flex-[5.5] min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
           <!-- Header row (single-line) -->
           <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
