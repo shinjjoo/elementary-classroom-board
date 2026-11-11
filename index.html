@@ -35,6 +35,15 @@
               <span id="currentSlotTimeRange" class="text-xs md:text-sm font-bold text-slate-500 tabular-nums whitespace-nowrap truncate">
                 09:00 ~ 09:40
               </span>
+              <button id="btnPreAlertToggle" onclick="togglePreClassAlert()"
+                class="cursor-pointer px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-2xs whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition">
+                <span>🔔</span>
+                <span id="preAlertToggleText">30초전 알림 ON</span>
+              </button>
+              <button onclick="triggerPreClassAlertPreview()" title="30초 전 준비 알림 미리보기"
+                class="cursor-pointer px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 whitespace-nowrap flex-shrink-0 transition">
+                알림 미리보기
+              </button>
             </div>
 
             <div class="flex items-center gap-2.5 flex-shrink-0">
@@ -164,6 +173,24 @@
               class="w-full py-2 px-2 rounded-xl bg-[#F8FAFC] hover:bg-blue-50 border border-slate-200 hover:border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
               <div id="ctrlSettingsIcon" class="flex-shrink-0"></div>
               <span class="text-xs font-black text-slate-700 whitespace-nowrap">설정</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 w-full pt-1.5 border-t border-slate-100">
+            <button onclick="openNoticeBoardModal()" title="칠판 알림장 및 판서"
+              class="w-full py-2 px-2 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 border border-emerald-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="dockNoticeIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-emerald-800 whitespace-nowrap">알림장</span>
+            </button>
+            <button onclick="openStudentCheckModal()" title="학생 활동 및 과제 확인"
+              class="w-full py-2 px-2 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 border border-indigo-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="dockCheckIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-indigo-800 whitespace-nowrap">활동확인</span>
+            </button>
+            <button onclick="openActivityTimerModal()" title="활동 타이머 및 효과음"
+              class="w-full py-2 px-2 rounded-xl bg-gradient-to-br from-rose-50 to-orange-50 hover:from-rose-100 hover:to-orange-100 border border-rose-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap">
+              <div id="dockTimerIcon" class="flex-shrink-0"></div>
+              <span class="text-xs font-black text-rose-800 whitespace-nowrap">타이머</span>
             </button>
           </div>
         </div>
@@ -448,6 +475,369 @@
         </div>
 
       </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 4: PRE-CLASS 30S ALERT MODAL ================= -->
+  <div id="preClassAlertModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bento-card w-full max-w-lg p-6 md:p-8 flex flex-col items-center text-center gap-5 shadow-2xl border-2 border-amber-300 bg-gradient-to-b from-amber-50/70 via-white to-white animate-in fade-in zoom-in-95 duration-200">
+      <div class="relative flex items-center justify-center">
+        <div id="preAlertIconSlot" class="w-20 h-20 flex items-center justify-center"></div>
+        <div class="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center shadow-md border-2 border-white">
+          <span id="preAlertCountdownNum">30</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-black">
+          <span>🔔</span>
+          <span>수업 시작 30초 전 준비 알림</span>
+        </div>
+        <h2 id="preAlertTitle" class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+          잠시 후 2교시 '수학' 시작 30초 전!
+        </h2>
+        <p id="preAlertPrepMessage" class="text-sm md:text-base font-bold text-slate-600 leading-relaxed max-w-sm mx-auto">
+          교과서와 연필·지우개를 책상 위에 꺼내고 바른 자세로 앉아요!
+        </p>
+      </div>
+
+      <div class="w-full bg-amber-100 rounded-full h-3 overflow-hidden">
+        <div id="preAlertProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 rounded-full" style="width: 100%;"></div>
+      </div>
+
+      <div class="w-full flex items-center justify-center gap-2 pt-1">
+        <button onclick="dismissPreClassAlert()"
+          class="w-full py-3.5 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-base shadow-lg shadow-amber-500/25 cursor-pointer transition flex items-center justify-center gap-2">
+          <span>✨</span>
+          <span>준비 완료! 창 닫기</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 5: CHALKBOARD NOTICE & BOARD WRITING ================= -->
+  <div id="noticeBoardModal" class="fixed inset-0 z-50 hidden bg-slate-900/55 backdrop-blur-xs flex items-center justify-center p-2 md:p-4">
+    <div id="noticeBoardCard" class="bento-card w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden bg-white shadow-2xl">
+      <!-- 상단 헤더 바 -->
+      <div class="px-4 py-2.5 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-2.5 flex-shrink-0">
+        <!-- 좌측: 학급명 및 체크박스 -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <span id="noticeClassTitle" class="text-xs md:text-sm font-black text-slate-800">1학년 1반 [2026]</span>
+          <div class="flex items-center gap-2.5 text-xs font-extrabold text-slate-600">
+            <label class="inline-flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkNoticeParent" checked class="w-3.5 h-3.5 accent-blue-600 rounded" />
+              <span>학부모</span>
+            </label>
+            <label class="inline-flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkNoticeStudent" checked class="w-3.5 h-3.5 accent-blue-600 rounded" />
+              <span>학생</span>
+            </label>
+            <label class="inline-flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkNoticeRequired" class="w-3.5 h-3.5 accent-rose-500 rounded" />
+              <span>필독</span>
+            </label>
+            <label class="inline-flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkNoticeTopPin" class="w-3.5 h-3.5 accent-amber-500 rounded" />
+              <span>상단공지</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 중앙: 날짜 선택 & 포맷 표시 -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-black text-slate-800">📅</span>
+          <input type="date" id="noticeDateInput" onchange="loadNoticeForDate(this.value)"
+            class="px-2 py-0.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 bg-slate-50 cursor-pointer" />
+          <span id="noticeDateFormatted" class="text-sm font-black text-slate-800 whitespace-nowrap">11월 11일 (수)</span>
+        </div>
+
+        <!-- 우측 컨트롤 버튼들 -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button onclick="toggleFrequentPhrasesDrawer()" title="자주 쓰는 문구 불러오기"
+            class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs cursor-pointer transition flex items-center gap-1">
+            <span>☆</span>
+            <span>자주 쓰는 문구</span>
+          </button>
+          <button onclick="playAttentionSound('whistle')" title="주의집중 호루라기 소리"
+            class="px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 font-extrabold text-xs cursor-pointer transition flex items-center gap-1">
+            <span>🔔</span>
+            <span>호루라기</span>
+          </button>
+          <button onclick="saveNoticeData()" title="알림장 저장하기"
+            class="px-2.5 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs cursor-pointer transition flex items-center gap-1 shadow-2xs">
+            <span>💾</span>
+            <span>저장</span>
+          </button>
+          <button onclick="toggleNoticeHistoryDrawer()" title="저장된 알림장 불러오기"
+            class="px-2.5 py-1 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-extrabold text-xs cursor-pointer transition flex items-center gap-1">
+            <span>📂</span>
+            <span>불러오기</span>
+          </button>
+          <button onclick="toggleNoticeFullscreen()" title="전체화면 전환"
+            class="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs cursor-pointer transition">
+            <span class="text-xs">⛶ 전체화면</span>
+          </button>
+          <button onclick="closeNoticeBoardModal()" title="창 닫기"
+            class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-black text-xs cursor-pointer transition">
+            닫기 ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- 서식 및 판서 툴바 (두 번째 줄) -->
+      <div class="px-4 py-2 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2.5 flex-shrink-0 text-xs">
+        <!-- 좌측: 배경 탭 테마 -->
+        <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
+          <button id="btnBgChalkboard" onclick="setNoticeBgTheme('chalkboard')"
+            class="px-3 py-1 rounded-lg font-black bg-slate-800 text-white shadow-2xs transition">칠판</button>
+          <button id="btnBgNote15" onclick="setNoticeBgTheme('note15')"
+            class="px-2.5 py-1 rounded-lg font-bold text-slate-600 hover:bg-slate-100 transition">공책 15칸</button>
+          <button id="btnBgNote10" onclick="setNoticeBgTheme('note10')"
+            class="px-2.5 py-1 rounded-lg font-bold text-slate-600 hover:bg-slate-100 transition">공책 10칸</button>
+        </div>
+
+        <!-- 중앙: 텍스트 서식 도구 -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
+            <button onclick="changeNoticeFontSize(4)" class="px-2 py-1 rounded font-black hover:bg-slate-100 text-slate-700" title="글자 크게">더크게 +</button>
+            <button onclick="changeNoticeFontSize(-4)" class="px-2 py-1 rounded font-black hover:bg-slate-100 text-slate-700" title="글자 작게">작게 -</button>
+            <div class="w-px h-4 bg-slate-200 mx-0.5"></div>
+            <button onclick="execNoticeFormat('bold')" class="w-7 h-7 rounded font-black hover:bg-slate-100 text-slate-800" title="굵게">B</button>
+            <button onclick="execNoticeFormat('underline')" class="w-7 h-7 rounded font-black underline hover:bg-slate-100 text-slate-800" title="밑줄">U</button>
+          </div>
+
+          <!-- 텍스트 글자색 선택 -->
+          <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
+            <span class="text-[11px] font-bold text-slate-400 px-1">글자색:</span>
+            <button onclick="setNoticeTextColor('#FFFFFF')" class="w-5 h-5 rounded-full bg-white border border-slate-300 shadow-2xs cursor-pointer" title="흰색"></button>
+            <button onclick="setNoticeTextColor('#FDE047')" class="w-5 h-5 rounded-full bg-yellow-300 border border-yellow-400 shadow-2xs cursor-pointer" title="노란색"></button>
+            <button onclick="setNoticeTextColor('#FDA4AF')" class="w-5 h-5 rounded-full bg-rose-300 border border-rose-400 shadow-2xs cursor-pointer" title="분홍색"></button>
+            <button onclick="setNoticeTextColor('#7DD3FC')" class="w-5 h-5 rounded-full bg-sky-300 border border-sky-400 shadow-2xs cursor-pointer" title="하늘색"></button>
+            <button onclick="setNoticeTextColor('#0F172A')" class="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 shadow-2xs cursor-pointer" title="검정색"></button>
+          </div>
+        </div>
+
+        <!-- 우측: 판서(그리기) 도구 -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button id="btnToggleDrawMode" onclick="toggleNoticeDrawMode()"
+            class="px-2.5 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-black flex items-center gap-1 cursor-pointer transition">
+            <span>✏️</span>
+            <span id="drawModeLabel">판서 그리기 OFF</span>
+          </button>
+          <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
+            <span class="text-[11px] font-bold text-slate-400 px-0.5">펜:</span>
+            <button onclick="setNoticePenColor('#FDE047')" class="w-4 h-4 rounded-full bg-yellow-300 border border-yellow-400 cursor-pointer" title="노랑"></button>
+            <button onclick="setNoticePenColor('#FB7185')" class="w-4 h-4 rounded-full bg-rose-400 border border-rose-500 cursor-pointer" title="분홍"></button>
+            <button onclick="setNoticePenColor('#38BDF8')" class="w-4 h-4 rounded-full bg-sky-400 border border-sky-500 cursor-pointer" title="하늘"></button>
+            <button onclick="setNoticePenColor('#FFFFFF')" class="w-4 h-4 rounded-full bg-white border border-slate-300 cursor-pointer" title="흰색"></button>
+          </div>
+          <button id="btnNoticeHighlighter" onclick="toggleNoticeHighlighter()"
+            class="px-2 py-1 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold hover:bg-yellow-50 cursor-pointer transition">
+            🖍️ 형광펜
+          </button>
+          <button onclick="clearNoticeCanvas()"
+            class="px-2 py-1 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold hover:bg-rose-50 hover:text-rose-600 cursor-pointer transition">
+            🧹 판서 지우기
+          </button>
+        </div>
+      </div>
+
+      <!-- 드로어 1: 자주 쓰는 문구 드로어 -->
+      <div id="frequentPhrasesDrawer" class="hidden px-4 py-2.5 bg-amber-50/70 border-b border-amber-200 flex items-center gap-2 overflow-x-auto">
+        <span class="text-xs font-black text-amber-900 whitespace-nowrap">💡 클릭하여 바로 입력:</span>
+        <div id="frequentPhrasesList" class="flex items-center gap-1.5 flex-nowrap"></div>
+      </div>
+
+      <!-- 드로어 2: 저장된 알림장 기록 드로어 -->
+      <div id="noticeHistoryDrawer" class="hidden px-4 py-2.5 bg-blue-50/70 border-b border-blue-200 flex items-center gap-2 overflow-x-auto">
+        <span class="text-xs font-black text-blue-900 whitespace-nowrap">📂 저장된 날짜 목록:</span>
+        <div id="noticeHistoryList" class="flex items-center gap-1.5 flex-nowrap"></div>
+      </div>
+
+      <!-- 메인 칠판/공책 판서 영역 -->
+      <div id="noticeSurfaceWrap" class="flex-1 relative overflow-hidden notice-bg-chalkboard flex flex-col p-6 md:p-10 transition-colors duration-300">
+        <!-- 상단 날짜 큰 제목 -->
+        <h1 id="noticeBoardDateTitle" class="text-3xl md:text-5xl font-black mb-4 select-none tracking-tight pointer-events-none">
+          11월 11일(수)
+        </h1>
+        <!-- 본문 에디터 (칠판 폰트/공책 스타일 반영) -->
+        <div id="noticeEditorArea" contenteditable="true" spellcheck="false"
+          class="flex-1 w-full outline-none overflow-y-auto notice-chalk-text leading-relaxed text-2xl md:text-4xl font-bold">
+        </div>
+        <!-- 투명 판서 캔버스 (그리기 모드 시 이벤트 수신) -->
+        <canvas id="noticeDrawCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 6: STUDENT ACTIVITY & HOMEWORK CHECK BOARD ================= -->
+  <div id="studentCheckModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-2.5 md:p-4">
+    <div class="bento-card w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden bg-white shadow-2xl p-4 md:p-6 gap-3">
+      <!-- 상단 헤더: 타이틀 + 탭 + 닫기 -->
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 font-black text-base shadow-2xs">
+            ✓
+          </div>
+          <div>
+            <h3 class="text-lg md:text-xl font-black text-slate-900">우리 반 활동 및 과제 확인</h3>
+            <p class="text-xs font-bold text-slate-400">학생 번호를 클릭하여 완료 상태를 1-클릭으로 전환하세요</p>
+          </div>
+        </div>
+
+        <button onclick="closeStudentCheckModal()" class="px-3 py-1.5 rounded-xl font-extrabold bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer text-xs transition">
+          닫기 ✕
+        </button>
+      </div>
+
+      <!-- 활동 카테고리 탭 (독서록, 수학익힘책, 알림장 확인 등) -->
+      <div id="checkCategoryTabs" class="flex items-center gap-1.5 overflow-x-auto pb-1 flex-shrink-0">
+      </div>
+
+      <!-- 요약 & 제어 바 -->
+      <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 flex-shrink-0">
+        <div class="flex items-center gap-3 min-w-[200px] flex-1">
+          <span id="studentCheckSummaryText" class="text-sm font-black text-indigo-900 whitespace-nowrap">
+            완료 0명 / 전체 20명
+          </span>
+          <div class="flex-1 max-w-xs bg-slate-200 rounded-full h-2.5 overflow-hidden">
+            <div id="studentCheckProgressBar" class="h-full bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <div class="inline-flex rounded-xl bg-white p-0.5 border border-slate-200">
+            <button id="btnCheckFilterAll" onclick="setStudentCheckFilter('all')"
+              class="px-2.5 py-1 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-2xs transition">전체</button>
+            <button id="btnCheckFilterIncomplete" onclick="setStudentCheckFilter('incomplete')"
+              class="px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition">미완료만</button>
+          </div>
+          <button onclick="markAllStudentsCheck(1)" class="px-2.5 py-1 rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 font-extrabold text-xs cursor-pointer transition">
+            전체 완료
+          </button>
+          <button onclick="markAllStudentsCheck(0)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-extrabold text-xs cursor-pointer transition">
+            전체 초기화
+          </button>
+          <button onclick="toggleRosterEditor()" class="px-2.5 py-1 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-extrabold text-xs cursor-pointer transition">
+            👥 명단 관리
+          </button>
+        </div>
+      </div>
+
+      <!-- 명단 편집 패널 (기본 숨김) -->
+      <div id="rosterEditorPanel" class="hidden p-3 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2 flex-shrink-0">
+        <div class="flex items-center justify-between text-xs font-bold text-amber-900">
+          <span>쉼표(,)나 줄바꿈으로 학생 이름을 구분해 입력하세요 (예: 1번 김민준, 2번 이서아 ...)</span>
+        </div>
+        <textarea id="rosterTextarea" rows="2" class="w-full p-2 rounded-xl bg-white border border-amber-200 text-xs font-bold text-slate-800 outline-none"></textarea>
+        <div class="flex justify-end gap-2">
+          <button onclick="toggleRosterEditor()" class="px-3 py-1 rounded-xl bg-white border border-slate-200 text-slate-600 text-xs font-bold cursor-pointer">취소</button>
+          <button onclick="saveStudentRoster()" class="px-3 py-1 rounded-xl bg-indigo-600 text-white text-xs font-black cursor-pointer shadow-2xs">명단 적용</button>
+        </div>
+      </div>
+
+      <!-- 학생 카드 그리드 -->
+      <div id="studentCheckGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5 overflow-y-auto flex-1 p-1">
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 7: VISUAL ACTIVITY TIMER & ATTENTION SOUNDS ================= -->
+  <div id="activityTimerModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3">
+    <div class="bento-card w-full max-w-xl p-5 md:p-6 flex flex-col items-center text-center gap-4 shadow-2xl bg-white">
+      <!-- 헤더 & 모드 전환 -->
+      <div class="w-full flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="inline-flex rounded-xl bg-slate-100 p-0.5">
+          <button id="btnTimerModeCountdown" onclick="setActivityTimerMode('countdown')"
+            class="px-3 py-1 rounded-lg text-xs font-black bg-blue-600 text-white shadow-2xs transition">타이머(카운트다운)</button>
+          <button id="btnTimerModeStopwatch" onclick="setActivityTimerMode('stopwatch')"
+            class="px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-200 transition">스톱워치</button>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button onclick="minimizeToFloatingTimer()" title="작은 화면으로 띄우기"
+            class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 font-extrabold text-xs cursor-pointer transition">
+            ↘ 미니 창으로 띄우기
+          </button>
+          <button onclick="closeActivityTimerModal()" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-black text-xs cursor-pointer transition">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- 활동 주제 입력 -->
+      <div class="w-full">
+        <input type="text" id="activityTimerTaskTitle" placeholder="활동 주제를 입력하세요 (예: 모둠별로 만들기 활동)"
+          class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-center font-black text-sm md:text-base text-slate-800 outline-none focus:border-blue-400 focus:bg-white transition" />
+      </div>
+
+      <!-- 원형 SVG 프로그레스 & 초대형 시간 디스플레이 -->
+      <div class="relative w-56 h-56 md:w-64 md:h-64 flex items-center justify-center">
+        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#F1F5F9" stroke-width="8" />
+          <circle id="activityTimerCirclePath" cx="60" cy="60" r="52" fill="none" stroke="#2563EB" stroke-width="8"
+            stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="0" class="transition-all duration-300" />
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span id="activityTimerDisplay" class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight tabular-nums">05:00</span>
+          <span id="activityTimerSubStatus" class="text-xs md:text-sm font-extrabold text-blue-600 mt-1">집중해서 활동을 시작해요!</span>
+        </div>
+      </div>
+
+      <!-- 시간 프리셋 버튼들 -->
+      <div class="flex items-center justify-center gap-1.5 flex-wrap">
+        <button onclick="setActivityTimerPreset(60)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">1분</button>
+        <button onclick="setActivityTimerPreset(120)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">2분</button>
+        <button onclick="setActivityTimerPreset(180)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">3분</button>
+        <button onclick="setActivityTimerPreset(300)" class="px-2.5 py-1 rounded-xl bg-blue-100 hover:bg-blue-200 text-xs font-black text-blue-700 cursor-pointer">5분</button>
+        <button onclick="setActivityTimerPreset(600)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">10분</button>
+        <button onclick="setActivityTimerPreset(1200)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">20분</button>
+        <button onclick="addActivityTimerSeconds(30)" class="px-2.5 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-black text-amber-800 cursor-pointer">+30초</button>
+      </div>
+
+      <!-- 주 제어 버튼: 시작/일시정지 & 리셋 -->
+      <div class="w-full flex items-center justify-center gap-3 pt-1">
+        <button id="btnActivityTimerStartPause" onclick="toggleActivityTimerStartPause()"
+          class="flex-1 max-w-xs py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-base shadow-lg shadow-blue-500/25 cursor-pointer transition">
+          시작 ▶
+        </button>
+        <button onclick="resetActivityTimer()"
+          class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-sm cursor-pointer transition">
+          초기화
+        </button>
+      </div>
+
+      <!-- 우리 반 주의집중 효과음 바 -->
+      <div class="w-full pt-3 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap text-xs">
+        <span class="font-bold text-slate-400">우리반 주의집중 효과음:</span>
+        <div class="flex items-center gap-1.5">
+          <button onclick="playAttentionSound('whistle')" class="px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 font-bold cursor-pointer transition">
+            📢 호루라기
+          </button>
+          <button onclick="playAttentionSound('xylophone')" class="px-2.5 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 font-bold cursor-pointer transition">
+            🎵 실로폰
+          </button>
+          <button onclick="playAttentionSound('clap')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold cursor-pointer transition">
+            👏 박수·환호
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MINI FLOATING TIMER ================= -->
+  <div id="miniFloatingTimer" class="fixed bottom-5 right-5 z-40 hidden bento-card p-3.5 shadow-2xl border-2 border-blue-500 bg-white flex items-center gap-3">
+    <div class="flex flex-col min-w-[90px]">
+      <span id="miniTimerTitle" class="text-[11px] font-bold text-slate-400 truncate max-w-[120px]">활동 타이머</span>
+      <span id="miniTimerDisplay" class="text-xl font-black text-blue-600 tabular-nums">05:00</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <button id="btnMiniTimerStartPause" onclick="toggleActivityTimerStartPause()"
+        class="px-2 py-1 rounded-lg bg-blue-600 text-white font-black text-xs cursor-pointer hover:bg-blue-700">▶</button>
+      <button onclick="expandFromFloatingTimer()" title="크게 보기"
+        class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs cursor-pointer">크게 보기 ↗</button>
+      <button onclick="closeActivityTimerCompletely()" title="타이머 종료"
+        class="px-2 py-1 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 font-black text-xs cursor-pointer">✕</button>
     </div>
   </div>
 

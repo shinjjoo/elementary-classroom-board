@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'elementary_classroom_board_bento_v3';
+const STORAGE_KEY = 'elementary_classroom_board_bento_v4';
 
 const VECTOR_PATHS = {
   book: `
@@ -218,11 +218,42 @@ function showToast(msg) {
 }
 
 function getDefaultState() {
+  const defaultNoticeDate = new Date().toISOString().slice(0, 10);
+  const defaultNoticeHtml = `
+    <div>1. 내일 놀이체육 수업(활동하기 편한 옷)</div>
+    <div>2. 작가와의 만남 사인 받을 사람, 책 준비하기 (희망자만)</div>
+    <div>3. 해지기 전에 집에 일찍 귀가하기</div>
+  `.trim();
+
+  const defaultStudents = [
+    { id: 's1', num: 1, name: '김하늘' },
+    { id: 's2', num: 2, name: '이도윤' },
+    { id: 's3', num: 3, name: '박서아' },
+    { id: 's4', num: 4, name: '정시우' },
+    { id: 's5', num: 5, name: '최지유' },
+    { id: 's6', num: 6, name: '강민준' },
+    { id: 's7', num: 7, name: '조예은' },
+    { id: 's8', num: 8, name: '윤유찬' },
+    { id: 's9', num: 9, name: '장하은' },
+    { id: 's10', num: 10, name: '임주원' },
+    { id: 's11', num: 11, name: '한서진' },
+    { id: 's12', num: 12, name: '오지호' },
+    { id: 's13', num: 13, name: '서채원' },
+    { id: 's14', num: 14, name: '신은우' },
+    { id: 's15', num: 15, name: '권수아' },
+    { id: 's16', num: 16, name: '황준우' },
+    { id: 's17', num: 17, name: '안다은' },
+    { id: 's18', num: 18, name: '송시현' },
+    { id: 's19', num: 19, name: '류도현' },
+    { id: 's20', num: 20, name: '문예린' }
+  ];
+
   return {
     className: '1학년 1반',
     soundEnabled: true,
     autoTimeSync: true,
-    lastResetDate: new Date().toISOString().slice(0, 10),
+    preClassAlertEnabled: true,
+    lastResetDate: defaultNoticeDate,
     subjects: JSON.parse(JSON.stringify(DEFAULT_SUBJECTS)),
     weeklyTimetable: {
       mon: { count: 4, periods: ['kor', 'math', 'g1_school', 'g1_day', 'chang', 'read'] },
@@ -248,33 +279,56 @@ function getDefaultState() {
     },
     routines: {
       morning: [
-        { id: 'm1', icon: 'bag',      grad: 'grad-purple-blue', title: '가방 정리하고 사물함에 넣기', repeat: 'daily', done: false },
-        { id: 'm2', icon: 'submit',   grad: 'grad-pink-orange', title: '숙제와 알림장 바구니에 내기', repeat: 'daily', done: false },
-        { id: 'm3', icon: 'water',    grad: 'grad-blue-cyan',   title: '내 물통 제자리에 두고 물 마시기', repeat: 'daily', done: false },
-        { id: 'm4', icon: 'calendar', grad: 'grad-sky-indigo',  title: '오늘 시간표 확인하고 교과서 꺼내기', repeat: 'daily', done: false },
-        { id: 'm5', icon: 'book',     grad: 'grad-purple-blue', title: '자리에 앉아 조용히 아침 독서하기', repeat: 'daily', done: false }
+        { id: 'm1', icon: 'bag',      grad: 'grad-purple-blue', title: '가방 정리하고 사물함에 넣기', repeat: 'daily', done: false, highlight: 1 },
+        { id: 'm2', icon: 'submit',   grad: 'grad-pink-orange', title: '숙제와 알림장 바구니에 내기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'm3', icon: 'water',    grad: 'grad-blue-cyan',   title: '내 물통 제자리에 두고 물 마시기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'm4', icon: 'calendar', grad: 'grad-sky-indigo',  title: '오늘 시간표 확인하고 교과서 꺼내기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'm5', icon: 'book',     grad: 'grad-purple-blue', title: '자리에 앉아 조용히 아침 독서하기', repeat: 'daily', done: false, highlight: 0 }
       ],
       classprep: [
-        { id: 'c1', icon: 'book',     grad: 'grad-purple-blue', title: '이번 시간 교과서 책상 위에 꺼내기', repeat: 'daily', done: false },
-        { id: 'c2', icon: 'pencil',   grad: 'grad-pink-orange', title: '연필 3자루와 지우개 준비하기', repeat: 'daily', done: false },
-        { id: 'c3', icon: 'bag',      grad: 'grad-blue-cyan',   title: '물통과 장난감은 책상 속에 넣기', repeat: 'daily', done: false },
-        { id: 'c4', icon: 'chair',    grad: 'grad-sky-indigo',  title: '허리를 펴고 바른 자세로 앉기', repeat: 'daily', done: false },
-        { id: 'c5', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 귀 기울이기', repeat: 'daily', done: false }
+        { id: 'c1', icon: 'book',     grad: 'grad-purple-blue', title: '이번 시간 교과서 책상 위에 꺼내기', repeat: 'daily', done: false, highlight: 1 },
+        { id: 'c2', icon: 'pencil',   grad: 'grad-pink-orange', title: '연필 3자루와 지우개 준비하기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'c3', icon: 'bag',      grad: 'grad-blue-cyan',   title: '물통과 장난감은 책상 속에 넣기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'c4', icon: 'chair',    grad: 'grad-sky-indigo',  title: '허리를 펴고 바른 자세로 앉기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'c5', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 귀 기울이기', repeat: 'daily', done: false, highlight: 0 }
       ],
       breaktime: [
-        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 미리 꺼내 놓기', repeat: 'daily', done: false },
-        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 다녀와서 비누로 손 씻기', repeat: 'daily', done: false },
-        { id: 'b3', icon: 'water',    grad: 'grad-mint-blue',   title: '내 자리에서 물이나 우유 마시기', repeat: 'daily', done: false },
-        { id: 'b4', icon: 'shield',   grad: 'grad-sky-indigo',  title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false },
-        { id: 'b5', icon: 'bell',     grad: 'grad-pink-orange', title: '종이 치면 바로 자리에 앉아 기다리기', repeat: 'daily', done: false }
+        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 미리 꺼내 놓기', repeat: 'daily', done: false, highlight: 1 },
+        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 다녀와서 비누로 손 씻기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'b3', icon: 'water',    grad: 'grad-mint-blue',   title: '내 자리에서 물이나 우유 마시기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'b4', icon: 'shield',   grad: 'grad-sky-indigo',  title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'b5', icon: 'bell',     grad: 'grad-pink-orange', title: '종이 치면 바로 자리에 앉아 기다리기', repeat: 'daily', done: false, highlight: 0 }
       ],
       afterschool: [
-        { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 챙겨 넣기', repeat: 'daily', done: false },
-        { id: 'a2', icon: 'clean',    grad: 'grad-mint-blue',   title: '책상 서랍 속과 내 자리 주변 정리하기', repeat: 'daily', done: false },
-        { id: 'a3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '의자를 책상 안으로 소리 없이 넣기', repeat: 'daily', done: false },
-        { id: 'a4', icon: 'coat',     grad: 'grad-purple-blue', title: '외투·물통·신발주머니 빠짐없이 챙기기', repeat: 'daily', done: false },
-        { id: 'a5', icon: 'heart',    grad: 'grad-lavender-pink', title: '선생님과 친구들에게 인사하고 하교하기', repeat: 'daily', done: false }
+        { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 챙겨 넣기', repeat: 'daily', done: false, highlight: 1 },
+        { id: 'a2', icon: 'clean',    grad: 'grad-mint-blue',   title: '책상 서랍 속과 내 자리 주변 정리하기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'a3', icon: 'chair',    grad: 'grad-sky-indigo',  title: '의자를 책상 안으로 소리 없이 넣기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'a4', icon: 'coat',     grad: 'grad-purple-blue', title: '외투·물통·신발주머니 빠짐없이 챙기기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'a5', icon: 'heart',    grad: 'grad-lavender-pink', title: '선생님과 친구들에게 인사하고 하교하기', repeat: 'daily', done: false, highlight: 0 }
       ]
+    },
+    notices: {
+      [defaultNoticeDate]: {
+        html: defaultNoticeHtml,
+        bgTheme: 'chalkboard',
+        fontSize: 38,
+        drawingDataUrl: ''
+      }
+    },
+    frequentPhrases: [
+      '내일 놀이체육 수업(활동하기 편한 옷 입고 오기)',
+      '가정통신문 부모님께 드리고 확인받아 오기',
+      '해지기 전에 집에 일찍 귀가하기',
+      '내일 준비물: 색연필, 사인펜, 가위, 풀 챙겨 오기',
+      '독서록에 책 1권 읽고 느낀 점 적어 오기',
+      '비 오는 날 우산 챙기고 차조심·길조심하기'
+    ],
+    students: defaultStudents,
+    studentChecks: {
+      morning: {},
+      homework: {},
+      milk: {},
+      custom: {}
     }
   };
 }
@@ -286,6 +340,8 @@ let manualSelectedPeriod = null;
 let simulatedClockMinutes = null;
 let editingPeriodIndex = null;
 let lastAnnouncedSlotKey = null;
+let dismissedPreAlertSlotKey = null;
+let preAlertPreviewTimer = null;
 
 function loadState() {
   try {
@@ -575,6 +631,9 @@ function renderStaticIcons() {
   setIcon('sectionTimetableIcon', 'calendar', 'grad-sky-indigo', 'w-7 h-7', 15);
   setIcon('sectionRoutineIcon', 'check', 'grad-purple-blue', 'w-9 h-9', 18);
   setIcon('celebrateStarIcon', 'star', 'grad-pink-orange', 'w-11 h-11', 22);
+  setIcon('dockNoticeIcon', 'notebook', 'grad-mint-blue', 'w-5 h-5', 12);
+  setIcon('dockCheckIcon', 'check', 'grad-purple-blue', 'w-5 h-5', 12);
+  setIcon('dockTimerIcon', 'sun', 'grad-pink-orange', 'w-5 h-5', 12);
 }
 
 function updateHeaderClockAndTimer() {
@@ -735,6 +794,30 @@ function updateHeaderClockAndTimer() {
     soundBtn.className = state.soundEnabled
       ? 'w-full py-2 px-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap'
       : 'w-full py-2 px-2.5 rounded-xl bg-[#F8FAFC] border border-slate-200 opacity-65 flex items-center justify-center gap-1.5 cursor-pointer transition whitespace-nowrap';
+  }
+
+  // Pre-Class Alert Toggle Button state
+  const btnPreAlert = document.getElementById('btnPreAlertToggle');
+  const txtPreAlert = document.getElementById('preAlertToggleText');
+  if (btnPreAlert) {
+    btnPreAlert.className = state.preClassAlertEnabled
+      ? 'cursor-pointer px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-2xs whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition'
+      : 'cursor-pointer px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-slate-200 text-slate-600 whitespace-nowrap flex-shrink-0 flex items-center gap-1 transition';
+  }
+  if (txtPreAlert) {
+    txtPreAlert.textContent = state.preClassAlertEnabled ? '30초전 알림 ON' : '30초전 알림 OFF';
+  }
+
+  // Automatic Pre-Class 30-Second Alert Trigger
+  if (state.preClassAlertEnabled && !preAlertPreviewTimer) {
+    const isPrepSlot = slot.type === 'break' || slot.type === 'lunch' || slot.type === 'morning';
+    if (isPrepSlot && slot.remainingSec <= 30 && slot.remainingSec > 0) {
+      if (dismissedPreAlertSlotKey !== slot.slotKey) {
+        showPreClassAlertModal(slot.remainingSec, slot.periodIndex);
+      }
+    } else if (slot.type === 'period') {
+      dismissedPreAlertSlotKey = null;
+    }
   }
 }
 
@@ -924,18 +1007,27 @@ function renderRoutineSection() {
 
   gridEl.innerHTML = tasks.map((task, idx) => {
     const isTodaySpecial = task.repeat === 'today';
+    const highlight = task.highlight || 0;
+    const highlightClass = highlight === 1 ? 'task-highlight-amber' : highlight === 2 ? 'task-highlight-rose' : '';
+    const badgeBg = highlight === 1 ? 'bg-amber-500 text-white' : highlight === 2 ? 'bg-rose-500 text-white' : 'bg-blue-600 text-white';
+
     return `
       <div class="bento-tile flex-1 min-h-[54px] px-4 py-2.5 flex items-center justify-between gap-3.5 bg-white border border-slate-200/90 rounded-2xl ${
         isTodaySpecial ? 'bg-gradient-to-r from-blue-50/40 to-white border-blue-200' : ''
-      }">
+      } ${highlightClass}">
         <div class="flex items-center gap-3.5 min-w-0 flex-1">
-          <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-black text-sm md:text-base flex items-center justify-center flex-shrink-0 shadow-2xs">
+          <span class="w-8 h-8 rounded-xl ${badgeBg} font-black text-sm md:text-base flex items-center justify-center flex-shrink-0 shadow-2xs">
             ${idx + 1}
           </span>
           ${renderSoftIcon(task.icon || 'star', task.grad || 'grad-purple-blue', 'w-11 h-11', 22)}
           <span class="text-lg md:text-2xl xl:text-[1.65rem] font-black text-slate-900 whitespace-nowrap truncate flex-1 leading-snug py-0.5">
             ${escapeHtml(task.title)}
           </span>
+          ${highlight === 1 ? `
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-500 text-white shadow-2xs whitespace-nowrap flex-shrink-0">★ 중요</span>
+          ` : highlight === 2 ? `
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-500 text-white shadow-2xs whitespace-nowrap flex-shrink-0">🚨 꼭!</span>
+          ` : ''}
           ${isTodaySpecial ? `
             <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-600 border border-blue-200 whitespace-nowrap flex-shrink-0">
               오늘
@@ -943,14 +1035,39 @@ function renderRoutineSection() {
           ` : ''}
         </div>
 
-        <button onclick="event.stopPropagation(); deleteRoutineTask('${activeRoutineTab}', '${task.id}')"
-          title="삭제"
-          class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
-          ✕
-        </button>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="event.stopPropagation(); toggleRoutineTaskHighlight('${activeRoutineTab}', '${task.id}')"
+            title="할 일 강조 색상 변경 (일반 → 중요 → 꼭!)"
+            class="px-2.5 h-8 rounded-xl ${
+              task.highlight === 1
+                ? 'bg-amber-500 text-white border-amber-600'
+                : task.highlight === 2
+                ? 'bg-rose-500 text-white border-rose-600'
+                : 'bg-slate-50 hover:bg-amber-50 text-slate-500 hover:text-amber-600 border-slate-200/80'
+            } border flex items-center justify-center gap-1 text-xs font-extrabold cursor-pointer flex-shrink-0 transition whitespace-nowrap">
+            <span>★</span>
+            <span>${task.highlight === 1 ? '중요' : task.highlight === 2 ? '꼭!' : '강조'}</span>
+          </button>
+
+          <button onclick="event.stopPropagation(); deleteRoutineTask('${activeRoutineTab}', '${task.id}')"
+            title="삭제"
+            class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
+            ✕
+          </button>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+function toggleRoutineTaskHighlight(tabKey, taskId) {
+  const list = state.routines[tabKey] || [];
+  const item = list.find(t => t.id === taskId);
+  if (!item) return;
+  item.highlight = ((item.highlight || 0) + 1) % 3;
+  playStampSound(item.highlight > 0);
+  saveState();
+  renderRoutineSection();
 }
 
 function escapeHtml(str) {
@@ -1529,6 +1646,1014 @@ function resetAllToFactoryDefaults() {
   closeSettingsModal();
   renderAll();
   showToast('초기 상태로 되돌렸습니다');
+}
+
+/* ==========================================================================
+   TOOL 1: PRE-CLASS 30-SECOND ALERT MODAL & PREVIEW
+   ========================================================================== */
+
+function showPreClassAlertModal(remainingSec, nextPeriodIdx) {
+  const modal = document.getElementById('preClassAlertModal');
+  if (!modal) return;
+
+  const targetPeriodIdx = (nextPeriodIdx !== null && nextPeriodIdx !== undefined) ? nextPeriodIdx : 0;
+  const subjId = getEffectivePeriodSubjectId(selectedWeekdayKey, targetPeriodIdx);
+  const subj = getSubjectById(subjId);
+  const periodNum = targetPeriodIdx + 1;
+
+  const iconSlot = document.getElementById('preAlertIconSlot');
+  if (iconSlot) {
+    iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-16 h-16', 32);
+  }
+
+  const numEl = document.getElementById('preAlertCountdownNum');
+  if (numEl) numEl.textContent = Math.max(1, remainingSec);
+
+  const titleEl = document.getElementById('preAlertTitle');
+  if (titleEl) {
+    titleEl.textContent = `잠시 후 ${periodNum}교시 '${subj.name}' 시작 ${remainingSec}초 전!`;
+  }
+
+  const msgEl = document.getElementById('preAlertPrepMessage');
+  if (msgEl) {
+    msgEl.textContent = `${subj.name} 교과서와 연필·지우개를 책상 위에 꺼내고 바른 자세로 앉아요!`;
+  }
+
+  const barEl = document.getElementById('preAlertProgressBar');
+  if (barEl) {
+    const pct = Math.max(0, Math.min(100, Math.round((remainingSec / 30) * 100)));
+    barEl.style.width = `${pct}%`;
+  }
+
+  if (modal.classList.contains('hidden')) {
+    modal.classList.remove('hidden');
+    playSchoolChime(false);
+  }
+}
+
+function dismissPreClassAlert() {
+  const modal = document.getElementById('preClassAlertModal');
+  if (modal) modal.classList.add('hidden');
+
+  if (preAlertPreviewTimer) {
+    clearInterval(preAlertPreviewTimer);
+    preAlertPreviewTimer = null;
+  }
+
+  const slot = evaluateCurrentTimeSlot();
+  dismissedPreAlertSlotKey = slot.slotKey;
+  showToast('준비 완료! 힘차게 수업을 시작해 볼까요?');
+}
+
+function togglePreClassAlert() {
+  state.preClassAlertEnabled = !state.preClassAlertEnabled;
+  saveState();
+  updateHeaderClockAndTimer();
+  showToast(state.preClassAlertEnabled ? '수업 30초 전 준비 알림이 켜졌습니다' : '수업 30초 전 준비 알림이 꺼졌습니다');
+}
+
+function triggerPreClassAlertPreview() {
+  if (preAlertPreviewTimer) {
+    clearInterval(preAlertPreviewTimer);
+    preAlertPreviewTimer = null;
+  }
+
+  let sec = 30;
+  const slot = evaluateCurrentTimeSlot();
+  const nextIdx = slot.periodIndex !== null ? slot.periodIndex : 1;
+
+  showPreClassAlertModal(sec, nextIdx);
+
+  preAlertPreviewTimer = setInterval(() => {
+    sec--;
+    if (sec <= 0) {
+      clearInterval(preAlertPreviewTimer);
+      preAlertPreviewTimer = null;
+      const modal = document.getElementById('preClassAlertModal');
+      if (modal) modal.classList.add('hidden');
+      playSchoolChime(true);
+      showToast('30초 준비 카운트다운이 완료되었습니다');
+    } else {
+      showPreClassAlertModal(sec, nextIdx);
+    }
+  }, 1000);
+}
+
+/* ==========================================================================
+   TOOL 2: NOTICE BOARD & CHALKBOARD DRAWING
+   ========================================================================== */
+
+let noticeDrawMode = false;
+let noticePenColor = '#FDE047';
+let noticeIsHighlighter = false;
+let isDrawingNotice = false;
+let lastDrawX = 0;
+let lastDrawY = 0;
+
+function openNoticeBoardModal() {
+  const modal = document.getElementById('noticeBoardModal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  const dateInput = document.getElementById('noticeDateInput');
+  if (dateInput && !dateInput.value) {
+    dateInput.value = todayStr;
+  }
+
+  const targetDate = (dateInput && dateInput.value) ? dateInput.value : todayStr;
+  loadNoticeForDate(targetDate);
+  initNoticeCanvasEvents();
+  renderFrequentPhrasesList();
+}
+
+function closeNoticeBoardModal() {
+  const modal = document.getElementById('noticeBoardModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function toggleNoticeFullscreen() {
+  const modal = document.getElementById('noticeBoardModal');
+  const card = document.getElementById('noticeBoardCard');
+  if (!card) return;
+
+  if (card.classList.contains('max-w-6xl')) {
+    card.classList.remove('max-w-6xl', 'h-[90vh]');
+    card.classList.add('w-full', 'h-full', 'rounded-none');
+    if (modal) modal.classList.remove('p-2', 'md:p-4');
+  } else {
+    card.classList.remove('w-full', 'h-full', 'rounded-none');
+    card.classList.add('max-w-6xl', 'h-[90vh]');
+    if (modal) modal.classList.add('p-2', 'md:p-4');
+  }
+}
+
+function formatNoticeDateDisplay(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length < 3) return dateStr;
+  const m = Number(parts[1]);
+  const d = Number(parts[2]);
+  const dt = new Date(parts[0], m - 1, d);
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${m}월 ${d}일 (${days[dt.getDay()]})`;
+}
+
+function loadNoticeForDate(dateStr) {
+  const dateFmt = document.getElementById('noticeDateFormatted');
+  const dateTitle = document.getElementById('noticeBoardDateTitle');
+  const formattedText = formatNoticeDateDisplay(dateStr);
+
+  if (dateFmt) dateFmt.textContent = formattedText;
+  if (dateTitle) dateTitle.textContent = formattedText;
+
+  const classTitle = document.getElementById('noticeClassTitle');
+  if (classTitle) classTitle.textContent = `${state.className} [${new Date().getFullYear()}]`;
+
+  const dateData = (state.notices && state.notices[dateStr]) || {
+    html: `<div>1. 내일 놀이체육 수업(활동하기 편한 옷)</div><div>2. 작가와의 만남 사인 받을 사람, 책 준비하기 (희망자만)</div><div>3. 해지기 전에 집에 일찍 귀가하기</div>`,
+    bgTheme: 'chalkboard',
+    fontSize: 38,
+    drawingDataUrl: ''
+  };
+
+  const editor = document.getElementById('noticeEditorArea');
+  if (editor) {
+    editor.innerHTML = dateData.html || '';
+    editor.style.fontSize = `${dateData.fontSize || 38}px`;
+  }
+
+  setNoticeBgTheme(dateData.bgTheme || 'chalkboard', false);
+  restoreNoticeCanvas(dateData.drawingDataUrl || '');
+}
+
+function saveNoticeData() {
+  const dateInput = document.getElementById('noticeDateInput');
+  const dateStr = dateInput ? dateInput.value : new Date().toISOString().slice(0, 10);
+  const editor = document.getElementById('noticeEditorArea');
+  const html = editor ? editor.innerHTML : '';
+  const currentFontSize = editor ? parseInt(window.getComputedStyle(editor).fontSize, 10) || 38 : 38;
+
+  const surface = document.getElementById('noticeSurfaceWrap');
+  let bgTheme = 'chalkboard';
+  if (surface) {
+    if (surface.classList.contains('notice-bg-note15')) bgTheme = 'note15';
+    else if (surface.classList.contains('notice-bg-note10')) bgTheme = 'note10';
+  }
+
+  const canvas = document.getElementById('noticeDrawCanvas');
+  const drawingDataUrl = canvas ? canvas.toDataURL() : '';
+
+  if (!state.notices) state.notices = {};
+  state.notices[dateStr] = {
+    html,
+    bgTheme,
+    fontSize: currentFontSize,
+    drawingDataUrl
+  };
+
+  saveState();
+  renderNoticeHistoryList();
+  showToast(`${formatNoticeDateDisplay(dateStr)} 알림장이 저장되었습니다!`);
+}
+
+function setNoticeBgTheme(theme, save = true) {
+  const surface = document.getElementById('noticeSurfaceWrap');
+  const btnChalk = document.getElementById('btnBgChalkboard');
+  const btnN15 = document.getElementById('btnBgNote15');
+  const btnN10 = document.getElementById('btnBgNote10');
+
+  if (surface) {
+    surface.classList.remove('notice-bg-chalkboard', 'notice-bg-note15', 'notice-bg-note10');
+    surface.classList.add(`notice-bg-${theme}`);
+  }
+
+  [btnChalk, btnN15, btnN10].forEach(b => {
+    if (b) {
+      b.className = 'px-2.5 py-1 rounded-lg font-bold text-slate-600 hover:bg-slate-100 transition';
+    }
+  });
+
+  if (theme === 'chalkboard' && btnChalk) {
+    btnChalk.className = 'px-3 py-1 rounded-lg font-black bg-slate-800 text-white shadow-2xs transition';
+  } else if (theme === 'note15' && btnN15) {
+    btnN15.className = 'px-3 py-1 rounded-lg font-black bg-blue-600 text-white shadow-2xs transition';
+  } else if (theme === 'note10' && btnN10) {
+    btnN10.className = 'px-3 py-1 rounded-lg font-black bg-blue-600 text-white shadow-2xs transition';
+  }
+
+  if (save) saveNoticeData();
+}
+
+function changeNoticeFontSize(delta) {
+  const editor = document.getElementById('noticeEditorArea');
+  if (!editor) return;
+  const cur = parseInt(window.getComputedStyle(editor).fontSize, 10) || 38;
+  const next = Math.max(22, Math.min(64, cur + delta));
+  editor.style.fontSize = `${next}px`;
+}
+
+function execNoticeFormat(cmd) {
+  document.execCommand(cmd, false, null);
+  const editor = document.getElementById('noticeEditorArea');
+  if (editor) editor.focus();
+}
+
+function setNoticeTextColor(color) {
+  document.execCommand('foreColor', false, color);
+  const editor = document.getElementById('noticeEditorArea');
+  if (editor) editor.focus();
+}
+
+/* Notice Canvas Drawing */
+function initNoticeCanvasEvents() {
+  const canvas = document.getElementById('noticeDrawCanvas');
+  const surface = document.getElementById('noticeSurfaceWrap');
+  if (!canvas || !surface || canvas.__eventsBound) return;
+
+  const resize = () => {
+    const rect = surface.getBoundingClientRect();
+    if (canvas.width !== rect.width || canvas.height !== rect.height) {
+      const prevData = canvas.toDataURL();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      if (prevData && prevData.length > 30) {
+        restoreNoticeCanvas(prevData);
+      }
+    }
+  };
+  resize();
+  window.addEventListener('resize', resize);
+
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top
+    };
+  };
+
+  const startDraw = (e) => {
+    if (!noticeDrawMode) return;
+    isDrawingNotice = true;
+    const pos = getPos(e);
+    lastDrawX = pos.x;
+    lastDrawY = pos.y;
+    e.preventDefault();
+  };
+
+  const draw = (e) => {
+    if (!isDrawingNotice || !noticeDrawMode) return;
+    const pos = getPos(e);
+    const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.moveTo(lastDrawX, lastDrawY);
+    ctx.lineTo(pos.x, pos.y);
+
+    if (noticeIsHighlighter) {
+      ctx.strokeStyle = noticePenColor;
+      ctx.lineWidth = 18;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.globalAlpha = 0.35;
+    } else {
+      ctx.strokeStyle = noticePenColor;
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.globalAlpha = 1.0;
+    }
+
+    ctx.stroke();
+    lastDrawX = pos.x;
+    lastDrawY = pos.y;
+    e.preventDefault();
+  };
+
+  const stopDraw = () => {
+    isDrawingNotice = false;
+  };
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  window.addEventListener('mouseup', stopDraw);
+
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  window.addEventListener('touchend', stopDraw);
+
+  canvas.__eventsBound = true;
+}
+
+function toggleNoticeDrawMode() {
+  noticeDrawMode = !noticeDrawMode;
+  const canvas = document.getElementById('noticeDrawCanvas');
+  const label = document.getElementById('drawModeLabel');
+  const btn = document.getElementById('btnToggleDrawMode');
+
+  if (noticeDrawMode) {
+    if (canvas) canvas.classList.remove('pointer-events-none');
+    if (label) label.textContent = '판서 그리기 ON';
+    if (btn) btn.className = 'px-2.5 py-1.5 rounded-xl bg-amber-500 text-white font-black flex items-center gap-1 cursor-pointer transition shadow-2xs';
+  } else {
+    if (canvas) canvas.classList.add('pointer-events-none');
+    if (label) label.textContent = '판서 그리기 OFF';
+    if (btn) btn.className = 'px-2.5 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-black flex items-center gap-1 cursor-pointer transition';
+  }
+}
+
+function setNoticePenColor(color) {
+  noticePenColor = color;
+  noticeIsHighlighter = false;
+  if (!noticeDrawMode) toggleNoticeDrawMode();
+}
+
+function toggleNoticeHighlighter() {
+  noticeIsHighlighter = !noticeIsHighlighter;
+  const btn = document.getElementById('btnNoticeHighlighter');
+  if (btn) {
+    btn.className = noticeIsHighlighter
+      ? 'px-2 py-1 rounded-xl bg-yellow-300 border border-yellow-400 text-amber-950 font-black cursor-pointer shadow-2xs transition'
+      : 'px-2 py-1 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold hover:bg-yellow-50 cursor-pointer transition';
+  }
+  if (!noticeDrawMode) toggleNoticeDrawMode();
+}
+
+function clearNoticeCanvas() {
+  const canvas = document.getElementById('noticeDrawCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function restoreNoticeCanvas(dataUrl) {
+  const canvas = document.getElementById('noticeDrawCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!dataUrl) return;
+
+  const img = new Image();
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  };
+  img.src = dataUrl;
+}
+
+/* Frequent Phrases Drawer */
+function toggleFrequentPhrasesDrawer() {
+  const drawer = document.getElementById('frequentPhrasesDrawer');
+  if (drawer) drawer.classList.toggle('hidden');
+}
+
+function renderFrequentPhrasesList() {
+  const list = document.getElementById('frequentPhrasesList');
+  if (!list) return;
+  const phrases = state.frequentPhrases || [];
+  list.innerHTML = phrases.map((text, idx) => `
+    <button onclick="insertFrequentPhrase(${idx})"
+      class="px-3 py-1.5 rounded-xl bg-white hover:bg-amber-100 border border-amber-200 text-slate-800 font-bold text-xs whitespace-nowrap cursor-pointer transition flex items-center gap-1 shadow-2xs">
+      <span>➕</span>
+      <span>${escapeHtml(text)}</span>
+    </button>
+  `).join('');
+}
+
+function insertFrequentPhrase(idx) {
+  const text = state.frequentPhrases[idx];
+  if (!text) return;
+  const editor = document.getElementById('noticeEditorArea');
+  if (!editor) return;
+
+  const existingLines = editor.innerText.split('\n').filter(l => l.trim().length > 0);
+  const nextNum = existingLines.length + 1;
+  const newLine = document.createElement('div');
+  newLine.textContent = `${nextNum}. ${text}`;
+  editor.appendChild(newLine);
+  editor.focus();
+  playStampSound(true);
+}
+
+/* Notice History Drawer */
+function toggleNoticeHistoryDrawer() {
+  const drawer = document.getElementById('noticeHistoryDrawer');
+  if (!drawer) return;
+  drawer.classList.toggle('hidden');
+  renderNoticeHistoryList();
+}
+
+function renderNoticeHistoryList() {
+  const list = document.getElementById('noticeHistoryList');
+  if (!list) return;
+  const notices = state.notices || {};
+  const dates = Object.keys(notices).sort().reverse();
+
+  if (dates.length === 0) {
+    list.innerHTML = `<span class="text-xs text-slate-400 font-bold">저장된 알림장이 없습니다</span>`;
+    return;
+  }
+
+  list.innerHTML = dates.map(d => `
+    <button onclick="document.getElementById('noticeDateInput').value='${d}'; loadNoticeForDate('${d}');"
+      class="px-2.5 py-1 rounded-xl bg-white hover:bg-blue-100 border border-blue-200 text-slate-800 font-extrabold text-xs whitespace-nowrap cursor-pointer transition shadow-2xs">
+      ${formatNoticeDateDisplay(d)}
+    </button>
+  `).join('');
+}
+
+/* ==========================================================================
+   TOOL 3: STUDENT ACTIVITY & HOMEWORK CHECKLIST
+   ========================================================================== */
+
+let activeStudentCheckCategory = 'morning';
+let studentCheckFilterMode = 'all';
+
+const STUDENT_CHECK_CATEGORIES = [
+  { key: 'morning', label: '아침 활동', icon: 'sun' },
+  { key: 'homework', label: '숙제·알림장', icon: 'notebook' },
+  { key: 'milk', label: '우유·급식', icon: 'milk' },
+  { key: 'custom', label: '자유 체크', icon: 'star' }
+];
+
+function openStudentCheckModal() {
+  const modal = document.getElementById('studentCheckModal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  renderStudentCheckTabs();
+  renderStudentCheckGrid();
+}
+
+function closeStudentCheckModal() {
+  const modal = document.getElementById('studentCheckModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function switchCheckCategory(catKey) {
+  activeStudentCheckCategory = catKey;
+  renderStudentCheckTabs();
+  renderStudentCheckGrid();
+}
+
+function renderStudentCheckTabs() {
+  const tabs = document.getElementById('checkCategoryTabs');
+  if (!tabs) return;
+  tabs.innerHTML = STUDENT_CHECK_CATEGORIES.map(c => {
+    const isSel = c.key === activeStudentCheckCategory;
+    return `
+      <button onclick="switchCheckCategory('${c.key}')"
+        class="px-3.5 py-1.5 rounded-xl font-black text-xs md:text-sm cursor-pointer transition whitespace-nowrap flex items-center gap-1.5 ${
+          isSel
+            ? 'bg-indigo-600 text-white shadow-xs'
+            : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+        }">
+        <span>${c.label}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+function setStudentCheckFilter(filterMode) {
+  studentCheckFilterMode = filterMode;
+  const btnAll = document.getElementById('btnCheckFilterAll');
+  const btnInc = document.getElementById('btnCheckFilterIncomplete');
+
+  if (filterMode === 'all') {
+    if (btnAll) btnAll.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-2xs transition';
+    if (btnInc) btnInc.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition';
+  } else {
+    if (btnAll) btnAll.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition';
+    if (btnInc) btnInc.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-2xs transition';
+  }
+
+  renderStudentCheckGrid();
+}
+
+function toggleStudentCheckStatus(studentId) {
+  if (!state.studentChecks) state.studentChecks = {};
+  if (!state.studentChecks[activeStudentCheckCategory]) {
+    state.studentChecks[activeStudentCheckCategory] = {};
+  }
+  const current = state.studentChecks[activeStudentCheckCategory][studentId] || 0;
+  const next = (current + 1) % 3;
+  state.studentChecks[activeStudentCheckCategory][studentId] = next;
+
+  if (next === 1) {
+    playStampSound(true);
+  } else if (next === 2) {
+    playStampSound(false);
+  }
+
+  saveState();
+  renderStudentCheckGrid();
+
+  // Check if all students completed
+  const students = state.students || [];
+  const checks = state.studentChecks[activeStudentCheckCategory] || {};
+  const completedCount = students.filter(s => checks[s.id] === 1).length;
+  if (students.length > 0 && completedCount === students.length) {
+    playCelebrationFanfare();
+    showToast('🎉 우리 반 모든 친구가 활동을 완료했습니다! 참 잘했어요!');
+  }
+}
+
+function markAllStudentsCheck(status) {
+  if (!state.studentChecks) state.studentChecks = {};
+  if (!state.studentChecks[activeStudentCheckCategory]) {
+    state.studentChecks[activeStudentCheckCategory] = {};
+  }
+  const students = state.students || [];
+  students.forEach(s => {
+    state.studentChecks[activeStudentCheckCategory][s.id] = status;
+  });
+
+  if (status === 1) {
+    playCelebrationFanfare();
+    showToast('전원 완료 처리되었습니다!');
+  } else {
+    showToast('전체 초기화되었습니다');
+  }
+
+  saveState();
+  renderStudentCheckGrid();
+}
+
+function renderStudentCheckGrid() {
+  const grid = document.getElementById('studentCheckGrid');
+  if (!grid) return;
+
+  const students = state.students || [];
+  const checks = (state.studentChecks && state.studentChecks[activeStudentCheckCategory]) || {};
+
+  const completedCount = students.filter(s => checks[s.id] === 1).length;
+  const totalCount = students.length;
+  const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+  const sumText = document.getElementById('studentCheckSummaryText');
+  if (sumText) sumText.textContent = `완료 ${completedCount}명 / 전체 ${totalCount}명 (${pct}%)`;
+
+  const bar = document.getElementById('studentCheckProgressBar');
+  if (bar) bar.style.width = `${pct}%`;
+
+  const filtered = students.filter(s => {
+    const st = checks[s.id] || 0;
+    if (studentCheckFilterMode === 'incomplete') return st !== 1;
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="col-span-full py-12 text-center text-slate-400 font-bold">
+        ${studentCheckFilterMode === 'incomplete' ? '모든 친구가 완료했습니다! 👏' : '등록된 학생이 없습니다'}
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(s => {
+    const st = checks[s.id] || 0;
+    const cardBg = st === 1
+      ? 'bg-indigo-50/80 border-indigo-400 text-indigo-900 shadow-sm'
+      : st === 2
+      ? 'bg-amber-50/90 border-amber-400 text-amber-900 shadow-sm'
+      : 'bg-white border-slate-200/90 text-slate-800 hover:border-indigo-300';
+
+    const numBadge = st === 1
+      ? 'bg-indigo-600 text-white'
+      : st === 2
+      ? 'bg-amber-500 text-white'
+      : 'bg-slate-100 text-slate-600';
+
+    const statusPill = st === 1
+      ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-black bg-indigo-600 text-white shadow-2xs">완료 ★</span>`
+      : st === 2
+      ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-black bg-amber-500 text-white shadow-2xs">확인필요</span>`
+      : `<span class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-100 text-slate-400">미확인</span>`;
+
+    return `
+      <button onclick="toggleStudentCheckStatus('${s.id}')"
+        class="bento-tile p-3 rounded-2xl border flex flex-col justify-between gap-2 text-left cursor-pointer transition select-none ${cardBg}">
+        <div class="flex items-center justify-between w-full">
+          <span class="w-6 h-6 rounded-lg ${numBadge} text-xs font-black flex items-center justify-center flex-shrink-0">
+            ${s.num}
+          </span>
+          ${statusPill}
+        </div>
+        <div class="text-base md:text-lg font-black truncate w-full pt-1">
+          ${escapeHtml(s.name)}
+        </div>
+      </button>
+    `;
+  }).join('');
+}
+
+function toggleRosterEditor() {
+  const panel = document.getElementById('rosterEditorPanel');
+  if (!panel) return;
+  panel.classList.toggle('hidden');
+  if (!panel.classList.contains('hidden')) {
+    const textarea = document.getElementById('rosterTextarea');
+    if (textarea) {
+      textarea.value = (state.students || []).map(s => s.name).join(', ');
+      textarea.focus();
+    }
+  }
+}
+
+function saveStudentRoster() {
+  const textarea = document.getElementById('rosterTextarea');
+  if (!textarea) return;
+  const raw = textarea.value.trim();
+  if (!raw) {
+    showToast('학생 이름을 입력해 주세요');
+    return;
+  }
+
+  const names = raw
+    .split(/[\n,]+/)
+    .map(n => n.replace(/^[0-9]+[번.\s]*/, '').trim())
+    .filter(n => n.length > 0);
+
+  if (names.length === 0) {
+    showToast('유효한 학생 이름이 없습니다');
+    return;
+  }
+
+  state.students = names.map((name, idx) => ({
+    id: 's' + (idx + 1),
+    num: idx + 1,
+    name
+  }));
+
+  saveState();
+  toggleRosterEditor();
+  renderStudentCheckGrid();
+  showToast(`${names.length}명의 학생 명단이 저장되었습니다!`);
+}
+
+/* ==========================================================================
+   TOOL 5: ACTIVITY TIMER, STOPWATCH & CLASSROOM SFX
+   ========================================================================== */
+
+let activityTimerMode = 'countdown';
+let activityTimerTotalSec = 300;
+let activityTimerRemainingSec = 300;
+let activityStopwatchElapsedSec = 0;
+let activityTimerRunning = false;
+let activityTimerInterval = null;
+
+function openActivityTimerModal() {
+  const modal = document.getElementById('activityTimerModal');
+  const mini = document.getElementById('miniFloatingTimer');
+  if (mini) mini.classList.add('hidden');
+  if (modal) modal.classList.remove('hidden');
+  updateActivityTimerDisplay();
+}
+
+function closeActivityTimerModal() {
+  const modal = document.getElementById('activityTimerModal');
+  if (modal) modal.classList.add('hidden');
+  if (activityTimerRunning) {
+    minimizeToFloatingTimer();
+  }
+}
+
+function minimizeToFloatingTimer() {
+  const modal = document.getElementById('activityTimerModal');
+  const mini = document.getElementById('miniFloatingTimer');
+  if (modal) modal.classList.add('hidden');
+  if (mini) mini.classList.remove('hidden');
+  updateMiniTimerDisplay();
+}
+
+function expandFromFloatingTimer() {
+  const mini = document.getElementById('miniFloatingTimer');
+  if (mini) mini.classList.add('hidden');
+  openActivityTimerModal();
+}
+
+function closeActivityTimerCompletely() {
+  const mini = document.getElementById('miniFloatingTimer');
+  if (mini) mini.classList.add('hidden');
+  pauseActivityTimer();
+  resetActivityTimer();
+  showToast('활동 타이머가 종료되었습니다');
+}
+
+function setActivityTimerMode(mode) {
+  pauseActivityTimer();
+  activityTimerMode = mode;
+
+  const btnCd = document.getElementById('btnTimerModeCountdown');
+  const btnSw = document.getElementById('btnTimerModeStopwatch');
+
+  if (mode === 'countdown') {
+    if (btnCd) btnCd.className = 'px-3 py-1 rounded-lg text-xs font-black bg-blue-600 text-white shadow-2xs transition';
+    if (btnSw) btnSw.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-200 transition';
+  } else {
+    if (btnCd) btnCd.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-200 transition';
+    if (btnSw) btnSw.className = 'px-3 py-1 rounded-lg text-xs font-black bg-blue-600 text-white shadow-2xs transition';
+  }
+
+  resetActivityTimer();
+}
+
+function setActivityTimerPreset(seconds) {
+  if (activityTimerMode !== 'countdown') setActivityTimerMode('countdown');
+  pauseActivityTimer();
+  activityTimerTotalSec = seconds;
+  activityTimerRemainingSec = seconds;
+  updateActivityTimerDisplay();
+}
+
+function addActivityTimerSeconds(sec) {
+  if (activityTimerMode === 'countdown') {
+    activityTimerTotalSec += sec;
+    activityTimerRemainingSec += sec;
+    updateActivityTimerDisplay();
+  }
+}
+
+function toggleActivityTimerStartPause() {
+  if (activityTimerRunning) {
+    pauseActivityTimer();
+  } else {
+    startActivityTimer();
+  }
+}
+
+function startActivityTimer() {
+  activityTimerRunning = true;
+  updateTimerPlayButtons();
+
+  if (activityTimerInterval) clearInterval(activityTimerInterval);
+  activityTimerInterval = setInterval(() => {
+    if (activityTimerMode === 'countdown') {
+      activityTimerRemainingSec--;
+
+      // 5, 4, 3, 2, 1s beeps
+      if (activityTimerRemainingSec > 0 && activityTimerRemainingSec <= 5) {
+        playTimerTickBeep(activityTimerRemainingSec);
+      }
+
+      if (activityTimerRemainingSec <= 0) {
+        activityTimerRemainingSec = 0;
+        pauseActivityTimer();
+        playCelebrationFanfare();
+        showToast('🔔 활동 시간이 종료되었습니다!');
+      }
+    } else {
+      activityStopwatchElapsedSec++;
+    }
+
+    updateActivityTimerDisplay();
+    updateMiniTimerDisplay();
+  }, 1000);
+
+  updateActivityTimerDisplay();
+  updateMiniTimerDisplay();
+}
+
+function pauseActivityTimer() {
+  activityTimerRunning = false;
+  if (activityTimerInterval) {
+    clearInterval(activityTimerInterval);
+    activityTimerInterval = null;
+  }
+  updateTimerPlayButtons();
+}
+
+function resetActivityTimer() {
+  pauseActivityTimer();
+  if (activityTimerMode === 'countdown') {
+    activityTimerRemainingSec = activityTimerTotalSec;
+  } else {
+    activityStopwatchElapsedSec = 0;
+  }
+  updateActivityTimerDisplay();
+  updateMiniTimerDisplay();
+}
+
+function updateTimerPlayButtons() {
+  const mainBtn = document.getElementById('btnActivityTimerStartPause');
+  const miniBtn = document.getElementById('btnMiniTimerStartPause');
+
+  if (mainBtn) {
+    mainBtn.innerHTML = activityTimerRunning ? '일시정지 ❚❚' : '시작 ▶';
+    mainBtn.className = activityTimerRunning
+      ? 'flex-1 max-w-xs py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-base shadow-lg shadow-amber-500/25 cursor-pointer transition'
+      : 'flex-1 max-w-xs py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-base shadow-lg shadow-blue-500/25 cursor-pointer transition';
+  }
+
+  if (miniBtn) {
+    miniBtn.innerHTML = activityTimerRunning ? '❚❚' : '▶';
+    miniBtn.className = activityTimerRunning
+      ? 'px-2 py-1 rounded-lg bg-amber-500 text-white font-black text-xs cursor-pointer hover:bg-amber-600'
+      : 'px-2 py-1 rounded-lg bg-blue-600 text-white font-black text-xs cursor-pointer hover:bg-blue-700';
+  }
+}
+
+function formatMinSec(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function updateActivityTimerDisplay() {
+  const disp = document.getElementById('activityTimerDisplay');
+  const sub = document.getElementById('activityTimerSubStatus');
+  const circle = document.getElementById('activityTimerCirclePath');
+  const circumference = 326.73;
+
+  if (activityTimerMode === 'countdown') {
+    const str = formatMinSec(activityTimerRemainingSec);
+    if (disp) disp.textContent = str;
+
+    const pct = activityTimerTotalSec > 0
+      ? activityTimerRemainingSec / activityTimerTotalSec
+      : 0;
+
+    if (circle) {
+      const offset = circumference - pct * circumference;
+      circle.setAttribute('stroke-dashoffset', String(offset));
+
+      if (activityTimerRemainingSec <= 10) {
+        circle.setAttribute('stroke', '#EF4444');
+      } else if (activityTimerRemainingSec <= 60) {
+        circle.setAttribute('stroke', '#F59E0B');
+      } else {
+        circle.setAttribute('stroke', '#2563EB');
+      }
+    }
+
+    if (sub) {
+      if (activityTimerRemainingSec === 0) {
+        sub.textContent = '활동이 끝났습니다! 모두 자리에 앉아요';
+        sub.className = 'text-xs md:text-sm font-black text-rose-600 mt-1';
+      } else if (activityTimerRemainingSec <= 10) {
+        sub.textContent = '마무리할 시간이에요! 10초 전!';
+        sub.className = 'text-xs md:text-sm font-black text-rose-600 mt-1 animate-pulse';
+      } else if (activityTimerRemainingSec <= 60) {
+        sub.textContent = '남은 시간 1분! 활동을 정리해요';
+        sub.className = 'text-xs md:text-sm font-extrabold text-amber-600 mt-1';
+      } else {
+        sub.textContent = '집중해서 활동을 시작해요!';
+        sub.className = 'text-xs md:text-sm font-extrabold text-blue-600 mt-1';
+      }
+    }
+  } else {
+    const str = formatMinSec(activityStopwatchElapsedSec);
+    if (disp) disp.textContent = str;
+    if (sub) {
+      sub.textContent = '스톱워치가 진행 중입니다';
+      sub.className = 'text-xs md:text-sm font-extrabold text-indigo-600 mt-1';
+    }
+    if (circle) {
+      circle.setAttribute('stroke-dashoffset', '0');
+      circle.setAttribute('stroke', '#6366F1');
+    }
+  }
+}
+
+function updateMiniTimerDisplay() {
+  const disp = document.getElementById('miniTimerDisplay');
+  const title = document.getElementById('miniTimerTitle');
+  const taskInp = document.getElementById('activityTimerTaskTitle');
+
+  if (disp) {
+    disp.textContent = activityTimerMode === 'countdown'
+      ? formatMinSec(activityTimerRemainingSec)
+      : formatMinSec(activityStopwatchElapsedSec);
+  }
+
+  if (title) {
+    const customTitle = taskInp ? taskInp.value.trim() : '';
+    title.textContent = customTitle || (activityTimerMode === 'countdown' ? '활동 타이머' : '스톱워치');
+  }
+}
+
+function playTimerTickBeep(sec) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(sec === 1 ? 880 : 587.33, ctx.currentTime);
+  gain.gain.setValueAtTime(0.15, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.14);
+}
+
+function playAttentionSound(type) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+
+  if (type === 'whistle') {
+    // Sharp referee whistle with frequency modulation trill
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(2600, ctx.currentTime);
+
+    lfo.frequency.setValueAtTime(28, ctx.currentTime);
+    lfoGain.gain.setValueAtTime(300, ctx.currentTime);
+
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+
+    gain.gain.setValueAtTime(0.001, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(ctx.currentTime);
+    lfo.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.75);
+    lfo.stop(ctx.currentTime + 0.75);
+    showToast('📢 삐익! 선생님을 바라보세요!');
+  } else if (type === 'xylophone') {
+    // Bright ascending arpeggio (C5 - E5 - G5 - C6)
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((f, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      const start = ctx.currentTime + idx * 0.14;
+      osc.frequency.setValueAtTime(f, start);
+      gain.gain.setValueAtTime(0.3, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.55);
+    });
+    showToast('🎵 또롱또롱! 주의 집중 시간입니다');
+  } else if (type === 'clap') {
+    // Rhythmic celebration claps
+    [0.0, 0.16, 0.32, 0.52].forEach((timeOffset) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(400, ctx.currentTime + timeOffset);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + timeOffset);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + timeOffset + 0.1);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + timeOffset);
+      osc.stop(ctx.currentTime + timeOffset + 0.12);
+    });
+    showToast('👏 짝짝짝! 칭찬의 박수!');
+  }
 }
 
 function initBoard() {

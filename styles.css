@@ -353,3 +353,73 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* ================= 1. TASK HIGHLIGHT STYLES ================= */
+.task-highlight-amber {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%) !important;
+  border: 2px solid #F59E0B !important;
+  box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.22) !important;
+}
+
+.task-highlight-rose {
+  background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%) !important;
+  border: 2px solid #F43F5E !important;
+  box-shadow: 0 8px 20px -4px rgba(244, 63, 94, 0.22) !important;
+}
+
+/* ================= 2. CHALKBOARD & NOTEBOOK NOTICE THEMES ================= */
+/* 교실 칠판 테마 - 어두운 청록색 그라데이션 질감 및 분필 텍스트 */
+.notice-bg-chalkboard {
+  background: radial-gradient(circle at 50% 35%, #2A5247 0%, #1E3F37 70%, #17332C 100%) !important;
+  color: #F8FAFC !important;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.35);
+}
+
+.notice-bg-chalkboard #noticeBoardDateTitle {
+  color: #F8FAFC !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.notice-bg-chalkboard .notice-chalk-text {
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* 공책 15칸 테마 - 아이보리 배경에 15칸 가이드라인 */
+.notice-bg-note15 {
+  background-color: #FFFDF9 !important;
+  background-image:
+    linear-gradient(#E2E8F0 1px, transparent 1px),
+    linear-gradient(90deg, #F1F5F9 1px, transparent 1px) !important;
+  background-size: 100% 3.2rem, calc(100% / 15) 100% !important;
+  color: #0F172A !important;
+}
+
+.notice-bg-note15 #noticeBoardDateTitle {
+  color: #1E293B !important;
+}
+
+.notice-bg-note15 .notice-chalk-text {
+  color: #0F172A !important;
+  line-height: 3.2rem !important;
+}
+
+/* 공책 10칸 테마 - 큼직한 10칸 저학년 쓰기 연습 공책 */
+.notice-bg-note10 {
+  background-color: #FFFDF9 !important;
+  background-image:
+    linear-gradient(#E2E8F0 1.5px, transparent 1.5px),
+    linear-gradient(90deg, #E2E8F0 1.5px, transparent 1.5px) !important;
+  background-size: 100% 4.4rem, calc(100% / 10) 100% !important;
+  color: #0F172A !important;
+}
+
+.notice-bg-note10 #noticeBoardDateTitle {
+  color: #1E293B !important;
+}
+
+.notice-bg-note10 .notice-chalk-text {
+  color: #0F172A !important;
+  line-height: 4.4rem !important;
+}
+
