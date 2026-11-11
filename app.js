@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'elementary_classroom_board_bento_v4';
+const STORAGE_KEY = 'elementary_classroom_board_bento_v5';
 
 const VECTOR_PATHS = {
   book: `
@@ -179,10 +179,10 @@ const DEFAULT_SUBJECTS = [
 const FREQUENT_TASK_PRESETS = [
   { icon: 'submit',   grad: 'grad-pink-orange',   title: '숙제 바구니에 내기',           tab: 'morning' },
   { icon: 'notebook', grad: 'grad-purple-blue',   title: '알림장 책상 위에 꺼내기',       tab: 'morning' },
-  { icon: 'milk',     grad: 'grad-sky-indigo',    title: '우유 마시고 갑 접기',           tab: 'breaktime' },
+  { icon: 'milk',     grad: 'grad-sky-indigo',    title: '우유 마시고 갑 접기',           tab: 'lunchtime' },
   { icon: 'restroom', grad: 'grad-blue-cyan',     title: '쉬는 시간에 화장실 다녀오기',   tab: 'breaktime' },
   { icon: 'water',    grad: 'grad-mint-blue',     title: '물 한 컵 마시기',               tab: 'breaktime' },
-  { icon: 'wash',     grad: 'grad-sky-indigo',    title: '점심 먹기 전 손 깨끗이 씻기',   tab: 'breaktime' },
+  { icon: 'wash',     grad: 'grad-sky-indigo',    title: '점심 먹기 전 손 깨끗이 씻기',   tab: 'lunchtime' },
   { icon: 'book',     grad: 'grad-purple-blue',   title: '다음 시간 교과서 꺼내 놓기',    tab: 'classprep' },
   { icon: 'pencil',   grad: 'grad-pink-orange',   title: '연필 3자루와 지우개 준비',     tab: 'classprep' },
   { icon: 'letter',   grad: 'grad-lavender-pink', title: '가정통신문 가방에 넣기',         tab: 'afterschool' },
@@ -192,10 +192,11 @@ const FREQUENT_TASK_PRESETS = [
 ];
 
 const ROUTINE_TABS_META = [
-  { key: 'morning',     label: '등교 후',       sub: '아침 루틴',     icon: 'sun',    grad: 'grad-pink-orange' },
-  { key: 'classprep',   label: '수업 준비',     sub: '수업 시작 전',  icon: 'pencil', grad: 'grad-purple-blue' },
-  { key: 'breaktime',   label: '쉬는·점심시간', sub: '휴식 및 점심',  icon: 'water',  grad: 'grad-blue-cyan' },
-  { key: 'afterschool', label: '하교 전',       sub: '귀가 준비',     icon: 'bag',    grad: 'grad-periwinkle-rose' }
+  { key: 'morning',     label: '등교 후',   sub: '아침 루틴',   icon: 'sun',    grad: 'grad-pink-orange' },
+  { key: 'classprep',   label: '수업 준비', sub: '수업 시작 전', icon: 'pencil', grad: 'grad-purple-blue' },
+  { key: 'breaktime',   label: '쉬는시간',  sub: '교시 사이 휴식', icon: 'water', grad: 'grad-blue-cyan' },
+  { key: 'lunchtime',   label: '점심시간',  sub: '급식 및 휴식', icon: 'wash',   grad: 'grad-mint-blue' },
+  { key: 'afterschool', label: '하교 전',   sub: '귀가 준비',   icon: 'bag',    grad: 'grad-periwinkle-rose' }
 ];
 
 const WEEKDAYS = [
@@ -293,11 +294,18 @@ function getDefaultState() {
         { id: 'c5', icon: 'star',     grad: 'grad-periwinkle-rose', title: '선생님과 친구 바라보며 귀 기울이기', repeat: 'daily', done: false, highlight: 0 }
       ],
       breaktime: [
-        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서 미리 꺼내 놓기', repeat: 'daily', done: false, highlight: 1 },
-        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 다녀와서 비누로 손 씻기', repeat: 'daily', done: false, highlight: 0 },
-        { id: 'b3', icon: 'water',    grad: 'grad-mint-blue',   title: '내 자리에서 물이나 우유 마시기', repeat: 'daily', done: false, highlight: 0 },
-        { id: 'b4', icon: 'shield',   grad: 'grad-sky-indigo',  title: '교실과 복도에서 사뿐사뿐 걷기', repeat: 'daily', done: false, highlight: 0 },
-        { id: 'b5', icon: 'bell',     grad: 'grad-pink-orange', title: '종이 치면 바로 자리에 앉아 기다리기', repeat: 'daily', done: false, highlight: 0 }
+        { id: 'b1', icon: 'book',     grad: 'grad-purple-blue', title: '다음 시간 교과서와 준비물 미리 꺼내기', repeat: 'daily', done: false, highlight: 1 },
+        { id: 'b2', icon: 'restroom', grad: 'grad-blue-cyan',   title: '화장실 미리 다녀와서 비누로 손 씻기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'b3', icon: 'water',    grad: 'grad-mint-blue',   title: '내 자리에서 물 한 모금 마시기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'b4', icon: 'shield',   grad: 'grad-sky-indigo',  title: '교실과 복도에서 사뿐사뿐 천천히 걷기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'b5', icon: 'chair',    grad: 'grad-pink-orange', title: '종이 치면 바로 자리에 앉아 기다리기', repeat: 'daily', done: false, highlight: 0 }
+      ],
+      lunchtime: [
+        { id: 'l1', icon: 'wash',     grad: 'grad-mint-blue',   title: '급식 먹기 전 비누로 손 깨끗이 씻기', repeat: 'daily', done: false, highlight: 1 },
+        { id: 'l2', icon: 'heart',    grad: 'grad-pink-orange', title: '차례를 지켜 조용히 줄 서서 급식 받기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'l3', icon: 'milk',     grad: 'grad-sky-indigo',  title: '바른 자세로 앉아 골고루 감사히 먹기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'l4', icon: 'clean',    grad: 'grad-mint-blue',   title: '내가 먹은 식판과 자리 깨끗이 정리하기', repeat: 'daily', done: false, highlight: 0 },
+        { id: 'l5', icon: 'water',    grad: 'grad-blue-cyan',   title: '식사 후 양치질하거나 입 헹구고 휴식하기', repeat: 'daily', done: false, highlight: 0 }
       ],
       afterschool: [
         { id: 'a1', icon: 'notebook', grad: 'grad-pink-orange', title: '알림장과 안내장 가방에 챙겨 넣기', repeat: 'daily', done: false, highlight: 1 },
@@ -324,10 +332,17 @@ function getDefaultState() {
       '비 오는 날 우산 챙기고 차조심·길조심하기'
     ],
     students: defaultStudents,
+    checkCategories: [
+      { id: 'morning',  label: '아침활동',    icon: '☀️' },
+      { id: 'homework', label: '과제·알림장', icon: '📒' },
+      { id: 'milk',     label: '우유·급식',   icon: '🥛' },
+      { id: 'reading',  label: '아침독서',    icon: '📚' }
+    ],
     studentChecks: {
       morning: {},
       homework: {},
       milk: {},
+      reading: {},
       custom: {}
     }
   };
@@ -350,6 +365,13 @@ function loadState() {
     const parsed = JSON.parse(raw);
     const def = getDefaultState();
     const merged = { ...def, ...parsed };
+    if (!merged.routines) merged.routines = def.routines;
+    if (!merged.routines.lunchtime) {
+      merged.routines.lunchtime = def.routines.lunchtime;
+    }
+    if (!merged.checkCategories || !merged.checkCategories.length) {
+      merged.checkCategories = def.checkCategories;
+    }
 
     const todayStr = new Date().toISOString().slice(0, 10);
     if (merged.lastResetDate !== todayStr) {
@@ -454,9 +476,9 @@ function evaluateCurrentTimeSlot() {
       slotKey: 'lunch_time',
       type: 'lunch',
       periodIndex: null,
-      routineTab: 'breaktime',
+      routineTab: 'lunchtime',
       icon: 'wash',
-      grad: 'grad-blue-cyan',
+      grad: 'grad-mint-blue',
       headline: `즐거운 '점심시간'`,
       subline: '손을 깨끗이 씻고 질서를 지켜 급식을 먹어요',
       timeRange: `${bs.lunchStart} ~ ${bs.lunchEnd}`,
@@ -1082,6 +1104,7 @@ function renderAll() {
   updateHeaderClockAndTimer();
   renderTimetableSection();
   renderRoutineSection();
+  renderHeroActivityCheckPanel();
 }
 
 function openClassNameEditor() {
@@ -1136,7 +1159,7 @@ function selectPeriodCard(periodIdx) {
 
 function selectLunchSlot() {
   manualSelectedPeriod = null;
-  activeRoutineTab = 'breaktime';
+  activeRoutineTab = 'lunchtime';
   renderAll();
 }
 
@@ -1764,6 +1787,13 @@ function openNoticeBoardModal() {
 
   const targetDate = (dateInput && dateInput.value) ? dateInput.value : todayStr;
   loadNoticeForDate(targetDate);
+  const editor = document.getElementById('noticeEditorArea');
+  if (editor) {
+    editor.style.lineHeight = '1.55';
+    editor.querySelectorAll('*').forEach(el => {
+      if (el.style && el.style.lineHeight) el.style.lineHeight = '1.55';
+    });
+  }
   initNoticeCanvasEvents();
   renderFrequentPhrasesList();
 }
@@ -1822,6 +1852,10 @@ function loadNoticeForDate(dateStr) {
   if (editor) {
     editor.innerHTML = dateData.html || '';
     editor.style.fontSize = `${dateData.fontSize || 38}px`;
+    editor.style.lineHeight = '1.55';
+    editor.querySelectorAll('*').forEach(el => {
+      if (el.style && el.style.lineHeight) el.style.lineHeight = '1.55';
+    });
   }
 
   setNoticeBgTheme(dateData.bgTheme || 'chalkboard', false);
@@ -1892,6 +1926,10 @@ function changeNoticeFontSize(delta) {
   const cur = parseInt(window.getComputedStyle(editor).fontSize, 10) || 38;
   const next = Math.max(22, Math.min(64, cur + delta));
   editor.style.fontSize = `${next}px`;
+  editor.style.lineHeight = '1.55';
+  editor.querySelectorAll('*').forEach(el => {
+    if (el.style && el.style.lineHeight) el.style.lineHeight = '1.55';
+  });
 }
 
 function execNoticeFormat(cmd) {
@@ -2111,17 +2149,18 @@ function renderNoticeHistoryList() {
 let activeStudentCheckCategory = 'morning';
 let studentCheckFilterMode = 'all';
 
-const STUDENT_CHECK_CATEGORIES = [
-  { key: 'morning', label: '아침 활동', icon: 'sun' },
-  { key: 'homework', label: '숙제·알림장', icon: 'notebook' },
-  { key: 'milk', label: '우유·급식', icon: 'milk' },
-  { key: 'custom', label: '자유 체크', icon: 'star' }
-];
+function ensureActiveCheckCategoryValid() {
+  const cats = state.checkCategories || [];
+  if (!cats.some(c => c.id === activeStudentCheckCategory)) {
+    activeStudentCheckCategory = cats[0]?.id || 'morning';
+  }
+}
 
 function openStudentCheckModal() {
   const modal = document.getElementById('studentCheckModal');
   if (!modal) return;
   modal.classList.remove('hidden');
+  ensureActiveCheckCategoryValid();
   renderStudentCheckTabs();
   renderStudentCheckGrid();
 }
@@ -2135,24 +2174,80 @@ function switchCheckCategory(catKey) {
   activeStudentCheckCategory = catKey;
   renderStudentCheckTabs();
   renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
 }
 
 function renderStudentCheckTabs() {
   const tabs = document.getElementById('checkCategoryTabs');
   if (!tabs) return;
-  tabs.innerHTML = STUDENT_CHECK_CATEGORIES.map(c => {
-    const isSel = c.key === activeStudentCheckCategory;
+  ensureActiveCheckCategoryValid();
+  const categories = state.checkCategories || [];
+  tabs.innerHTML = categories.map(c => {
+    const isSel = c.id === activeStudentCheckCategory;
     return `
-      <button onclick="switchCheckCategory('${c.key}')"
-        class="px-3.5 py-1.5 rounded-xl font-black text-xs md:text-sm cursor-pointer transition whitespace-nowrap flex items-center gap-1.5 ${
-          isSel
-            ? 'bg-indigo-600 text-white shadow-xs'
-            : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-        }">
-        <span>${c.label}</span>
-      </button>
+      <div class="inline-flex items-center rounded-xl transition ${
+        isSel
+          ? 'bg-indigo-600 text-white shadow-xs'
+          : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+      }">
+        <button onclick="switchCheckCategory('${c.id}')"
+          class="pl-3 py-1.5 pr-1 font-black text-xs md:text-sm cursor-pointer whitespace-nowrap flex items-center gap-1.5">
+          <span>${c.icon ? c.icon + ' ' : ''}${escapeHtml(c.label)}</span>
+        </button>
+        <button onclick="event.stopPropagation(); deleteCheckCategory('${c.id}')" title="활동 삭제"
+          class="mr-1.5 ml-0.5 px-1.5 py-0.5 rounded-lg hover:bg-black/15 text-[10px] font-black cursor-pointer transition">
+          ✕
+        </button>
+      </div>
     `;
   }).join('');
+}
+
+function addCheckCategory() {
+  const input = document.getElementById('newCheckCategoryInput');
+  if (!input) return;
+  const name = input.value.trim();
+  if (!name) {
+    showToast('활동 이름을 입력해 주세요');
+    return;
+  }
+  if (!state.checkCategories) state.checkCategories = [];
+  const newId = 'cat_' + Date.now();
+  state.checkCategories.push({
+    id: newId,
+    label: name,
+    icon: '⭐'
+  });
+  if (!state.studentChecks) state.studentChecks = {};
+  state.studentChecks[newId] = {};
+  activeStudentCheckCategory = newId;
+  input.value = '';
+  saveState();
+  renderStudentCheckTabs();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+  showToast(`'${name}' 활동 항목이 추가되었습니다!`);
+}
+
+function deleteCheckCategory(catId) {
+  if (!state.checkCategories || state.checkCategories.length <= 1) {
+    showToast('최소 1개의 활동 항목이 필요합니다');
+    return;
+  }
+  const target = state.checkCategories.find(c => c.id === catId);
+  const targetName = target ? target.label : '활동';
+  state.checkCategories = state.checkCategories.filter(c => c.id !== catId);
+  if (state.studentChecks && state.studentChecks[catId]) {
+    delete state.studentChecks[catId];
+  }
+  if (activeStudentCheckCategory === catId) {
+    activeStudentCheckCategory = state.checkCategories[0]?.id || 'morning';
+  }
+  saveState();
+  renderStudentCheckTabs();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+  showToast(`'${targetName}' 항목이 삭제되었습니다`);
 }
 
 function setStudentCheckFilter(filterMode) {
@@ -2172,6 +2267,7 @@ function setStudentCheckFilter(filterMode) {
 }
 
 function toggleStudentCheckStatus(studentId) {
+  ensureActiveCheckCategoryValid();
   if (!state.studentChecks) state.studentChecks = {};
   if (!state.studentChecks[activeStudentCheckCategory]) {
     state.studentChecks[activeStudentCheckCategory] = {};
@@ -2188,6 +2284,7 @@ function toggleStudentCheckStatus(studentId) {
 
   saveState();
   renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
 
   // Check if all students completed
   const students = state.students || [];
@@ -2199,7 +2296,29 @@ function toggleStudentCheckStatus(studentId) {
   }
 }
 
+function quickCompleteStudentFromHero(studentId) {
+  ensureActiveCheckCategoryValid();
+  if (!state.studentChecks) state.studentChecks = {};
+  if (!state.studentChecks[activeStudentCheckCategory]) {
+    state.studentChecks[activeStudentCheckCategory] = {};
+  }
+  state.studentChecks[activeStudentCheckCategory][studentId] = 1;
+  playStampSound(true);
+  saveState();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+
+  const students = state.students || [];
+  const checks = state.studentChecks[activeStudentCheckCategory] || {};
+  const completedCount = students.filter(s => checks[s.id] === 1).length;
+  if (students.length > 0 && completedCount === students.length) {
+    playCelebrationFanfare();
+    showToast('🎉 우리 반 모든 친구가 활동을 완료했습니다! 참 잘했어요!');
+  }
+}
+
 function markAllStudentsCheck(status) {
+  ensureActiveCheckCategoryValid();
   if (!state.studentChecks) state.studentChecks = {};
   if (!state.studentChecks[activeStudentCheckCategory]) {
     state.studentChecks[activeStudentCheckCategory] = {};
@@ -2218,11 +2337,13 @@ function markAllStudentsCheck(status) {
 
   saveState();
   renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
 }
 
 function renderStudentCheckGrid() {
   const grid = document.getElementById('studentCheckGrid');
   if (!grid) return;
+  ensureActiveCheckCategoryValid();
 
   const students = state.students || [];
   const checks = (state.studentChecks && state.studentChecks[activeStudentCheckCategory]) || {};
@@ -2289,6 +2410,75 @@ function renderStudentCheckGrid() {
   }).join('');
 }
 
+function renderHeroActivityCheckPanel() {
+  const panel = document.getElementById('heroActivityCheckPanel');
+  if (!panel) return;
+  ensureActiveCheckCategoryValid();
+
+  // 1. Render pills
+  const pillsEl = document.getElementById('heroCheckCategoryPills');
+  const categories = state.checkCategories || [];
+  if (pillsEl) {
+    pillsEl.innerHTML = categories.map(c => {
+      const isSel = c.id === activeStudentCheckCategory;
+      return `
+        <button onclick="switchCheckCategory('${c.id}')"
+          class="px-2 py-0.5 rounded-lg text-xs font-black transition cursor-pointer whitespace-nowrap ${
+            isSel
+              ? 'bg-indigo-600 text-white shadow-2xs'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+          }">
+          <span>${c.icon ? c.icon + ' ' : ''}${escapeHtml(c.label)}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  // 2. Calculate incomplete students
+  const students = state.students || [];
+  const checks = (state.studentChecks && state.studentChecks[activeStudentCheckCategory]) || {};
+  const incompleteList = students.filter(s => (checks[s.id] || 0) !== 1);
+  const total = students.length;
+
+  // 3. Update count badge
+  const badgeEl = document.getElementById('heroIncompleteCountBadge');
+  if (badgeEl) {
+    if (incompleteList.length === 0 && total > 0) {
+      badgeEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap';
+      badgeEl.textContent = `전원 완료! (${total}명)`;
+    } else {
+      badgeEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-200 whitespace-nowrap';
+      badgeEl.textContent = `미완료 ${incompleteList.length}명 / ${total}명`;
+    }
+  }
+
+  // 4. Update incomplete student badge list
+  const listEl = document.getElementById('heroIncompleteStudentsList');
+  if (listEl) {
+    if (incompleteList.length === 0 && total > 0) {
+      listEl.innerHTML = `
+        <div class="w-full py-2 px-3 rounded-xl bg-blue-50/80 border border-blue-200 text-center text-xs md:text-sm font-extrabold text-blue-700">
+          🎉 모든 친구들이 활동을 완료했어요! 참 잘했어요!
+        </div>
+      `;
+    } else if (total === 0) {
+      listEl.innerHTML = `
+        <div class="w-full py-1 text-center text-xs font-bold text-slate-400">
+          등록된 학생이 없습니다
+        </div>
+      `;
+    } else {
+      listEl.innerHTML = incompleteList.map(s => `
+        <button onclick="quickCompleteStudentFromHero('${s.id}')" title="클릭하여 완료 처리"
+          class="px-2.5 py-1 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-xs md:text-sm font-black text-slate-800 hover:text-blue-700 cursor-pointer transition flex items-center gap-1 whitespace-nowrap shadow-2xs">
+          <span class="text-[11px] font-extrabold text-blue-600">${s.num}번</span>
+          <span>${escapeHtml(s.name)}</span>
+        </button>
+      `).join('');
+    }
+  }
+}
+
 function toggleRosterEditor() {
   const panel = document.getElementById('rosterEditorPanel');
   if (!panel) return;
@@ -2330,6 +2520,7 @@ function saveStudentRoster() {
   saveState();
   toggleRosterEditor();
   renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
   showToast(`${names.length}명의 학생 명단이 저장되었습니다!`);
 }
 
@@ -2656,11 +2847,228 @@ function playAttentionSound(type) {
   }
 }
 
+function applyTimerWindowScale(width, height) {
+  const win = document.getElementById('activityTimerWindow');
+  const svgCircle = win ? win.querySelector('.relative.flex-shrink-0') : null;
+  const disp = document.getElementById('activityTimerDisplay');
+
+  // Compute a base dimension relative to default (520x450)
+  const baseDim = Math.min(width, height);
+  const scale = Math.max(0.7, Math.min(2.0, baseDim / 440));
+
+  if (svgCircle) {
+    const targetSize = Math.round(Math.max(160, Math.min(360, 210 * scale)));
+    svgCircle.style.width = `${targetSize}px`;
+    svgCircle.style.height = `${targetSize}px`;
+  }
+  if (disp) {
+    const targetFontSize = Math.round(Math.max(32, Math.min(76, 46 * scale)));
+    disp.style.fontSize = `${targetFontSize}px`;
+  }
+}
+
+function initTimerWindowDragAndResize() {
+  const modal = document.getElementById('activityTimerModal');
+  const win = document.getElementById('activityTimerWindow');
+  const header = document.getElementById('activityTimerDragHeader');
+  const resizeHandle = document.getElementById('activityTimerResizeHandle');
+  const mini = document.getElementById('miniFloatingTimer');
+
+  // 1. Draggable Activity Timer Window (#activityTimerDragHeader -> #activityTimerWindow)
+  if (header && win) {
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialLeft = 0;
+    let initialTop = 0;
+
+    const onDragStart = (e) => {
+      // Don't drag if clicking buttons or input
+      if (e.target.closest('button') || e.target.closest('input')) return;
+      isDragging = true;
+      const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      startX = clientX;
+      startY = clientY;
+
+      const rect = win.getBoundingClientRect();
+      // Remove translate(-50%, -50%) if present
+      if (win.style.transform && win.style.transform.includes('translate')) {
+        win.style.transform = 'none';
+        win.style.left = `${rect.left}px`;
+        win.style.top = `${rect.top}px`;
+      }
+      initialLeft = parseFloat(win.style.left) || rect.left;
+      initialTop = parseFloat(win.style.top) || rect.top;
+
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('mouseup', onDragEnd);
+      document.addEventListener('touchmove', onDragMove, { passive: false });
+      document.addEventListener('touchend', onDragEnd);
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onDragMove = (e) => {
+      if (!isDragging) return;
+      const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+
+      const winWidth = win.offsetWidth;
+      const winHeight = win.offsetHeight;
+      const maxLeft = Math.max(10, window.innerWidth - winWidth - 10);
+      const maxTop = Math.max(10, window.innerHeight - winHeight - 10);
+
+      const newLeft = Math.max(10, Math.min(maxLeft, initialLeft + dx));
+      const newTop = Math.max(10, Math.min(maxTop, initialTop + dy));
+
+      win.style.left = `${newLeft}px`;
+      win.style.top = `${newTop}px`;
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onDragEnd = () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', onDragMove);
+      document.removeEventListener('mouseup', onDragEnd);
+      document.removeEventListener('touchmove', onDragMove);
+      document.removeEventListener('touchend', onDragEnd);
+    };
+
+    header.addEventListener('mousedown', onDragStart);
+    header.addEventListener('touchstart', onDragStart, { passive: false });
+  }
+
+  // 2. Resizable Activity Timer Window (#activityTimerResizeHandle -> #activityTimerWindow)
+  if (resizeHandle && win) {
+    let isResizing = false;
+    let startX = 0;
+    let startY = 0;
+    let initialW = 0;
+    let initialH = 0;
+
+    const onResizeStart = (e) => {
+      isResizing = true;
+      const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      startX = clientX;
+      startY = clientY;
+
+      const rect = win.getBoundingClientRect();
+      if (win.style.transform && win.style.transform.includes('translate')) {
+        win.style.transform = 'none';
+        win.style.left = `${rect.left}px`;
+        win.style.top = `${rect.top}px`;
+      }
+      initialW = win.offsetWidth;
+      initialH = win.offsetHeight;
+
+      document.addEventListener('mousemove', onResizeMove);
+      document.addEventListener('mouseup', onResizeEnd);
+      document.addEventListener('touchmove', onResizeMove, { passive: false });
+      document.addEventListener('touchend', onResizeEnd);
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onResizeMove = (e) => {
+      if (!isResizing) return;
+      const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      const dw = clientX - startX;
+      const dh = clientY - startY;
+
+      const minW = 340;
+      const maxW = Math.round(window.innerWidth * 0.95);
+      const minH = 380;
+      const maxH = Math.round(window.innerHeight * 0.92);
+
+      const targetW = Math.max(minW, Math.min(maxW, initialW + dw));
+      const targetH = Math.max(minH, Math.min(maxH, initialH + dh));
+
+      win.style.width = `${targetW}px`;
+      win.style.height = `${targetH}px`;
+      applyTimerWindowScale(targetW, targetH);
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onResizeEnd = () => {
+      isResizing = false;
+      document.removeEventListener('mousemove', onResizeMove);
+      document.removeEventListener('mouseup', onResizeEnd);
+      document.removeEventListener('touchmove', onResizeMove);
+      document.removeEventListener('touchend', onResizeEnd);
+    };
+
+    resizeHandle.addEventListener('mousedown', onResizeStart);
+    resizeHandle.addEventListener('touchstart', onResizeStart, { passive: false });
+  }
+
+  // 3. Draggable Mini Floating Timer (#miniFloatingTimer)
+  if (mini) {
+    let isDraggingMini = false;
+    let startX = 0;
+    let startY = 0;
+    let initialLeft = 0;
+    let initialTop = 0;
+
+    const onMiniDragStart = (e) => {
+      if (e.target.closest('button')) return;
+      isDraggingMini = true;
+      const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      startX = clientX;
+      startY = clientY;
+
+      const rect = mini.getBoundingClientRect();
+      mini.style.bottom = 'auto';
+      mini.style.right = 'auto';
+      mini.style.left = `${rect.left}px`;
+      mini.style.top = `${rect.top}px`;
+      initialLeft = rect.left;
+      initialTop = rect.top;
+
+      document.addEventListener('mousemove', onMiniDragMove);
+      document.addEventListener('mouseup', onMiniDragEnd);
+      document.addEventListener('touchmove', onMiniDragMove, { passive: false });
+      document.addEventListener('touchend', onMiniDragEnd);
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onMiniDragMove = (e) => {
+      if (!isDraggingMini) return;
+      const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+
+      const maxLeft = Math.max(10, window.innerWidth - mini.offsetWidth - 10);
+      const maxTop = Math.max(10, window.innerHeight - mini.offsetHeight - 10);
+
+      mini.style.left = `${Math.max(10, Math.min(maxLeft, initialLeft + dx))}px`;
+      mini.style.top = `${Math.max(10, Math.min(maxTop, initialTop + dy))}px`;
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onMiniDragEnd = () => {
+      isDraggingMini = false;
+      document.removeEventListener('mousemove', onMiniDragMove);
+      document.removeEventListener('mouseup', onMiniDragEnd);
+      document.removeEventListener('touchmove', onMiniDragMove);
+      document.removeEventListener('touchend', onMiniDragEnd);
+    };
+
+    mini.addEventListener('mousedown', onMiniDragStart);
+    mini.addEventListener('touchstart', onMiniDragStart, { passive: false });
+  }
+}
+
 function initBoard() {
   renderStaticIcons();
   const initialSlot = evaluateCurrentTimeSlot();
   activeRoutineTab = initialSlot.routineTab;
   renderAll();
+  initTimerWindowDragAndResize();
   setInterval(() => {
     updateHeaderClockAndTimer();
   }, 1000);
@@ -2670,3 +3078,4 @@ function initBoard() {
 }
 
 initBoard();
+

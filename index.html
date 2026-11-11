@@ -24,9 +24,9 @@
       <main class="lg:col-span-8 flex flex-col min-h-0 h-full" style="gap: clamp(0.9rem, 1.6vw, 1.5rem);">
 
         <!-- Top Hero Card (현재 시간 핵심 정보 크게 표시) -->
-        <section class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex flex-col justify-between gap-3 flex-shrink-0">
+        <section id="heroScheduleCard" class="bento-card hero-card-pad bg-gradient-to-br from-[#EFF6FF] via-white to-[#F8FAFC] border-blue-200 flex-[5.6] min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
           <!-- Top status bar (single-line) -->
-          <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate">
+          <div class="flex items-center justify-between gap-3 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2 min-w-0">
               <span id="autoModeBadge" onclick="toggleAutoMode()"
                 class="cursor-pointer px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-blue-600 text-white shadow-2xs whitespace-nowrap flex-shrink-0">
@@ -56,7 +56,7 @@
           </div>
 
           <!-- Main Hero content: Circular SVG Progress + Icon + Headlines -->
-          <div class="flex items-center gap-4 xl:gap-5 py-1">
+          <div class="flex items-center gap-4 xl:gap-5 py-1 flex-shrink-0">
             <!-- Circular SVG Progress wrapping #currentStatusIconSlot -->
             <div class="relative w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 flex-shrink-0 flex items-center justify-center">
               <svg class="w-20 h-20 md:w-22 md:h-22 xl:w-24 xl:h-24 -rotate-90" viewBox="0 0 60 60">
@@ -77,10 +77,34 @@
               </div>
             </div>
           </div>
+
+          <!-- 현재 일정 알림창 내 실시간 활동확인 (미완료 학생 표시란) -->
+          <div id="heroActivityCheckPanel" class="mt-1 p-3 rounded-2xl bg-white/90 border border-blue-200/90 shadow-2xs flex flex-col justify-between gap-2 flex-1 min-h-0 overflow-hidden">
+            <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <span class="px-2.5 py-0.5 rounded-lg bg-indigo-600 text-white text-xs font-black whitespace-nowrap flex-shrink-0">활동 확인</span>
+                <div id="heroCheckCategoryPills" class="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                  <!-- JS에서 활동 카테고리 탭 렌더링 -->
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <span id="heroIncompleteCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-200 whitespace-nowrap">
+                  미완료 20명
+                </span>
+                <button onclick="openStudentCheckModal()"
+                  class="px-2.5 py-1 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-extrabold cursor-pointer transition whitespace-nowrap">
+                  전체 확인/편집 →
+                </button>
+              </div>
+            </div>
+            <!-- 미완료 학생 이름 배지 목록 (클릭 시 즉시 완료 처리 가능) -->
+            <div id="heroIncompleteStudentsList" class="flex flex-wrap items-center content-start gap-1.5 overflow-y-auto flex-1 min-h-0 py-0.5">
+            </div>
+          </div>
         </section>
 
         <!-- Main Center To-Do List Card (현재 시간 할 일 리스트 크게 표시) -->
-        <section class="bento-card hero-card-pad flex-1 flex flex-col justify-between gap-3 min-h-0">
+        <section id="routineTodoCard" class="bento-card hero-card-pad flex-[4.4] min-h-0 flex flex-col justify-between gap-2 overflow-hidden">
           <!-- Header row (single-line) -->
           <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-slate-100 whitespace-nowrap truncate flex-shrink-0">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
@@ -288,7 +312,8 @@
           <select id="newTaskRoutineTab" class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-slate-200 font-extrabold text-sm text-slate-800">
             <option value="morning">등교 후 할 일</option>
             <option value="classprep">수업 준비 할 일</option>
-            <option value="breaktime">쉬는·점심시간 할 일</option>
+            <option value="breaktime">쉬는시간 할 일</option>
+            <option value="lunchtime">점심시간 할 일</option>
             <option value="afterschool">하교 전 할 일</option>
           </select>
         </div>
@@ -690,8 +715,19 @@
         </button>
       </div>
 
-      <!-- 활동 카테고리 탭 (독서록, 수학익힘책, 알림장 확인 등) -->
-      <div id="checkCategoryTabs" class="flex items-center gap-1.5 overflow-x-auto pb-1 flex-shrink-0">
+      <!-- 활동 카테고리 탭 (독서록, 수학익힘책, 알림장 확인 등) + 활동 추가 UI -->
+      <div class="flex items-center justify-between gap-2 overflow-x-auto pb-1 flex-shrink-0 flex-wrap">
+        <div id="checkCategoryTabs" class="flex items-center gap-1.5 overflow-x-auto">
+        </div>
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <input id="newCheckCategoryInput" type="text" maxlength="14" placeholder="새 활동명 (예: 안내장 제출)"
+            class="w-36 sm:w-44 px-2.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-extrabold text-slate-800"
+            onkeydown="if(event.key==='Enter') addCheckCategory()" />
+          <button onclick="addCheckCategory()"
+            class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black cursor-pointer whitespace-nowrap transition">
+            + 활동 추가
+          </button>
+        </div>
       </div>
 
       <!-- 요약 & 제어 바 -->
@@ -742,85 +778,103 @@
     </div>
   </div>
 
-  <!-- ================= MODAL 7: VISUAL ACTIVITY TIMER & ATTENTION SOUNDS ================= -->
-  <div id="activityTimerModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3">
-    <div class="bento-card w-full max-w-xl p-5 md:p-6 flex flex-col items-center text-center gap-4 shadow-2xl bg-white">
-      <!-- 헤더 & 모드 전환 -->
-      <div class="w-full flex items-center justify-between border-b border-slate-100 pb-2.5">
-        <div class="inline-flex rounded-xl bg-slate-100 p-0.5">
-          <button id="btnTimerModeCountdown" onclick="setActivityTimerMode('countdown')"
-            class="px-3 py-1 rounded-lg text-xs font-black bg-blue-600 text-white shadow-2xs transition">타이머(카운트다운)</button>
-          <button id="btnTimerModeStopwatch" onclick="setActivityTimerMode('stopwatch')"
-            class="px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-200 transition">스톱워치</button>
+  <!-- ================= MODAL 7: VISUAL ACTIVITY TIMER & ATTENTION SOUNDS (DRAGGABLE & RESIZABLE) ================= -->
+  <div id="activityTimerModal" class="fixed inset-0 z-50 hidden pointer-events-none">
+    <div id="activityTimerWindow"
+      class="pointer-events-auto fixed bento-card shadow-2xl border-2 border-blue-300 bg-white flex flex-col justify-between overflow-hidden"
+      style="width: 520px; min-width: 340px; min-height: 420px; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+      <!-- 헤더 & 모드 전환 (드래그 핸들 헤더) -->
+      <div id="activityTimerDragHeader" class="w-full flex items-center justify-between border-b border-blue-100 p-3 md:px-4 md:py-2.5 cursor-move select-none bg-gradient-to-r from-blue-50 to-indigo-50 flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-black text-blue-600 bg-white/80 px-2 py-0.5 rounded-lg border border-blue-200 shadow-2xs whitespace-nowrap">
+            ✥ 드래그하여 이동
+          </span>
+          <div class="inline-flex rounded-xl bg-white/90 p-0.5 border border-blue-100">
+            <button id="btnTimerModeCountdown" onclick="setActivityTimerMode('countdown')"
+              class="px-2.5 py-1 rounded-lg text-xs font-black bg-blue-600 text-white shadow-2xs transition">타이머(카운트다운)</button>
+            <button id="btnTimerModeStopwatch" onclick="setActivityTimerMode('stopwatch')"
+              class="px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition">스톱워치</button>
+          </div>
         </div>
 
-        <div class="flex items-center gap-1.5">
+        <div class="flex items-center gap-1.5 flex-shrink-0">
           <button onclick="minimizeToFloatingTimer()" title="작은 화면으로 띄우기"
-            class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 font-extrabold text-xs cursor-pointer transition">
-            ↘ 미니 창으로 띄우기
+            class="px-2.5 py-1 rounded-xl bg-white hover:bg-blue-100 hover:text-blue-700 text-slate-600 font-extrabold text-xs cursor-pointer border border-slate-200 transition">
+            ↘ 미니 창
           </button>
-          <button onclick="closeActivityTimerModal()" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-black text-xs cursor-pointer transition">
+          <button onclick="closeActivityTimerModal()" class="px-2.5 py-1 rounded-xl bg-white hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-black text-xs cursor-pointer border border-slate-200 transition">
             ✕
           </button>
         </div>
       </div>
 
-      <!-- 활동 주제 입력 -->
-      <div class="w-full">
-        <input type="text" id="activityTimerTaskTitle" placeholder="활동 주제를 입력하세요 (예: 모둠별로 만들기 활동)"
-          class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-center font-black text-sm md:text-base text-slate-800 outline-none focus:border-blue-400 focus:bg-white transition" />
+      <!-- 본문 컨테이너 -->
+      <div class="w-full p-4 md:p-5 flex flex-col items-center text-center gap-3 flex-1 min-h-0 overflow-y-auto">
+        <!-- 활동 주제 입력 -->
+        <div class="w-full flex-shrink-0">
+          <input type="text" id="activityTimerTaskTitle" placeholder="활동 주제를 입력하세요 (예: 모둠별로 만들기 활동)"
+            class="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-center font-black text-sm md:text-base text-slate-800 outline-none focus:border-blue-400 focus:bg-white transition" />
+        </div>
+
+        <!-- 원형 SVG 프로그레스 & 초대형 시간 디스플레이 -->
+        <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0 flex items-center justify-center my-1">
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#F1F5F9" stroke-width="8" />
+            <circle id="activityTimerCirclePath" cx="60" cy="60" r="52" fill="none" stroke="#2563EB" stroke-width="8"
+              stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="0" class="transition-all duration-300" />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="activityTimerDisplay" class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight tabular-nums">05:00</span>
+            <span id="activityTimerSubStatus" class="text-xs md:text-sm font-extrabold text-blue-600 mt-1">집중해서 활동을 시작해요!</span>
+          </div>
+        </div>
+
+        <!-- 시간 프리셋 버튼들 -->
+        <div class="flex items-center justify-center gap-1.5 flex-wrap flex-shrink-0">
+          <button onclick="setActivityTimerPreset(60)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">1분</button>
+          <button onclick="setActivityTimerPreset(120)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">2분</button>
+          <button onclick="setActivityTimerPreset(180)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">3분</button>
+          <button onclick="setActivityTimerPreset(300)" class="px-2.5 py-1 rounded-xl bg-blue-100 hover:bg-blue-200 text-xs font-black text-blue-700 cursor-pointer">5분</button>
+          <button onclick="setActivityTimerPreset(600)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">10분</button>
+          <button onclick="setActivityTimerPreset(1200)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">20분</button>
+          <button onclick="addActivityTimerSeconds(30)" class="px-2.5 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-black text-amber-800 cursor-pointer">+30초</button>
+        </div>
+
+        <!-- 주 제어 버튼: 시작/일시정지 & 리셋 -->
+        <div class="w-full flex items-center justify-center gap-3 pt-1 flex-shrink-0">
+          <button id="btnActivityTimerStartPause" onclick="toggleActivityTimerStartPause()"
+            class="flex-1 max-w-xs py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-base shadow-lg shadow-blue-500/25 cursor-pointer transition">
+            시작 ▶
+          </button>
+          <button onclick="resetActivityTimer()"
+            class="px-5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-sm cursor-pointer transition">
+            초기화
+          </button>
+        </div>
+
+        <!-- 우리 반 주의집중 효과음 바 -->
+        <div class="w-full pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap text-xs flex-shrink-0">
+          <span class="font-bold text-slate-400">주의집중 효과음:</span>
+          <div class="flex items-center gap-1.5">
+            <button onclick="playAttentionSound('whistle')" class="px-2 py-0.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 font-bold cursor-pointer transition">
+              📢 호루라기
+            </button>
+            <button onclick="playAttentionSound('xylophone')" class="px-2 py-0.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 font-bold cursor-pointer transition">
+              🎵 실로폰
+            </button>
+            <button onclick="playAttentionSound('clap')" class="px-2 py-0.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold cursor-pointer transition">
+              👏 박수·환호
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- 원형 SVG 프로그레스 & 초대형 시간 디스플레이 -->
-      <div class="relative w-56 h-56 md:w-64 md:h-64 flex items-center justify-center">
-        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="52" fill="none" stroke="#F1F5F9" stroke-width="8" />
-          <circle id="activityTimerCirclePath" cx="60" cy="60" r="52" fill="none" stroke="#2563EB" stroke-width="8"
-            stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="0" class="transition-all duration-300" />
+      <!-- 우측 하단 크기 조절 리사이즈 핸들 -->
+      <div id="activityTimerResizeHandle" title="드래그하여 창 크기 조절"
+        class="absolute bottom-0 right-0 w-7 h-7 cursor-nwse-resize flex items-end justify-end p-1 text-slate-400 hover:text-blue-600 z-20 select-none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M21 15L15 21M21 8L8 21"/>
         </svg>
-        <div class="absolute inset-0 flex flex-col items-center justify-center">
-          <span id="activityTimerDisplay" class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight tabular-nums">05:00</span>
-          <span id="activityTimerSubStatus" class="text-xs md:text-sm font-extrabold text-blue-600 mt-1">집중해서 활동을 시작해요!</span>
-        </div>
-      </div>
-
-      <!-- 시간 프리셋 버튼들 -->
-      <div class="flex items-center justify-center gap-1.5 flex-wrap">
-        <button onclick="setActivityTimerPreset(60)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">1분</button>
-        <button onclick="setActivityTimerPreset(120)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">2분</button>
-        <button onclick="setActivityTimerPreset(180)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">3분</button>
-        <button onclick="setActivityTimerPreset(300)" class="px-2.5 py-1 rounded-xl bg-blue-100 hover:bg-blue-200 text-xs font-black text-blue-700 cursor-pointer">5분</button>
-        <button onclick="setActivityTimerPreset(600)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">10분</button>
-        <button onclick="setActivityTimerPreset(1200)" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-slate-700 cursor-pointer">20분</button>
-        <button onclick="addActivityTimerSeconds(30)" class="px-2.5 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-black text-amber-800 cursor-pointer">+30초</button>
-      </div>
-
-      <!-- 주 제어 버튼: 시작/일시정지 & 리셋 -->
-      <div class="w-full flex items-center justify-center gap-3 pt-1">
-        <button id="btnActivityTimerStartPause" onclick="toggleActivityTimerStartPause()"
-          class="flex-1 max-w-xs py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-base shadow-lg shadow-blue-500/25 cursor-pointer transition">
-          시작 ▶
-        </button>
-        <button onclick="resetActivityTimer()"
-          class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-sm cursor-pointer transition">
-          초기화
-        </button>
-      </div>
-
-      <!-- 우리 반 주의집중 효과음 바 -->
-      <div class="w-full pt-3 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap text-xs">
-        <span class="font-bold text-slate-400">우리반 주의집중 효과음:</span>
-        <div class="flex items-center gap-1.5">
-          <button onclick="playAttentionSound('whistle')" class="px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 font-bold cursor-pointer transition">
-            📢 호루라기
-          </button>
-          <button onclick="playAttentionSound('xylophone')" class="px-2.5 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 font-bold cursor-pointer transition">
-            🎵 실로폰
-          </button>
-          <button onclick="playAttentionSound('clap')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold cursor-pointer transition">
-            👏 박수·환호
-          </button>
-        </div>
       </div>
     </div>
   </div>
