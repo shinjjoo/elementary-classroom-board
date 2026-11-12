@@ -1905,6 +1905,7 @@ function loadNoticeForDate(dateStr) {
 
   setNoticeBgTheme(dateData.bgTheme || 'chalkboard', false);
   restoreNoticeCanvas(dateData.drawingDataUrl || '');
+  updateNoticeFontSizeBadge(dateData.fontSize || 38);
 }
 
 function saveNoticeData() {
@@ -1965,16 +1966,36 @@ function setNoticeBgTheme(theme, save = true) {
   if (save) saveNoticeData();
 }
 
+function updateNoticeFontSizeBadge(size) {
+  const badge = document.getElementById('noticeFontSizeBadge');
+  if (badge) badge.textContent = `${size}px`;
+}
+
 function changeNoticeFontSize(delta) {
   const editor = document.getElementById('noticeEditorArea');
   if (!editor) return;
   const cur = parseInt(window.getComputedStyle(editor).fontSize, 10) || 38;
-  const next = Math.max(22, Math.min(64, cur + delta));
+  const step = (cur >= 60 || (cur + delta >= 60))
+    ? (delta > 0 ? 8 : -8)
+    : (delta > 0 ? 6 : -6);
+  const next = Math.max(20, Math.min(128, cur + (delta > 0 ? Math.abs(step) : -Math.abs(step))));
   editor.style.fontSize = `${next}px`;
   editor.style.lineHeight = '1.55';
   editor.querySelectorAll('*').forEach(el => {
     if (el.style && el.style.lineHeight) el.style.lineHeight = '1.55';
   });
+  updateNoticeFontSizeBadge(next);
+}
+
+function setNoticeMaxFontSize() {
+  const editor = document.getElementById('noticeEditorArea');
+  if (!editor) return;
+  editor.style.fontSize = '128px';
+  editor.style.lineHeight = '1.55';
+  editor.querySelectorAll('*').forEach(el => {
+    if (el.style && el.style.lineHeight) el.style.lineHeight = '1.55';
+  });
+  updateNoticeFontSizeBadge(128);
 }
 
 function execNoticeFormat(cmd) {
@@ -2526,15 +2547,136 @@ function renderHeroActivityCheckPanel() {
   }
 }
 
+function renderRosterIndividualList() {
+  const container = document.getElementById('rosterIndividualList');
+  if (!container) return;
+  const students = state.students || [];
+
+  if (students.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full py-4 text-center text-xs font-bold text-amber-700">
+        등록된 학생이 없습니다. [+ 학생 1명 추가] 버튼으로 등록해 보세요.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = students.map((s, idx) => `
+    <div class="flex items-center gap-1.5 p-1.5 rounded-xl bg-white border border-amber-200 shadow-2xs hover:border-amber-400 transition" data-student-id="${s.id}">
+      <input type="number" value="${s.num}"
+        min="1" max="999"
+        onchange="updateStudentItemField('${s.id}', 'num', this.value)"
+        class="w-14 px-1.5 py-1 rounded-lg bg-white border border-slate-300 text-xs font-black text-indigo-700 text-center outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
+        title="학생 번호" />
+      <input type="text" value="${escapeHtml(s.name)}"
+        onchange="updateStudentItemField('${s.id}', 'name', this.value)"
+        class="flex-1 min-w-0 px-2 py-1 rounded-lg bg-white border border-slate-300 text-xs font-extrabold text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
+        placeholder="이름"
+        title="학생 이름" />
+      <button type="button" onclick="removeStudentFromRoster('${s.id}')"
+        class="px-1.5 py-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 font-bold text-xs cursor-pointer transition flex-shrink-0"
+        title="학생 삭제">✕</button>
+    </div>
+  `).join('');
+}
+
+function updateStudentItemField(studentId, field, value) {
+  if (!state.students) state.students = [];
+  const target = state.students.find(s => s.id === studentId);
+  if (!target) return;
+
+  if (field === 'num') {
+    const parsedNum = parseInt(value, 10);
+    target.num = isNaN(parsedNum) ? 1 : parsedNum;
+  } else if (field === 'name') {
+    target.name = String(value).trim();
+  }
+
+  saveState();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+
+  // Also sync rosterTextarea bulk preview
+  const textarea = document.getElementById('rosterTextarea');
+  if (textarea) {
+    textarea.value = (state.students || []).map(s => `${s.num}. ${s.name}`).join(', ');
+  }
+}
+
+function addSingleStudentToRoster() {
+  if (!state.students) state.students = [];
+  const maxNum = state.students.reduce((max, s) => Math.max(max, Number(s.num) || 0), 0);
+  const nextNum = maxNum + 1;
+  const newId = 's_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+
+  state.students.push({
+    id: newId,
+    num: nextNum,
+    name: `학생${nextNum}`
+  });
+
+  saveState();
+  renderRosterIndividualList();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+
+  const textarea = document.getElementById('rosterTextarea');
+  if (textarea) {
+    textarea.value = (state.students || []).map(s => `${s.num}. ${s.name}`).join(', ');
+  }
+
+  // Scroll to bottom of individual list
+  const container = document.getElementById('rosterIndividualList');
+  if (container) container.scrollTop = container.scrollHeight;
+
+  showToast(`${nextNum}번 학생이 추가되었습니다.`);
+}
+
+function removeStudentFromRoster(studentId) {
+  if (!state.students) state.students = [];
+  const target = state.students.find(s => s.id === studentId);
+  const targetName = target ? `${target.num}번 ${target.name}` : '학생';
+
+  state.students = state.students.filter(s => s.id !== studentId);
+
+  // Clean up check states for removed student
+  if (state.studentChecks) {
+    Object.keys(state.studentChecks).forEach(cat => {
+      if (state.studentChecks[cat]) {
+        delete state.studentChecks[cat][studentId];
+      }
+    });
+  }
+
+  saveState();
+  renderRosterIndividualList();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+
+  const textarea = document.getElementById('rosterTextarea');
+  if (textarea) {
+    textarea.value = (state.students || []).map(s => `${s.num}. ${s.name}`).join(', ');
+  }
+
+  showToast(`${targetName}을(를) 명단에서 삭제했습니다.`);
+}
+
+function saveStudentIndividualChanges() {
+  saveState();
+  renderStudentCheckGrid();
+  renderHeroActivityCheckPanel();
+  showToast('학생 명단 변경사항이 저장되었습니다!');
+}
+
 function toggleRosterEditor() {
   const panel = document.getElementById('rosterEditorPanel');
   if (!panel) return;
   panel.classList.toggle('hidden');
   if (!panel.classList.contains('hidden')) {
+    renderRosterIndividualList();
     const textarea = document.getElementById('rosterTextarea');
     if (textarea) {
-      textarea.value = (state.students || []).map(s => s.name).join(', ');
-      textarea.focus();
+      textarea.value = (state.students || []).map(s => `${s.num}. ${s.name}`).join(', ');
     }
   }
 }
@@ -2548,27 +2690,66 @@ function saveStudentRoster() {
     return;
   }
 
-  const names = raw
+  // Split by newline or comma
+  const tokens = raw
     .split(/[\n,]+/)
-    .map(n => n.replace(/^[0-9]+[번.\s]*/, '').trim())
-    .filter(n => n.length > 0);
+    .map(t => t.trim())
+    .filter(t => t.length > 0);
 
-  if (names.length === 0) {
+  if (tokens.length === 0) {
+    showToast('유효한 학생 데이터가 없습니다');
+    return;
+  }
+
+  const oldStudents = state.students || [];
+  const usedOldIds = new Set();
+  let lastAssignedNum = 0;
+
+  const parsedItems = tokens.map((token, idx) => {
+    // Check if token begins with number: e.g. "21. 김하늘", "21번 김하늘", "21 김하늘", "21.김하늘"
+    const match = token.match(/^\s*(\d+)(?:번|\.|\s)*\s*(.+)$/);
+    let num;
+    let name;
+    if (match) {
+      num = parseInt(match[1], 10);
+      name = match[2].trim();
+      lastAssignedNum = num;
+    } else {
+      num = lastAssignedNum + 1;
+      lastAssignedNum = num;
+      name = token.trim();
+    }
+    return { num, name };
+  }).filter(item => item.name.length > 0);
+
+  if (parsedItems.length === 0) {
     showToast('유효한 학생 이름이 없습니다');
     return;
   }
 
-  state.students = names.map((name, idx) => ({
-    id: 's' + (idx + 1),
-    num: idx + 1,
-    name
-  }));
+  // Preserve existing student IDs and check states
+  state.students = parsedItems.map((item, idx) => {
+    // 1. Try matching by exact name first
+    let matched = oldStudents.find(o => !usedOldIds.has(o.id) && o.name === item.name);
+    // 2. If not matched by name, match by same index position
+    if (!matched && oldStudents[idx] && !usedOldIds.has(oldStudents[idx].id)) {
+      matched = oldStudents[idx];
+    }
+    const id = matched ? matched.id : ('s_' + Date.now() + '_' + idx);
+    usedOldIds.add(id);
+
+    return {
+      id,
+      num: item.num,
+      name: item.name
+    };
+  });
 
   saveState();
-  toggleRosterEditor();
+  renderRosterIndividualList();
   renderStudentCheckGrid();
   renderHeroActivityCheckPanel();
-  showToast(`${names.length}명의 학생 명단이 저장되었습니다!`);
+  showToast(`${state.students.length}명의 학생 명단이 저장되었습니다!`);
 }
 
 /* ==========================================================================
