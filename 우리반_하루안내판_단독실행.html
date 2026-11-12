@@ -52,9 +52,9 @@ body {
 /* ================= APPLICATION LAYOUT & OUTER MARGINS ================= */
 #app {
   width: 100%;
-  max-width: 1760px;
+  max-width: 1920px !important;
   margin: 0 auto;
-  padding: clamp(1.25rem, 3.2vh, 2.75rem) clamp(1.5rem, 3.8vw, 3.75rem) !important;
+  padding: clamp(0.75rem, 1.8vh, 1.5rem) clamp(1rem, 2vw, 2rem) !important;
 }
 
 @media (min-width: 1024px) {
@@ -189,12 +189,22 @@ body {
 
 /* ================= HERO CENTER CARD ================= */
 #currentStatusHeadline {
-  font-size: clamp(1.5rem, 2.5vw + 0.5rem, 3.1rem) !important;
-  line-height: 1.25 !important;
+  font-size: clamp(2.4rem, 4.2vw + 0.5rem, 4.8rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
 }
 
 #currentStatusSubline {
-  font-size: clamp(0.82rem, 1vw + 0.25rem, 1.2rem) !important;
+  font-size: clamp(1.2rem, 1.75vw + 0.25rem, 2.05rem) !important;
+  line-height: 1.25 !important;
+}
+
+#currentSlotTimeRange {
+  font-size: clamp(1rem, 1.3vw + 0.15rem, 1.5rem) !important;
+}
+
+#remainingTimeText {
+  font-size: clamp(1.2rem, 1.65vw + 0.2rem, 1.9rem) !important;
 }
 
 #currentStatusIconSlot .soft-icon-tile {
@@ -210,21 +220,34 @@ body {
 
 /* ================= ULTRA-LARGE CLOCK ================= */
 #clockDisplay {
-  font-size: clamp(2.5rem, 3.8vw + 0.6rem, 4.6rem) !important;
-  line-height: 1 !important;
+  font-size: clamp(3.4rem, 5.4vw + 0.4rem, 6.4rem) !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.04em !important;
 }
 
 #ampmDisplay {
-  font-size: clamp(0.8rem, 0.95vw + 0.2rem, 1.15rem) !important;
+  font-size: clamp(1.15rem, 1.4vw + 0.15rem, 1.75rem) !important;
 }
 
 #secondsDisplay {
-  font-size: clamp(0.95rem, 1.25vw + 0.2rem, 1.5rem) !important;
+  font-size: clamp(1.35rem, 1.75vw + 0.2rem, 2.2rem) !important;
+}
+
+#dateDisplay {
+  font-size: clamp(1.2rem, 1.45vw + 0.2rem, 1.75rem) !important;
+}
+
+#dayOfWeekBadge {
+  font-size: clamp(0.95rem, 1.1vw + 0.1rem, 1.3rem) !important;
 }
 
 /* ================= SECTION HEADINGS ================= */
 #routineBoardTitle {
-  font-size: clamp(1.05rem, 1.3vw + 0.25rem, 1.55rem) !important;
+  font-size: clamp(1.45rem, 1.95vw + 0.25rem, 2.3rem) !important;
+}
+
+#sectionTimetableIcon + h3 {
+  font-size: clamp(1.25rem, 1.55vw + 0.2rem, 1.8rem) !important;
 }
 
 /* ================= ROUTINE TABS PILL BAR ================= */
@@ -269,13 +292,16 @@ body {
   min-height: 0;
 }
 
-#periodListContainer .bento-tile .subject-name {
-  font-size: clamp(0.82rem, 0.95vw + 0.2rem, 1.1rem) !important;
+#periodListContainer .bento-tile .subject-name,
+#periodListContainer .bento-tile span.truncate {
+  font-size: clamp(1.3rem, 1.75vw + 0.2rem, 2.1rem) !important;
+  line-height: 1.15 !important;
 }
 
 #periodListContainer .bento-tile > div:first-child > div:first-child {
-  width: clamp(2.6rem, 3.2vw, 3.3rem) !important;
-  height: clamp(1.9rem, 2.2vh, 2.4rem) !important;
+  width: clamp(3.9rem, 4.6vw, 5.1rem) !important;
+  height: clamp(2.2rem, 2.9vh, 2.9rem) !important;
+  font-size: clamp(1rem, 1.25vw + 0.1rem, 1.45rem) !important;
   border-radius: 10px !important;
   flex-shrink: 0;
   display: flex;
@@ -293,6 +319,15 @@ body {
 #periodListContainer .bento-tile .soft-icon-tile svg {
   width: clamp(0.95rem, 1.15vw, 1.25rem) !important;
   height: clamp(0.95rem, 1.15vw, 1.25rem) !important;
+}
+
+#periodListContainer .bento-tile .tabular-nums {
+  font-size: clamp(0.85rem, 1vw + 0.1rem, 1.15rem) !important;
+}
+
+#periodListContainer [onclick*="selectLunchSlot"] span,
+#periodListContainer .lunch-row span {
+  font-size: clamp(1.15rem, 1.45vw + 0.15rem, 1.7rem) !important;
 }
 
 #periodListContainer .bento-tile span,
@@ -327,17 +362,24 @@ body {
   min-height: 0;
   padding: clamp(0.35rem, 0.75vh, 0.65rem) clamp(0.85rem, 1.2vw, 1.2rem) !important;
 }
+#routineCardsGrid .bento-tile > div:first-child > span:first-child {
+  width: clamp(2.1rem, 2.5vw, 2.8rem) !important;
+  height: clamp(2.1rem, 2.5vw, 2.8rem) !important;
+  font-size: clamp(1.1rem, 1.4vw, 1.6rem) !important;
+  border-radius: 12px !important;
+}
 #routineCardsGrid .bento-tile .soft-icon-tile {
-  width: clamp(1.9rem, 2.3vw, 2.45rem) !important;
-  height: clamp(1.9rem, 2.3vw, 2.45rem) !important;
+  width: clamp(2.2rem, 2.6vw, 2.9rem) !important;
+  height: clamp(2.2rem, 2.6vw, 2.9rem) !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile svg {
-  width: clamp(1rem, 1.25vw, 1.35rem) !important;
-  height: clamp(1rem, 1.25vw, 1.35rem) !important;
+  width: clamp(1.2rem, 1.45vw, 1.6rem) !important;
+  height: clamp(1.2rem, 1.45vw, 1.6rem) !important;
 }
 #routineCardsGrid .bento-tile span.flex-1 {
-  font-size: clamp(0.95rem, 1.28vw + 0.2rem, 1.42rem) !important;
-  line-height: 1.25 !important;
+  font-size: clamp(1.4rem, 2.15vw + 0.25rem, 2.55rem) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.025em !important;
 }
 
 /* ================= HERO INCOMPLETE STUDENTS LIST (10 COLS x 2 ROWS) ================= */
@@ -350,6 +392,13 @@ body {
   #heroIncompleteStudentsList {
     grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
   }
+}
+#heroIncompleteStudentsList button {
+  font-size: clamp(0.95rem, 1.18vw + 0.1rem, 1.38rem) !important;
+  padding: 0.25rem 0.3rem !important;
+}
+#heroIncompleteStudentsList button span:first-child {
+  font-size: clamp(0.8rem, 0.95vw, 1.1rem) !important;
 }
 
 /* Animations */
