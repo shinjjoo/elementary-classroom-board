@@ -1089,11 +1089,6 @@ function renderRoutineSection() {
           <span class="text-lg md:text-2xl xl:text-[1.65rem] font-black text-slate-900 whitespace-nowrap truncate flex-1 leading-snug py-0.5">
             ${escapeHtml(task.title)}
           </span>
-          ${highlight === 1 ? `
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-500 text-white shadow-2xs whitespace-nowrap flex-shrink-0">★ 중요</span>
-          ` : highlight === 2 ? `
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-500 text-white shadow-2xs whitespace-nowrap flex-shrink-0">🚨 꼭!</span>
-          ` : ''}
           ${isTodaySpecial ? `
             <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-600 border border-blue-200 whitespace-nowrap flex-shrink-0">
               오늘
