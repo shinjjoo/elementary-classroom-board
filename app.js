@@ -2989,9 +2989,13 @@ let activityTimerInterval = null;
 function openActivityTimerModal() {
   const modal = document.getElementById('activityTimerModal');
   const mini = document.getElementById('miniFloatingTimer');
+  const win = document.getElementById('activityTimerWindow');
   if (mini) mini.classList.add('hidden');
   if (modal) modal.classList.remove('hidden');
   updateActivityTimerDisplay();
+  requestAnimationFrame(() => {
+    applyTimerWindowScale(win ? win.offsetWidth : 520, win ? win.offsetHeight : 460);
+  });
 }
 
 function closeActivityTimerModal() {
@@ -3180,16 +3184,16 @@ function updateActivityTimerDisplay() {
     if (sub) {
       if (activityTimerRemainingSec === 0) {
         sub.textContent = '활동이 끝났습니다! 모두 자리에 앉아요';
-        sub.className = 'text-xs md:text-sm font-black text-rose-600 mt-1';
+        sub.className = 'font-black text-rose-600 leading-tight text-center max-w-[82%] break-keep';
       } else if (activityTimerRemainingSec <= 10) {
         sub.textContent = '마무리할 시간이에요! 10초 전!';
-        sub.className = 'text-xs md:text-sm font-black text-rose-600 mt-1 animate-pulse';
+        sub.className = 'font-black text-rose-600 leading-tight text-center max-w-[82%] break-keep animate-pulse';
       } else if (activityTimerRemainingSec <= 60) {
         sub.textContent = '남은 시간 1분! 활동을 정리해요';
-        sub.className = 'text-xs md:text-sm font-extrabold text-amber-600 mt-1';
+        sub.className = 'font-extrabold text-amber-600 leading-tight text-center max-w-[82%] break-keep';
       } else {
         sub.textContent = '집중해서 활동을 시작해요!';
-        sub.className = 'text-xs md:text-sm font-extrabold text-blue-600 mt-1';
+        sub.className = 'font-extrabold text-blue-600 leading-tight text-center max-w-[82%] break-keep';
       }
     }
   } else {
@@ -3197,7 +3201,7 @@ function updateActivityTimerDisplay() {
     if (disp) disp.textContent = str;
     if (sub) {
       sub.textContent = '스톱워치가 진행 중입니다';
-      sub.className = 'text-xs md:text-sm font-extrabold text-indigo-600 mt-1';
+      sub.className = 'font-extrabold text-indigo-600 leading-tight text-center max-w-[82%] break-keep';
     }
     if (circle) {
       circle.setAttribute('stroke-dashoffset', '0');
@@ -3393,21 +3397,31 @@ function playAttentionSound(type) {
 
 function applyTimerWindowScale(width, height) {
   const win = document.getElementById('activityTimerWindow');
-  const svgCircle = win ? win.querySelector('.relative.flex-shrink-0') : null;
+  const stage = document.getElementById('activityTimerGaugeStage');
+  const gaugeWrap = document.getElementById('activityTimerGaugeWrap');
   const disp = document.getElementById('activityTimerDisplay');
+  const sub = document.getElementById('activityTimerSubStatus');
+  if (!gaugeWrap) return;
 
-  // Compute a base dimension relative to default (520x450)
-  const baseDim = Math.min(width, height);
-  const scale = Math.max(0.7, Math.min(2.0, baseDim / 440));
+  const fallbackW = Math.max(120, (width || (win ? win.offsetWidth : 520)) - 48);
+  const fallbackH = Math.max(120, (height || (win ? win.offsetHeight : 460)) - 250);
+  const availW = stage && stage.clientWidth > 0 ? stage.clientWidth : fallbackW;
+  const availH = stage && stage.clientHeight > 0 ? stage.clientHeight : fallbackH;
 
-  if (svgCircle) {
-    const targetSize = Math.round(Math.max(160, Math.min(360, 210 * scale)));
-    svgCircle.style.width = `${targetSize}px`;
-    svgCircle.style.height = `${targetSize}px`;
-  }
+  // Maintain strict 1:1 aspect ratio inside the available stage area
+  const gaugeSize = Math.round(Math.max(84, Math.min(availW, availH) - 6));
+  gaugeWrap.style.width = `${gaugeSize}px`;
+  gaugeWrap.style.height = `${gaugeSize}px`;
+
   if (disp) {
-    const targetFontSize = Math.round(Math.max(32, Math.min(76, 46 * scale)));
+    const targetFontSize = Math.round(Math.max(18, gaugeSize * 0.24));
     disp.style.fontSize = `${targetFontSize}px`;
+    disp.style.lineHeight = '1.05';
+  }
+  if (sub) {
+    const targetSubSize = Math.round(Math.max(9, Math.min(28, gaugeSize * 0.068)));
+    sub.style.fontSize = `${targetSubSize}px`;
+    sub.style.marginTop = `${Math.max(2, Math.round(gaugeSize * 0.025))}px`;
   }
 }
 
@@ -3522,9 +3536,9 @@ function initTimerWindowDragAndResize() {
       const dw = clientX - startX;
       const dh = clientY - startY;
 
-      const minW = 340;
+      const minW = 300;
       const maxW = Math.round(window.innerWidth * 0.95);
-      const minH = 380;
+      const minH = 360;
       const maxH = Math.round(window.innerHeight * 0.92);
 
       const targetW = Math.max(minW, Math.min(maxW, initialW + dw));
@@ -3546,6 +3560,15 @@ function initTimerWindowDragAndResize() {
 
     resizeHandle.addEventListener('mousedown', onResizeStart);
     resizeHandle.addEventListener('touchstart', onResizeStart, { passive: false });
+  }
+
+  if (win && typeof ResizeObserver !== 'undefined') {
+    const timerWinObserver = new ResizeObserver(() => {
+      if (modal && !modal.classList.contains('hidden')) {
+        requestAnimationFrame(() => applyTimerWindowScale(win.offsetWidth, win.offsetHeight));
+      }
+    });
+    timerWinObserver.observe(win);
   }
 
   // 3. Draggable Mini Floating Timer (#miniFloatingTimer)
