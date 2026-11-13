@@ -2784,34 +2784,34 @@ function fitAllTextsWithoutTruncation() {
     '#heroIncompleteStudentsList button span.truncate'
   ];
 
-  const scaleFactors = [0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58];
+  const scaleFactors = [0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58, 0.52, 0.46, 0.40];
 
   selectors.forEach(sel => {
     const elements = document.querySelectorAll(sel);
     elements.forEach(el => {
       // 1. Reset inline styles to default computed styles
-      el.style.fontSize = '';
-      el.style.letterSpacing = '';
+      el.style.removeProperty('font-size');
+      el.style.removeProperty('letter-spacing');
 
       if (el.clientWidth <= 0) return;
 
       // Check if text overflows container width
       if (el.scrollWidth > el.clientWidth) {
-        // Step 1: Reduce letter-spacing
-        el.style.letterSpacing = '-0.04em';
+        // Step 1: Reduce letter-spacing with !important
+        el.style.setProperty('letter-spacing', '-0.04em', 'important');
         if (el.scrollWidth <= el.clientWidth) return;
 
-        el.style.letterSpacing = '-0.065em';
+        el.style.setProperty('letter-spacing', '-0.065em', 'important');
         if (el.scrollWidth <= el.clientWidth) return;
 
-        // Step 2: Gradually reduce font-size (down to min 11px)
+        // Step 2: Gradually reduce font-size with !important (down to min 11px)
         const computedStyle = window.getComputedStyle(el);
         const baseFontSize = parseFloat(computedStyle.fontSize);
         if (isNaN(baseFontSize) || baseFontSize <= 0) return;
 
         for (const factor of scaleFactors) {
-          const nextSize = Math.max(11, baseFontSize * factor);
-          el.style.fontSize = `${nextSize}px`;
+          const nextSize = Math.max(11, Math.round(baseFontSize * factor * 10) / 10);
+          el.style.setProperty('font-size', `${nextSize}px`, 'important');
           if (el.scrollWidth <= el.clientWidth) {
             break;
           }
