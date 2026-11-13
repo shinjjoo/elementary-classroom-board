@@ -564,39 +564,74 @@
     </div>
   </div>
 
-  <!-- ================= MODAL 4: PRE-CLASS 30S ALERT MODAL ================= -->
-  <div id="preClassAlertModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bento-card w-full max-w-lg p-6 md:p-8 flex flex-col items-center text-center gap-5 shadow-2xl border-2 border-amber-300 bg-gradient-to-b from-amber-50/70 via-white to-white animate-in fade-in zoom-in-95 duration-200">
-      <div class="relative flex items-center justify-center">
-        <div id="preAlertIconSlot" class="w-20 h-20 flex items-center justify-center"></div>
-        <div class="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center shadow-md border-2 border-white">
-          <span id="preAlertCountdownNum">30</span>
-        </div>
-      </div>
-
-      <div class="space-y-2">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-black">
+  <!-- ================= MODAL 4: PRE-CLASS 30S ALERT MODAL (3X CLASSROOM TV EDITION) ================= -->
+  <div id="preClassAlertModal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-md flex items-center justify-center p-4 md:p-8">
+    <div class="bento-card w-[94vw] max-w-[1440px] min-h-[76vh] p-7 md:p-12 flex flex-col items-center justify-between text-center gap-6 md:gap-8 shadow-2xl border-4 border-amber-400 bg-gradient-to-b from-amber-50 via-white to-[#F8FAFC] rounded-[36px]">
+      
+      <!-- 상단 배지 및 대형 카운트다운 -->
+      <div class="w-full flex flex-wrap items-center justify-between gap-4 border-b-2 border-amber-200/70 pb-5">
+        <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-amber-500 text-white text-lg md:text-2xl font-black shadow-md">
           <span>🔔</span>
-          <span>수업 시작 30초 전 준비 알림</span>
+          <span>수업 시작 30초 전 준비!</span>
         </div>
-        <h2 id="preAlertTitle" class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-          잠시 후 2교시 '수학' 시작 30초 전!
+
+        <div class="flex items-center gap-3 px-6 py-2.5 rounded-2xl bg-rose-50 border-2 border-rose-300 shadow-sm">
+          <span class="text-lg md:text-2xl font-black text-rose-600">남은 시간</span>
+          <span id="preAlertCountdownNum" class="text-4xl md:text-6xl font-black text-rose-600 tabular-nums leading-none">30</span>
+          <span class="text-xl md:text-3xl font-black text-rose-500">초</span>
+        </div>
+      </div>
+
+      <!-- 중앙: 다음 교시 아이콘 + 과목명 대형 타이틀 -->
+      <div class="flex flex-col items-center justify-center gap-4 my-auto w-full">
+        <div class="flex items-center justify-center gap-5 md:gap-7">
+          <div id="preAlertPeriodBadgeSlot" class="flex-shrink-0"></div>
+          <div id="preAlertIconSlot" class="flex items-center justify-center flex-shrink-0"></div>
+        </div>
+
+        <h2 id="preAlertTitle" class="text-4xl md:text-6xl xl:text-7xl font-black text-slate-900 tracking-tight leading-tight">
+          2교시 '수학' 곧 시작!
         </h2>
-        <p id="preAlertPrepMessage" class="text-sm md:text-base font-bold text-slate-600 leading-relaxed max-w-sm mx-auto">
-          교과서와 연필·지우개를 책상 위에 꺼내고 바른 자세로 앉아요!
+
+        <p id="preAlertPrepMessage" class="text-xl md:text-3xl font-extrabold text-blue-700 leading-snug">
+          다음 수업 준비를 지금 바로 시작해요
         </p>
+
+        <!-- 직관적인 3단계 준비 행동 카드 -->
+        <div id="preAlertChecklistCards" class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-5xl mt-3">
+          <div class="p-5 md:p-6 rounded-3xl bg-white border-2 border-blue-200 shadow-md flex flex-col items-center justify-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-sm md:text-base font-black">1단계 · 교과서</span>
+            <div id="preAlertCard1Title" class="text-2xl md:text-3xl font-black text-slate-900">'수학' 책 꺼내기</div>
+            <div class="text-base md:text-lg font-bold text-slate-500">책상 왼쪽 위에 올리기</div>
+          </div>
+
+          <div class="p-5 md:p-6 rounded-3xl bg-white border-2 border-amber-200 shadow-md flex flex-col items-center justify-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-amber-500 text-white text-sm md:text-base font-black">2단계 · 필기도구</span>
+            <div id="preAlertCard2Title" class="text-2xl md:text-3xl font-black text-slate-900">연필·지우개 준비</div>
+            <div class="text-base md:text-lg font-bold text-slate-500">장난감은 책상 속으로!</div>
+          </div>
+
+          <div class="p-5 md:p-6 rounded-3xl bg-white border-2 border-emerald-200 shadow-md flex flex-col items-center justify-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-sm md:text-base font-black">3단계 · 바른 자세</span>
+            <div id="preAlertCard3Title" class="text-2xl md:text-3xl font-black text-slate-900">자리에 조용히 앉기</div>
+            <div class="text-base md:text-lg font-bold text-slate-500">물·화장실 미리 마치고 대기</div>
+          </div>
+        </div>
       </div>
 
-      <div class="w-full bg-amber-100 rounded-full h-3 overflow-hidden">
-        <div id="preAlertProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 rounded-full" style="width: 100%;"></div>
-      </div>
+      <!-- 하단 진행 바 & 닫기 버튼 -->
+      <div class="w-full flex flex-col gap-4 pt-2">
+        <div class="w-full bg-amber-100 rounded-full h-5 md:h-6 overflow-hidden border border-amber-200">
+          <div id="preAlertProgressBar" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 transition-all duration-300 rounded-full" style="width: 100%;"></div>
+        </div>
 
-      <div class="w-full flex items-center justify-center gap-2 pt-1">
-        <button onclick="dismissPreClassAlert()"
-          class="w-full py-3.5 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-base shadow-lg shadow-amber-500/25 cursor-pointer transition flex items-center justify-center gap-2">
-          <span>✨</span>
-          <span>준비 완료! 창 닫기</span>
-        </button>
+        <div class="w-full flex items-center justify-center">
+          <button onclick="dismissPreClassAlert()"
+            class="w-full max-w-md py-4 px-8 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xl md:text-2xl shadow-xl shadow-amber-500/25 cursor-pointer transition flex items-center justify-center gap-2.5">
+            <span>✨</span>
+            <span>준비 완료! 창 닫기</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

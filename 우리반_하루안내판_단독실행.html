@@ -220,7 +220,8 @@ body {
   display: none !important;
 }
 
-#currentPeriodBadgeSlot .period-squircle {
+#currentPeriodBadgeSlot .period-squircle,
+#preAlertPeriodBadgeSlot .period-squircle {
   width: clamp(3.4rem, 4.2vw, 4.8rem) !important;
   height: clamp(3.4rem, 4.2vw, 4.8rem) !important;
   border-radius: clamp(0.85rem, 1.15vw, 1.35rem) !important;
@@ -234,14 +235,26 @@ body {
   padding: 0 2px !important;
 }
 
-#currentPeriodBadgeSlot .period-squircle-num {
+#preAlertPeriodBadgeSlot .period-squircle {
+  width: clamp(4.5rem, 6vw, 6.5rem) !important;
+  height: clamp(4.5rem, 6vw, 6.5rem) !important;
+  border-radius: clamp(1.2rem, 1.6vw, 1.8rem) !important;
+}
+
+#currentPeriodBadgeSlot .period-squircle-num,
+#preAlertPeriodBadgeSlot .period-squircle-num {
   font-size: clamp(1.5rem, 2.0vw, 2.4rem) !important;
   font-weight: 900 !important;
   line-height: 1 !important;
   letter-spacing: -0.04em !important;
 }
 
-#currentPeriodBadgeSlot .period-squircle-label {
+#preAlertPeriodBadgeSlot .period-squircle-num {
+  font-size: clamp(2.2rem, 3.0vw, 3.5rem) !important;
+}
+
+#currentPeriodBadgeSlot .period-squircle-label,
+#preAlertPeriodBadgeSlot .period-squircle-label {
   font-size: clamp(0.55rem, 0.72vw, 0.8rem) !important;
   font-weight: 800 !important;
   line-height: 1.1 !important;
@@ -249,6 +262,10 @@ body {
   opacity: 0.95 !important;
   white-space: nowrap !important;
   margin-top: 1px !important;
+}
+
+#preAlertPeriodBadgeSlot .period-squircle-label {
+  font-size: clamp(0.85rem, 1.1vw, 1.25rem) !important;
 }
 
 #currentSlotTimeRange {
@@ -1142,39 +1159,74 @@ body {
     </div>
   </div>
 
-  <!-- ================= MODAL 4: PRE-CLASS 30S ALERT MODAL ================= -->
-  <div id="preClassAlertModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bento-card w-full max-w-lg p-6 md:p-8 flex flex-col items-center text-center gap-5 shadow-2xl border-2 border-amber-300 bg-gradient-to-b from-amber-50/70 via-white to-white animate-in fade-in zoom-in-95 duration-200">
-      <div class="relative flex items-center justify-center">
-        <div id="preAlertIconSlot" class="w-20 h-20 flex items-center justify-center"></div>
-        <div class="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-amber-500 text-white font-black text-sm flex items-center justify-center shadow-md border-2 border-white">
-          <span id="preAlertCountdownNum">30</span>
-        </div>
-      </div>
-
-      <div class="space-y-2">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-black">
+  <!-- ================= MODAL 4: PRE-CLASS 30S ALERT MODAL (3X CLASSROOM TV EDITION) ================= -->
+  <div id="preClassAlertModal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-md flex items-center justify-center p-4 md:p-8">
+    <div class="bento-card w-[94vw] max-w-[1440px] min-h-[76vh] p-7 md:p-12 flex flex-col items-center justify-between text-center gap-6 md:gap-8 shadow-2xl border-4 border-amber-400 bg-gradient-to-b from-amber-50 via-white to-[#F8FAFC] rounded-[36px]">
+      
+      <!-- 상단 배지 및 대형 카운트다운 -->
+      <div class="w-full flex flex-wrap items-center justify-between gap-4 border-b-2 border-amber-200/70 pb-5">
+        <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-amber-500 text-white text-lg md:text-2xl font-black shadow-md">
           <span>🔔</span>
-          <span>수업 시작 30초 전 준비 알림</span>
+          <span>수업 시작 30초 전 준비!</span>
         </div>
-        <h2 id="preAlertTitle" class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-          잠시 후 2교시 '수학' 시작 30초 전!
+
+        <div class="flex items-center gap-3 px-6 py-2.5 rounded-2xl bg-rose-50 border-2 border-rose-300 shadow-sm">
+          <span class="text-lg md:text-2xl font-black text-rose-600">남은 시간</span>
+          <span id="preAlertCountdownNum" class="text-4xl md:text-6xl font-black text-rose-600 tabular-nums leading-none">30</span>
+          <span class="text-xl md:text-3xl font-black text-rose-500">초</span>
+        </div>
+      </div>
+
+      <!-- 중앙: 다음 교시 아이콘 + 과목명 대형 타이틀 -->
+      <div class="flex flex-col items-center justify-center gap-4 my-auto w-full">
+        <div class="flex items-center justify-center gap-5 md:gap-7">
+          <div id="preAlertPeriodBadgeSlot" class="flex-shrink-0"></div>
+          <div id="preAlertIconSlot" class="flex items-center justify-center flex-shrink-0"></div>
+        </div>
+
+        <h2 id="preAlertTitle" class="text-4xl md:text-6xl xl:text-7xl font-black text-slate-900 tracking-tight leading-tight">
+          2교시 '수학' 곧 시작!
         </h2>
-        <p id="preAlertPrepMessage" class="text-sm md:text-base font-bold text-slate-600 leading-relaxed max-w-sm mx-auto">
-          교과서와 연필·지우개를 책상 위에 꺼내고 바른 자세로 앉아요!
+
+        <p id="preAlertPrepMessage" class="text-xl md:text-3xl font-extrabold text-blue-700 leading-snug">
+          다음 수업 준비를 지금 바로 시작해요
         </p>
+
+        <!-- 직관적인 3단계 준비 행동 카드 -->
+        <div id="preAlertChecklistCards" class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-5xl mt-3">
+          <div class="p-5 md:p-6 rounded-3xl bg-white border-2 border-blue-200 shadow-md flex flex-col items-center justify-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-sm md:text-base font-black">1단계 · 교과서</span>
+            <div id="preAlertCard1Title" class="text-2xl md:text-3xl font-black text-slate-900">'수학' 책 꺼내기</div>
+            <div class="text-base md:text-lg font-bold text-slate-500">책상 왼쪽 위에 올리기</div>
+          </div>
+
+          <div class="p-5 md:p-6 rounded-3xl bg-white border-2 border-amber-200 shadow-md flex flex-col items-center justify-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-amber-500 text-white text-sm md:text-base font-black">2단계 · 필기도구</span>
+            <div id="preAlertCard2Title" class="text-2xl md:text-3xl font-black text-slate-900">연필·지우개 준비</div>
+            <div class="text-base md:text-lg font-bold text-slate-500">장난감은 책상 속으로!</div>
+          </div>
+
+          <div class="p-5 md:p-6 rounded-3xl bg-white border-2 border-emerald-200 shadow-md flex flex-col items-center justify-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-sm md:text-base font-black">3단계 · 바른 자세</span>
+            <div id="preAlertCard3Title" class="text-2xl md:text-3xl font-black text-slate-900">자리에 조용히 앉기</div>
+            <div class="text-base md:text-lg font-bold text-slate-500">물·화장실 미리 마치고 대기</div>
+          </div>
+        </div>
       </div>
 
-      <div class="w-full bg-amber-100 rounded-full h-3 overflow-hidden">
-        <div id="preAlertProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 rounded-full" style="width: 100%;"></div>
-      </div>
+      <!-- 하단 진행 바 & 닫기 버튼 -->
+      <div class="w-full flex flex-col gap-4 pt-2">
+        <div class="w-full bg-amber-100 rounded-full h-5 md:h-6 overflow-hidden border border-amber-200">
+          <div id="preAlertProgressBar" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 transition-all duration-300 rounded-full" style="width: 100%;"></div>
+        </div>
 
-      <div class="w-full flex items-center justify-center gap-2 pt-1">
-        <button onclick="dismissPreClassAlert()"
-          class="w-full py-3.5 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-base shadow-lg shadow-amber-500/25 cursor-pointer transition flex items-center justify-center gap-2">
-          <span>✨</span>
-          <span>준비 완료! 창 닫기</span>
-        </button>
+        <div class="w-full flex items-center justify-center">
+          <button onclick="dismissPreClassAlert()"
+            class="w-full max-w-md py-4 px-8 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xl md:text-2xl shadow-xl shadow-amber-500/25 cursor-pointer transition flex items-center justify-center gap-2.5">
+            <span>✨</span>
+            <span>준비 완료! 창 닫기</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -3473,24 +3525,68 @@ function showPreClassAlertModal(remainingSec, nextPeriodIdx) {
   const subj = getSubjectById(subjId);
   const periodNum = targetPeriodIdx + 1;
 
-  const iconSlot = document.getElementById('preAlertIconSlot');
-  if (iconSlot) {
-    iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-16 h-16', 32);
+  // 1. Next Period Squircle Badge
+  const periodSlot = document.getElementById('preAlertPeriodBadgeSlot');
+  if (periodSlot) {
+    periodSlot.innerHTML = renderPeriodSquircleIcon(periodNum, false);
   }
 
+  // 2. Large Subject Soft Icon
+  const iconSlot = document.getElementById('preAlertIconSlot');
+  if (iconSlot) {
+    iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-24 h-24 md:w-28 md:h-28', 52);
+  }
+
+  // 3. Countdown Number
   const numEl = document.getElementById('preAlertCountdownNum');
   if (numEl) numEl.textContent = Math.max(1, remainingSec);
 
+  // 4. Concise Title & Prep Message
   const titleEl = document.getElementById('preAlertTitle');
   if (titleEl) {
-    titleEl.textContent = `잠시 후 ${periodNum}교시 '${subj.name}' 시작 ${remainingSec}초 전!`;
+    titleEl.textContent = `${periodNum}교시 '${subj.name}' 곧 시작!`;
   }
 
   const msgEl = document.getElementById('preAlertPrepMessage');
   if (msgEl) {
-    msgEl.textContent = `${subj.name} 교과서와 연필·지우개를 책상 위에 꺼내고 바른 자세로 앉아요!`;
+    msgEl.textContent = '아래 3가지를 지금 바로 준비해요!';
   }
 
+  // 5. Subject-tailored 3-Step Action Cards
+  const card1El = document.getElementById('preAlertCard1Title');
+  const card2El = document.getElementById('preAlertCard2Title');
+  const card3El = document.getElementById('preAlertCard3Title');
+
+  let card1Text = `'${subj.name}' 책 꺼내기`;
+  let card2Text = '연필·지우개 준비';
+  let card3Text = '자리에 조용히 앉기';
+
+  const sid = (subj.id || '').toLowerCase();
+  const sname = subj.name || '';
+
+  if (sid === 'pe' || sname.includes('체육') || sname.includes('놀이')) {
+    card1Text = '물통·손수건 챙기기';
+    card2Text = '운동화 끈 단단히 묶기';
+    card3Text = '조용히 줄 서서 대기';
+  } else if (sid === 'art' || sname.includes('미술') || sname.includes('만들기') || sname.includes('그리기')) {
+    card1Text = '미술 준비물 꺼내기';
+    card2Text = '색연필·가위·풀 준비';
+    card3Text = '책상 정리하고 앉기';
+  } else if (sid === 'music' || sname.includes('음악') || sname.includes('노래') || sname.includes('악기')) {
+    card1Text = `'${subj.name}' 책·악기 준비`;
+    card2Text = '바른 자세로 손 모으기';
+    card3Text = '조용히 자리에 앉기';
+  } else if (sid === 'read' || sname.includes('독서')) {
+    card1Text = '읽을 책 1권 꺼내기';
+    card2Text = '독서록·필기도구 준비';
+    card3Text = '조용히 책 읽기 대기';
+  }
+
+  if (card1El) card1El.textContent = card1Text;
+  if (card2El) card2El.textContent = card2Text;
+  if (card3El) card3El.textContent = card3Text;
+
+  // 6. Progress Bar
   const barEl = document.getElementById('preAlertProgressBar');
   if (barEl) {
     const pct = Math.max(0, Math.min(100, Math.round((remainingSec / 30) * 100)));

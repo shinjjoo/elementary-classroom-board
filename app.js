@@ -1901,24 +1901,68 @@ function showPreClassAlertModal(remainingSec, nextPeriodIdx) {
   const subj = getSubjectById(subjId);
   const periodNum = targetPeriodIdx + 1;
 
-  const iconSlot = document.getElementById('preAlertIconSlot');
-  if (iconSlot) {
-    iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-16 h-16', 32);
+  // 1. Next Period Squircle Badge
+  const periodSlot = document.getElementById('preAlertPeriodBadgeSlot');
+  if (periodSlot) {
+    periodSlot.innerHTML = renderPeriodSquircleIcon(periodNum, false);
   }
 
+  // 2. Large Subject Soft Icon
+  const iconSlot = document.getElementById('preAlertIconSlot');
+  if (iconSlot) {
+    iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-24 h-24 md:w-28 md:h-28', 52);
+  }
+
+  // 3. Countdown Number
   const numEl = document.getElementById('preAlertCountdownNum');
   if (numEl) numEl.textContent = Math.max(1, remainingSec);
 
+  // 4. Concise Title & Prep Message
   const titleEl = document.getElementById('preAlertTitle');
   if (titleEl) {
-    titleEl.textContent = `잠시 후 ${periodNum}교시 '${subj.name}' 시작 ${remainingSec}초 전!`;
+    titleEl.textContent = `${periodNum}교시 '${subj.name}' 곧 시작!`;
   }
 
   const msgEl = document.getElementById('preAlertPrepMessage');
   if (msgEl) {
-    msgEl.textContent = `${subj.name} 교과서와 연필·지우개를 책상 위에 꺼내고 바른 자세로 앉아요!`;
+    msgEl.textContent = '아래 3가지를 지금 바로 준비해요!';
   }
 
+  // 5. Subject-tailored 3-Step Action Cards
+  const card1El = document.getElementById('preAlertCard1Title');
+  const card2El = document.getElementById('preAlertCard2Title');
+  const card3El = document.getElementById('preAlertCard3Title');
+
+  let card1Text = `'${subj.name}' 책 꺼내기`;
+  let card2Text = '연필·지우개 준비';
+  let card3Text = '자리에 조용히 앉기';
+
+  const sid = (subj.id || '').toLowerCase();
+  const sname = subj.name || '';
+
+  if (sid === 'pe' || sname.includes('체육') || sname.includes('놀이')) {
+    card1Text = '물통·손수건 챙기기';
+    card2Text = '운동화 끈 단단히 묶기';
+    card3Text = '조용히 줄 서서 대기';
+  } else if (sid === 'art' || sname.includes('미술') || sname.includes('만들기') || sname.includes('그리기')) {
+    card1Text = '미술 준비물 꺼내기';
+    card2Text = '색연필·가위·풀 준비';
+    card3Text = '책상 정리하고 앉기';
+  } else if (sid === 'music' || sname.includes('음악') || sname.includes('노래') || sname.includes('악기')) {
+    card1Text = `'${subj.name}' 책·악기 준비`;
+    card2Text = '바른 자세로 손 모으기';
+    card3Text = '조용히 자리에 앉기';
+  } else if (sid === 'read' || sname.includes('독서')) {
+    card1Text = '읽을 책 1권 꺼내기';
+    card2Text = '독서록·필기도구 준비';
+    card3Text = '조용히 책 읽기 대기';
+  }
+
+  if (card1El) card1El.textContent = card1Text;
+  if (card2El) card2El.textContent = card2Text;
+  if (card3El) card3El.textContent = card3Text;
+
+  // 6. Progress Bar
   const barEl = document.getElementById('preAlertProgressBar');
   if (barEl) {
     const pct = Math.max(0, Math.min(100, Math.round((remainingSec / 30) * 100)));
