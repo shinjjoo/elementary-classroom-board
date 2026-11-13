@@ -545,6 +545,32 @@ function evaluateCurrentTimeSlot() {
   }
 
   const lastP = activePeriods[activePeriods.length - 1];
+  if (periodCount >= 4 && lastP) {
+    const p4End = hmToMinutes(activePeriods[3].end) * 60;
+    if (nowSec >= p4End && nowSec < lStart) {
+      const total = Math.max(1, lStart - p4End);
+      const rem = Math.max(0, lStart - nowSec);
+      return {
+        slotKey: 'before_lunch_prep',
+        type: 'lunch',
+        periodIndex: null,
+        routineTab: 'lunchtime',
+        icon: 'wash',
+        grad: 'grad-blue-cyan',
+        headline: `점심시간 준비`,
+        subline: '손을 깨끗이 씻고 질서를 지켜 급식실로 이동해요',
+        timeRange: `${activePeriods[3].end} ~ ${bs.lunchStart}`,
+        progressPct: Math.round((rem / total) * 100),
+        remainingSec: rem
+      };
+    }
+  }
+
+  const lastEndStr = lastP ? lastP.end : '13:40';
+  const afterStartStr = (periodCount >= 4 && hmToMinutes(bs.lunchEnd) > hmToMinutes(lastEndStr))
+    ? bs.lunchEnd
+    : lastEndStr;
+
   return {
     slotKey: 'after_school',
     type: 'afterschool',
@@ -554,7 +580,7 @@ function evaluateCurrentTimeSlot() {
     grad: 'grad-periwinkle-rose',
     headline: `일과 마침 '하교 준비'`,
     subline: '알림장과 소지품을 챙기고 안전하게 귀가해요',
-    timeRange: `${lastP ? lastP.end : '13:40'} ~ 하교`,
+    timeRange: `${afterStartStr} ~ 하교`,
     progressPct: 100,
     remainingSec: 0
   };
@@ -1049,14 +1075,18 @@ function renderTimetableSection() {
       </div>
     `);
 
-    if (i === 3 && periodCount > 4) {
+    if (i === 3 && periodCount >= 4) {
       const isLunchNow = manualSelectedPeriod === null && slot.type === 'lunch';
+      const lunchEndMin = hmToMinutes(state.bellSchedule.lunchEnd);
+      const isLunchDone = manualSelectedPeriod === null && totalMinutes >= lunchEndMin && selectedWeekdayKey === todayKey;
       cardsHtml.push(`
         <div onclick="selectLunchSlot()"
-          class="px-3 py-2 rounded-xl border ${
+          class="lunch-row px-3 py-2 rounded-xl border ${
             isLunchNow
-              ? 'bg-blue-50 border-blue-300'
-              : 'bg-[#F8FAFC] border-slate-200/80'
+              ? 'bento-period-active bg-blue-50 border-blue-400'
+              : isLunchDone
+                ? 'bento-period-done opacity-75 bg-[#F8FAFC] border-slate-200/80'
+                : 'bg-[#F8FAFC] border-slate-200/80'
           } flex items-center justify-between gap-2 cursor-pointer transition whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0">
             ${renderSoftIcon('wash', 'grad-blue-cyan', 'w-7 h-7', 14)}
