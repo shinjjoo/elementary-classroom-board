@@ -146,6 +146,17 @@ function renderSoftIcon(iconKey, gradClass = 'grad-purple-blue', sizeClass = 'w-
   `;
 }
 
+function renderPeriodSquircleIcon(periodNum, isNext = false) {
+  const gradClass = isNext ? 'grad-blue-cyan' : 'grad-sky-indigo';
+  const label = isNext ? '다음·' + periodNum + '교시' : '교시';
+  return `
+    <div class="soft-icon-tile ${gradClass} period-squircle">
+      <span class="period-squircle-num">${periodNum}</span>
+      <span class="period-squircle-label">${label}</span>
+    </div>
+  `;
+}
+
 const DEFAULT_SUBJECTS = [
   // 기본 교과
   { id: 'kor',        name: '국어',       icon: 'book',     grad: 'grad-pink-orange' },
@@ -494,10 +505,12 @@ function evaluateCurrentTimeSlot() {
         slotKey: `period_${p.num}`,
         type: 'period',
         periodIndex: i,
+        periodNum: p.num,
+        subjectName: subj.name,
         routineTab: 'classprep',
         icon: subj.icon,
         grad: subj.grad,
-        headline: `${p.num}교시 '${subj.name}'`,
+        headline: `'${subj.name}'`,
         subline: '교과서와 연필을 준비하고 선생님 말씀에 귀 기울여요',
         timeRange: `${p.start} ~ ${p.end}`,
         progressPct: Math.round((rem / total) * 100),
@@ -516,10 +529,12 @@ function evaluateCurrentTimeSlot() {
           slotKey: `break_after_${p.num}`,
           type: 'break',
           periodIndex: i + 1,
+          nextPeriodNum: nextP.num,
+          nextSubjectName: nextSubj.name,
           routineTab: 'breaktime',
           icon: 'water',
           grad: 'grad-blue-cyan',
-          headline: `쉬는 시간 · 다음 ${nextP.num}교시 '${nextSubj.name}'`,
+          headline: `쉬는 시간 · '${nextSubj.name}'`,
           subline: '화장실에 다녀오고 다음 시간 교과서를 준비해요',
           timeRange: `${p.end} ~ ${nextP.start}`,
           progressPct: Math.round((rem / total) * 100),
@@ -783,6 +798,7 @@ function updateHeaderClockAndTimer() {
   }
 
   const iconSlot = document.getElementById('currentStatusIconSlot');
+  const periodBadgeSlot = document.getElementById('currentPeriodBadgeSlot');
   const headlineEl = document.getElementById('currentStatusHeadline');
   const sublineEl = document.getElementById('currentStatusSubline');
   const timeRangeEl = document.getElementById('currentSlotTimeRange');
@@ -794,14 +810,18 @@ function updateHeaderClockAndTimer() {
     const pObj = state.bellSchedule.periods[manualSelectedPeriod];
     const subj = getSubjectById(getEffectivePeriodSubjectId(selectedWeekdayKey, manualSelectedPeriod));
 
+    if (periodBadgeSlot) {
+      periodBadgeSlot.classList.remove('hidden');
+      periodBadgeSlot.innerHTML = renderPeriodSquircleIcon(pObj.num, false);
+    }
     if (iconSlot) iconSlot.innerHTML = renderSoftIcon(subj.icon, subj.grad, 'w-14 h-14', 28);
     if (headlineEl) {
-      headlineEl.textContent = `${pObj.num}교시 '${subj.name}'`;
-      headlineEl.classList.add('whitespace-nowrap', 'truncate');
+      headlineEl.textContent = `'${subj.name}'`;
+      headlineEl.classList.add('whitespace-nowrap');
     }
     if (sublineEl) {
       sublineEl.textContent = '교과서와 연필을 준비하고 선생님 말씀에 귀 기울여요';
-      sublineEl.classList.add('whitespace-nowrap', 'truncate');
+      sublineEl.classList.add('whitespace-nowrap');
     }
     if (timeRangeEl) {
       timeRangeEl.textContent = `${pObj.start} ~ ${pObj.end}`;
@@ -814,14 +834,32 @@ function updateHeaderClockAndTimer() {
     if (timerBarFill) timerBarFill.style.width = '100%';
     if (timerCirclePath) timerCirclePath.setAttribute('stroke-dashoffset', '0');
   } else {
+    if (slot.type === 'period') {
+      if (periodBadgeSlot) {
+        periodBadgeSlot.classList.remove('hidden');
+        periodBadgeSlot.innerHTML = renderPeriodSquircleIcon(slot.periodNum, false);
+      }
+    } else if (slot.type === 'break') {
+      if (periodBadgeSlot) {
+        periodBadgeSlot.classList.remove('hidden');
+        periodBadgeSlot.innerHTML = renderPeriodSquircleIcon(slot.nextPeriodNum, true);
+      }
+    } else {
+      // morning, lunch, afterschool
+      if (periodBadgeSlot) {
+        periodBadgeSlot.classList.add('hidden');
+        periodBadgeSlot.innerHTML = '';
+      }
+    }
+
     if (iconSlot) iconSlot.innerHTML = renderSoftIcon(slot.icon, slot.grad, 'w-14 h-14', 28);
     if (headlineEl) {
       headlineEl.textContent = slot.headline;
-      headlineEl.classList.add('whitespace-nowrap', 'truncate');
+      headlineEl.classList.add('whitespace-nowrap');
     }
     if (sublineEl) {
       sublineEl.textContent = slot.subline || '';
-      sublineEl.classList.add('whitespace-nowrap', 'truncate');
+      sublineEl.classList.add('whitespace-nowrap');
     }
     if (timeRangeEl) {
       timeRangeEl.textContent = slot.timeRange;
@@ -899,6 +937,8 @@ function updateHeaderClockAndTimer() {
       dismissedPreAlertSlotKey = null;
     }
   }
+
+  requestAnimationFrame(() => fitAllTextsWithoutTruncation());
 }
 
 function renderTimetableSection() {
@@ -1031,6 +1071,7 @@ function renderTimetableSection() {
   }
 
   listEl.innerHTML = cardsHtml.join('');
+  requestAnimationFrame(() => fitAllTextsWithoutTruncation());
 }
 
 function renderRoutineSection() {
@@ -1141,6 +1182,7 @@ function renderRoutineSection() {
       </div>
     `;
   }).join('');
+  requestAnimationFrame(() => fitAllTextsWithoutTruncation());
 }
 
 function toggleRoutineTaskHighlight(tabKey, taskId) {
@@ -1161,11 +1203,61 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function fitAllTextsWithoutTruncation() {
+  const selectors = [
+    '#currentStatusHeadline',
+    '#currentStatusSubline',
+    '#routineCardsGrid .bento-tile span.flex-1',
+    '#periodListContainer .bento-tile span.truncate',
+    '#heroIncompleteStudentsList button span.truncate'
+  ];
+
+  const scaleFactors = [0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58];
+
+  selectors.forEach(sel => {
+    const elements = document.querySelectorAll(sel);
+    elements.forEach(el => {
+      // 1. Reset inline styles to default computed styles
+      el.style.fontSize = '';
+      el.style.letterSpacing = '';
+
+      if (el.clientWidth <= 0) return;
+
+      // Check if text overflows container width
+      if (el.scrollWidth > el.clientWidth) {
+        // Step 1: Reduce letter-spacing
+        el.style.letterSpacing = '-0.04em';
+        if (el.scrollWidth <= el.clientWidth) return;
+
+        el.style.letterSpacing = '-0.065em';
+        if (el.scrollWidth <= el.clientWidth) return;
+
+        // Step 2: Gradually reduce font-size (down to min 11px)
+        const computedStyle = window.getComputedStyle(el);
+        const baseFontSize = parseFloat(computedStyle.fontSize);
+        if (isNaN(baseFontSize) || baseFontSize <= 0) return;
+
+        for (const factor of scaleFactors) {
+          const nextSize = Math.max(11, baseFontSize * factor);
+          el.style.fontSize = `${nextSize}px`;
+          if (el.scrollWidth <= el.clientWidth) {
+            break;
+          }
+          if (nextSize <= 11) {
+            break;
+          }
+        }
+      }
+    });
+  });
+}
+
 function renderAll() {
   updateHeaderClockAndTimer();
   renderTimetableSection();
   renderRoutineSection();
   renderHeroActivityCheckPanel();
+  requestAnimationFrame(() => fitAllTextsWithoutTruncation());
 }
 
 function openClassNameEditor() {
@@ -2631,6 +2723,7 @@ function renderHeroActivityCheckPanel() {
       `).join('');
     }
   }
+  requestAnimationFrame(() => fitAllTextsWithoutTruncation());
 }
 
 function renderRosterIndividualList() {
@@ -3477,6 +3570,9 @@ function initBoard() {
   activeRoutineTab = initialSlot.routineTab;
   renderAll();
   initTimerWindowDragAndResize();
+  window.addEventListener('resize', () => {
+    requestAnimationFrame(() => fitAllTextsWithoutTruncation());
+  });
   setInterval(() => {
     updateHeaderClockAndTimer();
   }, 1000);
