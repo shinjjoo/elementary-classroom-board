@@ -365,6 +365,64 @@
     </div>
   </div>
 
+  <!-- ================= MODAL 2-B: EDIT ROUTINE TASK ================= -->
+  <div id="editRoutineTaskModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3">
+    <div class="bento-card w-full max-w-lg p-5 max-h-[88vh] flex flex-col gap-3.5 overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-lg md:text-xl font-black text-slate-900">할 일 내용 수정하기</h3>
+        <button onclick="closeEditRoutineTaskModal()" class="px-3 py-1 rounded-xl font-extrabold bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer text-xs">닫기</button>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <div>
+          <label class="block text-xs font-extrabold text-slate-500 mb-1">반복 설정</label>
+          <select id="editTaskRepeatType" class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-slate-200 font-extrabold text-sm text-slate-800">
+            <option value="daily">매일 반복 루틴</option>
+            <option value="today">오늘만 특별 할 일</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold text-slate-500 mb-1">아이콘 선택</label>
+          <select id="editTaskIconSelect" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-extrabold text-slate-800">
+            <option value="bag">가방/정리 아이콘</option>
+            <option value="notebook">알림장/노트 아이콘</option>
+            <option value="submit">숙제 제출 아이콘</option>
+            <option value="milk">우유/간식 아이콘</option>
+            <option value="water">물 마시기 아이콘</option>
+            <option value="wash">손 씻기 아이콘</option>
+            <option value="restroom">화장실 아이콘</option>
+            <option value="book">책/독서 아이콘</option>
+            <option value="pencil">연필/준비물 아이콘</option>
+            <option value="clean">청소/정돈 아이콘</option>
+            <option value="chair">의자 넣기 아이콘</option>
+            <option value="coat">외투/소지품 아이콘</option>
+            <option value="letter">안내장/편지 아이콘</option>
+            <option value="star">약속/별 아이콘</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold text-slate-500 mb-1">할 일 내용</label>
+          <input id="editTaskTitleInput" type="text" placeholder="예: 안내장 가방에 넣기, 우유 마시기"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-extrabold text-slate-900"
+            onkeydown="if(event.key==='Enter') saveEditedRoutineTask()" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeEditRoutineTaskModal()"
+          class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-extrabold text-sm cursor-pointer transition">
+          취소
+        </button>
+        <button onclick="saveEditedRoutineTask()"
+          class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm cursor-pointer transition">
+          저장
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= MODAL 3: TEACHER SETTINGS ================= -->
   <div id="settingsModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-2.5 md:p-4">
     <div class="bento-card w-full max-w-4xl max-h-[88vh] flex flex-col overflow-hidden">

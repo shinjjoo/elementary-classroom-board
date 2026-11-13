@@ -189,15 +189,15 @@ body {
 
 /* ================= HERO CENTER CARD ================= */
 #currentStatusHeadline {
-  font-size: clamp(1.75rem, 2.9vw + 0.35rem, 3.35rem) !important;
-  line-height: 1.32 !important;
+  font-size: clamp(2.4rem, 4.4vw + 0.5rem, 5.8rem) !important;
+  line-height: 1.24 !important;
   letter-spacing: -0.03em !important;
-  padding: 0.08em 0 !important;
+  padding: 0.04em 0 !important;
 }
 
 #currentStatusSubline {
-  font-size: clamp(1rem, 1.35vw + 0.2rem, 1.6rem) !important;
-  line-height: 1.38 !important;
+  font-size: clamp(1.3rem, 2.0vw + 0.25rem, 2.5rem) !important;
+  line-height: 1.3 !important;
   padding: 0.05em 0 !important;
 }
 
@@ -306,16 +306,16 @@ body {
 
 #periodListContainer .bento-tile .subject-name,
 #periodListContainer .bento-tile span.truncate {
-  font-size: clamp(1.1rem, 1.4vw + 0.15rem, 1.65rem) !important;
-  line-height: 1.38 !important;
-  padding: 0.05em 0 !important;
+  font-size: clamp(1.45rem, 2.25vw + 0.25rem, 2.85rem) !important;
+  line-height: 1.28 !important;
+  padding: 0.04em 0 !important;
 }
 
 #periodListContainer .bento-tile > div:first-child > div:first-child {
-  width: clamp(3.3rem, 3.9vw, 4.3rem) !important;
-  height: clamp(1.95rem, 2.5vh, 2.45rem) !important;
-  font-size: clamp(0.88rem, 1.05vw + 0.08rem, 1.2rem) !important;
-  line-height: 1.3 !important;
+  width: clamp(4.2rem, 5.1vw, 6rem) !important;
+  height: clamp(2.2rem, 3vh, 2.9rem) !important;
+  font-size: clamp(1.1rem, 1.45vw + 0.15rem, 1.85rem) !important;
+  line-height: 1.25 !important;
   border-radius: 10px !important;
   flex-shrink: 0;
   display: flex;
@@ -342,8 +342,8 @@ body {
 
 #periodListContainer [onclick*="selectLunchSlot"] span,
 #periodListContainer .lunch-row span {
-  font-size: clamp(1rem, 1.25vw + 0.1rem, 1.45rem) !important;
-  line-height: 1.35 !important;
+  font-size: clamp(1.35rem, 1.9vw + 0.2rem, 2.4rem) !important;
+  line-height: 1.28 !important;
 }
 
 #periodListContainer .bento-tile span,
@@ -370,33 +370,33 @@ body {
 
 /* ================= ROUTINE CARDS GRID (1 ITEM PER ROW, 5 ROWS FILLING - 120% EXPANDED) ================= */
 #routineCardsGrid {
-  gap: clamp(0.35rem, 0.7vh, 0.6rem) !important;
+  gap: clamp(0.25rem, 0.45vh, 0.45rem) !important;
 }
 #routineCardsGrid .bento-tile {
   border-radius: 16px !important;
   flex: 1 1 0%;
   min-height: 0;
-  padding: clamp(0.28rem, 0.6vh, 0.55rem) clamp(0.75rem, 1.1vw, 1.1rem) !important;
+  padding: clamp(0.2rem, 0.4vh, 0.42rem) clamp(0.75rem, 1.1vw, 1.1rem) !important;
 }
 #routineCardsGrid .bento-tile > div:first-child > span:first-child {
-  width: clamp(1.85rem, 2.1vw, 2.35rem) !important;
-  height: clamp(1.85rem, 2.1vw, 2.35rem) !important;
-  font-size: clamp(0.95rem, 1.15vw, 1.3rem) !important;
+  width: clamp(2.1rem, 2.4vw, 2.7rem) !important;
+  height: clamp(2.1rem, 2.4vw, 2.7rem) !important;
+  font-size: clamp(1.1rem, 1.3vw, 1.5rem) !important;
   border-radius: 12px !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile {
-  width: clamp(1.95rem, 2.2vw, 2.45rem) !important;
-  height: clamp(1.95rem, 2.2vw, 2.45rem) !important;
+  width: clamp(2.1rem, 2.4vw, 2.7rem) !important;
+  height: clamp(2.1rem, 2.4vw, 2.7rem) !important;
 }
 #routineCardsGrid .bento-tile .soft-icon-tile svg {
-  width: clamp(1.1rem, 1.3vw, 1.45rem) !important;
-  height: clamp(1.1rem, 1.3vw, 1.45rem) !important;
+  width: clamp(1.15rem, 1.35vw, 1.55rem) !important;
+  height: clamp(1.15rem, 1.35vw, 1.55rem) !important;
 }
 #routineCardsGrid .bento-tile span.flex-1 {
-  font-size: clamp(1.1rem, 1.55vw + 0.2rem, 1.85rem) !important;
-  line-height: 1.38 !important;
+  font-size: clamp(1.5rem, 2.45vw + 0.3rem, 3.25rem) !important;
+  line-height: 1.28 !important;
   letter-spacing: -0.025em !important;
-  padding: 0.06em 0 !important;
+  padding: 0.04em 0 !important;
 }
 
 /* ================= HERO INCOMPLETE STUDENTS LIST (10 COLS x 2 ROWS) ================= */
@@ -889,6 +889,64 @@ body {
         </div>
         <div id="frequentTaskPresetsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2-B: EDIT ROUTINE TASK ================= -->
+  <div id="editRoutineTaskModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3">
+    <div class="bento-card w-full max-w-lg p-5 max-h-[88vh] flex flex-col gap-3.5 overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-lg md:text-xl font-black text-slate-900">할 일 내용 수정하기</h3>
+        <button onclick="closeEditRoutineTaskModal()" class="px-3 py-1 rounded-xl font-extrabold bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer text-xs">닫기</button>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <div>
+          <label class="block text-xs font-extrabold text-slate-500 mb-1">반복 설정</label>
+          <select id="editTaskRepeatType" class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-slate-200 font-extrabold text-sm text-slate-800">
+            <option value="daily">매일 반복 루틴</option>
+            <option value="today">오늘만 특별 할 일</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold text-slate-500 mb-1">아이콘 선택</label>
+          <select id="editTaskIconSelect" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm font-extrabold text-slate-800">
+            <option value="bag">가방/정리 아이콘</option>
+            <option value="notebook">알림장/노트 아이콘</option>
+            <option value="submit">숙제 제출 아이콘</option>
+            <option value="milk">우유/간식 아이콘</option>
+            <option value="water">물 마시기 아이콘</option>
+            <option value="wash">손 씻기 아이콘</option>
+            <option value="restroom">화장실 아이콘</option>
+            <option value="book">책/독서 아이콘</option>
+            <option value="pencil">연필/준비물 아이콘</option>
+            <option value="clean">청소/정돈 아이콘</option>
+            <option value="chair">의자 넣기 아이콘</option>
+            <option value="coat">외투/소지품 아이콘</option>
+            <option value="letter">안내장/편지 아이콘</option>
+            <option value="star">약속/별 아이콘</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold text-slate-500 mb-1">할 일 내용</label>
+          <input id="editTaskTitleInput" type="text" placeholder="예: 안내장 가방에 넣기, 우유 마시기"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-extrabold text-slate-900"
+            onkeydown="if(event.key==='Enter') saveEditedRoutineTask()" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeEditRoutineTaskModal()"
+          class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-extrabold text-sm cursor-pointer transition">
+          취소
+        </button>
+        <button onclick="saveEditedRoutineTask()"
+          class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm cursor-pointer transition">
+          저장
+        </button>
       </div>
     </div>
   </div>
@@ -1681,11 +1739,6 @@ function showToast(msg) {
 
 function getDefaultState() {
   const defaultNoticeDate = new Date().toISOString().slice(0, 10);
-  const defaultNoticeHtml = `
-    <div>1. 내일 놀이체육 수업(활동하기 편한 옷)</div>
-    <div>2. 작가와의 만남 사인 받을 사람, 책 준비하기 (희망자만)</div>
-    <div>3. 해지기 전에 집에 일찍 귀가하기</div>
-  `.trim();
 
   const defaultStudents = [
     { id: 's1', num: 1, name: '김하늘' },
@@ -1776,14 +1829,7 @@ function getDefaultState() {
         { id: 'a5', icon: 'heart',    grad: 'grad-lavender-pink', title: '선생님과 친구들에게 인사하고 하교하기', repeat: 'daily', done: false, highlight: 0 }
       ]
     },
-    notices: {
-      [defaultNoticeDate]: {
-        html: defaultNoticeHtml,
-        bgTheme: 'chalkboard',
-        fontSize: 38,
-        drawingDataUrl: ''
-      }
-    },
+    notices: {},
     frequentPhrases: [
       '내일 놀이체육 수업(활동하기 편한 옷 입고 오기)',
       '가정통신문 부모님께 드리고 확인받아 오기',
@@ -1843,6 +1889,11 @@ function loadState() {
           .filter(item => item.repeat !== 'today')
           .map(item => ({ ...item, done: false }));
       });
+      if (merged.studentChecks) {
+        Object.keys(merged.studentChecks).forEach(catKey => {
+          merged.studentChecks[catKey] = {};
+        });
+      }
     }
     return merged;
   } catch (e) {
@@ -2159,6 +2210,27 @@ function renderStaticIcons() {
 
 function updateHeaderClockAndTimer() {
   const now = new Date();
+  const todayDateStr = now.toISOString().slice(0, 10);
+  if (state.lastResetDate !== todayDateStr) {
+    state.lastResetDate = todayDateStr;
+    state.todayOverrides = {};
+    if (state.studentChecks) {
+      Object.keys(state.studentChecks).forEach(catKey => {
+        state.studentChecks[catKey] = {};
+      });
+    }
+    if (state.routines) {
+      Object.keys(state.routines).forEach(tabKey => {
+        state.routines[tabKey] = state.routines[tabKey]
+          .filter(item => item.repeat !== 'today')
+          .map(item => ({ ...item, done: false }));
+      });
+    }
+    saveState();
+    renderStudentCheckGrid();
+    renderHeroActivityCheckPanel();
+  }
+
   const month = now.getMonth() + 1;
   const date = now.getDate();
   const dayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
@@ -2571,6 +2643,14 @@ function renderRoutineSection() {
             <span>${task.highlight === 1 ? '중요' : task.highlight === 2 ? '꼭!' : '강조'}</span>
           </button>
 
+          <button onclick="event.stopPropagation(); openEditRoutineTaskModal('${activeRoutineTab}', '${task.id}')"
+            title="할 일 내용 수정"
+            class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200/80 flex items-center justify-center cursor-pointer flex-shrink-0 transition">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </button>
+
           <button onclick="event.stopPropagation(); deleteRoutineTask('${activeRoutineTab}', '${task.id}')"
             title="삭제"
             class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
@@ -2906,6 +2986,70 @@ function addPresetTask(presetIdx) {
   closeQuickAddTaskModal();
   renderAll();
   showToast('할 일이 추가되었습니다');
+}
+
+let editingRoutineTaskContext = null;
+
+function openEditRoutineTaskModal(tabKey, taskId) {
+  const list = state.routines[tabKey] || [];
+  const task = list.find(t => t.id === taskId);
+  if (!task) return;
+
+  editingRoutineTaskContext = { tabKey, taskId };
+
+  const iconSelect = document.getElementById('editTaskIconSelect');
+  if (iconSelect) iconSelect.value = task.icon || 'star';
+
+  const repSelect = document.getElementById('editTaskRepeatType');
+  if (repSelect) repSelect.value = task.repeat || 'daily';
+
+  const titleInp = document.getElementById('editTaskTitleInput');
+  if (titleInp) titleInp.value = task.title || '';
+
+  const modal = document.getElementById('editRoutineTaskModal');
+  if (modal) modal.classList.remove('hidden');
+  if (titleInp) setTimeout(() => titleInp.focus(), 80);
+}
+
+function closeEditRoutineTaskModal() {
+  const modal = document.getElementById('editRoutineTaskModal');
+  if (modal) modal.classList.add('hidden');
+  editingRoutineTaskContext = null;
+}
+
+function saveEditedRoutineTask() {
+  if (!editingRoutineTaskContext) return;
+  const { tabKey, taskId } = editingRoutineTaskContext;
+  const list = state.routines[tabKey] || [];
+  const task = list.find(t => t.id === taskId);
+  if (!task) {
+    closeEditRoutineTaskModal();
+    return;
+  }
+
+  const titleInp = document.getElementById('editTaskTitleInput');
+  const iconSelect = document.getElementById('editTaskIconSelect');
+  const repSelect = document.getElementById('editTaskRepeatType');
+
+  const title = titleInp ? titleInp.value.trim() : '';
+  if (!title) {
+    showToast('할 일 내용을 입력해 주세요');
+    return;
+  }
+
+  const icon = iconSelect ? iconSelect.value : (task.icon || 'star');
+  const repeat = repSelect ? repSelect.value : (task.repeat || 'daily');
+  const grad = ICON_DEFAULT_GRAD[icon] || task.grad || 'grad-purple-blue';
+
+  task.title = title;
+  task.icon = icon;
+  task.repeat = repeat;
+  task.grad = grad;
+
+  saveState();
+  closeEditRoutineTaskModal();
+  renderRoutineSection();
+  showToast('할 일이 수정되었습니다');
 }
 
 function openSettingsModal(initialTab = 'timetable') {
@@ -3348,7 +3492,7 @@ function loadNoticeForDate(dateStr) {
   if (classTitle) classTitle.textContent = `${state.className} [${new Date().getFullYear()}]`;
 
   const dateData = (state.notices && state.notices[dateStr]) || {
-    html: `<div>1. 내일 놀이체육 수업(활동하기 편한 옷)</div><div>2. 작가와의 만남 사인 받을 사람, 책 준비하기 (희망자만)</div><div>3. 해지기 전에 집에 일찍 귀가하기</div>`,
+    html: '',
     bgTheme: 'chalkboard',
     fontSize: 38,
     drawingDataUrl: ''

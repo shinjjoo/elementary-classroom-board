@@ -220,11 +220,6 @@ function showToast(msg) {
 
 function getDefaultState() {
   const defaultNoticeDate = new Date().toISOString().slice(0, 10);
-  const defaultNoticeHtml = `
-    <div>1. 내일 놀이체육 수업(활동하기 편한 옷)</div>
-    <div>2. 작가와의 만남 사인 받을 사람, 책 준비하기 (희망자만)</div>
-    <div>3. 해지기 전에 집에 일찍 귀가하기</div>
-  `.trim();
 
   const defaultStudents = [
     { id: 's1', num: 1, name: '김하늘' },
@@ -315,14 +310,7 @@ function getDefaultState() {
         { id: 'a5', icon: 'heart',    grad: 'grad-lavender-pink', title: '선생님과 친구들에게 인사하고 하교하기', repeat: 'daily', done: false, highlight: 0 }
       ]
     },
-    notices: {
-      [defaultNoticeDate]: {
-        html: defaultNoticeHtml,
-        bgTheme: 'chalkboard',
-        fontSize: 38,
-        drawingDataUrl: ''
-      }
-    },
+    notices: {},
     frequentPhrases: [
       '내일 놀이체육 수업(활동하기 편한 옷 입고 오기)',
       '가정통신문 부모님께 드리고 확인받아 오기',
@@ -382,6 +370,11 @@ function loadState() {
           .filter(item => item.repeat !== 'today')
           .map(item => ({ ...item, done: false }));
       });
+      if (merged.studentChecks) {
+        Object.keys(merged.studentChecks).forEach(catKey => {
+          merged.studentChecks[catKey] = {};
+        });
+      }
     }
     return merged;
   } catch (e) {
@@ -698,6 +691,27 @@ function renderStaticIcons() {
 
 function updateHeaderClockAndTimer() {
   const now = new Date();
+  const todayDateStr = now.toISOString().slice(0, 10);
+  if (state.lastResetDate !== todayDateStr) {
+    state.lastResetDate = todayDateStr;
+    state.todayOverrides = {};
+    if (state.studentChecks) {
+      Object.keys(state.studentChecks).forEach(catKey => {
+        state.studentChecks[catKey] = {};
+      });
+    }
+    if (state.routines) {
+      Object.keys(state.routines).forEach(tabKey => {
+        state.routines[tabKey] = state.routines[tabKey]
+          .filter(item => item.repeat !== 'today')
+          .map(item => ({ ...item, done: false }));
+      });
+    }
+    saveState();
+    renderStudentCheckGrid();
+    renderHeroActivityCheckPanel();
+  }
+
   const month = now.getMonth() + 1;
   const date = now.getDate();
   const dayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
@@ -1110,6 +1124,14 @@ function renderRoutineSection() {
             <span>${task.highlight === 1 ? '중요' : task.highlight === 2 ? '꼭!' : '강조'}</span>
           </button>
 
+          <button onclick="event.stopPropagation(); openEditRoutineTaskModal('${activeRoutineTab}', '${task.id}')"
+            title="할 일 내용 수정"
+            class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200/80 flex items-center justify-center cursor-pointer flex-shrink-0 transition">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </button>
+
           <button onclick="event.stopPropagation(); deleteRoutineTask('${activeRoutineTab}', '${task.id}')"
             title="삭제"
             class="w-8 h-8 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 flex items-center justify-center text-xs font-bold cursor-pointer flex-shrink-0 transition">
@@ -1445,6 +1467,70 @@ function addPresetTask(presetIdx) {
   closeQuickAddTaskModal();
   renderAll();
   showToast('할 일이 추가되었습니다');
+}
+
+let editingRoutineTaskContext = null;
+
+function openEditRoutineTaskModal(tabKey, taskId) {
+  const list = state.routines[tabKey] || [];
+  const task = list.find(t => t.id === taskId);
+  if (!task) return;
+
+  editingRoutineTaskContext = { tabKey, taskId };
+
+  const iconSelect = document.getElementById('editTaskIconSelect');
+  if (iconSelect) iconSelect.value = task.icon || 'star';
+
+  const repSelect = document.getElementById('editTaskRepeatType');
+  if (repSelect) repSelect.value = task.repeat || 'daily';
+
+  const titleInp = document.getElementById('editTaskTitleInput');
+  if (titleInp) titleInp.value = task.title || '';
+
+  const modal = document.getElementById('editRoutineTaskModal');
+  if (modal) modal.classList.remove('hidden');
+  if (titleInp) setTimeout(() => titleInp.focus(), 80);
+}
+
+function closeEditRoutineTaskModal() {
+  const modal = document.getElementById('editRoutineTaskModal');
+  if (modal) modal.classList.add('hidden');
+  editingRoutineTaskContext = null;
+}
+
+function saveEditedRoutineTask() {
+  if (!editingRoutineTaskContext) return;
+  const { tabKey, taskId } = editingRoutineTaskContext;
+  const list = state.routines[tabKey] || [];
+  const task = list.find(t => t.id === taskId);
+  if (!task) {
+    closeEditRoutineTaskModal();
+    return;
+  }
+
+  const titleInp = document.getElementById('editTaskTitleInput');
+  const iconSelect = document.getElementById('editTaskIconSelect');
+  const repSelect = document.getElementById('editTaskRepeatType');
+
+  const title = titleInp ? titleInp.value.trim() : '';
+  if (!title) {
+    showToast('할 일 내용을 입력해 주세요');
+    return;
+  }
+
+  const icon = iconSelect ? iconSelect.value : (task.icon || 'star');
+  const repeat = repSelect ? repSelect.value : (task.repeat || 'daily');
+  const grad = ICON_DEFAULT_GRAD[icon] || task.grad || 'grad-purple-blue';
+
+  task.title = title;
+  task.icon = icon;
+  task.repeat = repeat;
+  task.grad = grad;
+
+  saveState();
+  closeEditRoutineTaskModal();
+  renderRoutineSection();
+  showToast('할 일이 수정되었습니다');
 }
 
 function openSettingsModal(initialTab = 'timetable') {
@@ -1887,7 +1973,7 @@ function loadNoticeForDate(dateStr) {
   if (classTitle) classTitle.textContent = `${state.className} [${new Date().getFullYear()}]`;
 
   const dateData = (state.notices && state.notices[dateStr]) || {
-    html: `<div>1. 내일 놀이체육 수업(활동하기 편한 옷)</div><div>2. 작가와의 만남 사인 받을 사람, 책 준비하기 (희망자만)</div><div>3. 해지기 전에 집에 일찍 귀가하기</div>`,
+    html: '',
     bgTheme: 'chalkboard',
     fontSize: 38,
     drawingDataUrl: ''
